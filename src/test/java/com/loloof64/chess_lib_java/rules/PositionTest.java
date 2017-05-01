@@ -1,6 +1,7 @@
 package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.pieces.Piece;
+import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

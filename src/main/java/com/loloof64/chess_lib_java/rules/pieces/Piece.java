@@ -1,5 +1,8 @@
 package com.loloof64.chess_lib_java.rules.pieces;
 
+import com.loloof64.chess_lib_java.rules.Position;
+import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+
 /**
  * Representation of a chess Piece.
  */
@@ -10,6 +13,14 @@ public abstract class Piece {
      * @return char - the FEN value of this piece.
      */
     public abstract char toFEN();
+
+    /**
+     * Says if the piece belongs to white army.
+     * @return boolean - does the piece belong to white army ?
+     */
+    public boolean isWhitePiece(){
+        return whitePlayer;
+    }
 
     /**
      * Translate a Forsyth-Edwards Notation to a Piece instance.
@@ -33,6 +44,15 @@ public abstract class Piece {
             default: return null;
         }
     }
+
+    /**
+     * Says if this piece can do the given move in the position.
+     * @param from - BoardCell - start cell
+     * @param to - BoardCell - end cell
+     * @param position - Position - the position which this piece belongs to.
+     * @return is this move correct ?
+     */
+    abstract public boolean canMove(BoardCell from, BoardCell to, Position position);
 
     @Override
     public boolean equals(Object o) {

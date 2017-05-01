@@ -33,7 +33,7 @@ public class Board {
             for (char cell : cellValues){
                 if (Character.isDigit(cell)){
                     int holesNumber = (int) cell - (int) '0';
-                    for (int times = 0; times < holesNumber; times++) fileIndex++;
+                    for (int times = 0; times < holesNumber; times++) boardToBuild[rankIndex][fileIndex++] = null;
                 }
                 else {
                     boardToBuild[rankIndex][fileIndex++] = Piece.fromFEN(cell);

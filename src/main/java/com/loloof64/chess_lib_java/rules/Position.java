@@ -1,5 +1,8 @@
 package com.loloof64.chess_lib_java.rules;
 
+import com.loloof64.chess_lib_java.rules.pieces.Piece;
+import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+
 /**
  * Immutable chess position.
  */
@@ -33,6 +36,30 @@ public class Position {
      */
     public String toFEN(){
         return _board.toFEN() + " " + _info.toFEN();
+    }
+
+    /**
+     * Says if a move can be done on this position.
+     * @param from - BoardCell - the start cell
+     * @param to - BoardCell - the end cell
+     * @return boolean - can we move as described ?
+     */
+    public boolean canMove(BoardCell from, BoardCell to){
+        Piece movingPiece = _board.values()[from.rank][from.file];
+        boolean noPieceAtStartCell = movingPiece == null;
+        boolean pieceIsNotOurs = movingPiece != null && movingPiece.isWhitePiece() != _info.whiteTurn;
+
+        if (noPieceAtStartCell || pieceIsNotOurs) return false;
+        return movingPiece.canMove(from, to,this);
+    }
+
+    /**
+     * Gets the piece (can be null) at the given cell.
+     * @param cell - BoardCell - the cell where we want to get the piece.
+     * @return Piece - the piece in the given cell.
+     */
+    public Piece getPieceAt(BoardCell cell){
+        return _board.values()[cell.rank][cell.file];
     }
 
     @Override

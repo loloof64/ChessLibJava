@@ -1,4 +1,4 @@
-package com.loloof64.chess_lib_java.rules;
+package com.loloof64.chess_lib_java.rules.coords;
 
 /**
  * Board rank coordinate..

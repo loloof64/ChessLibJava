@@ -1,5 +1,7 @@
 package com.loloof64.chess_lib_java.rules;
 
+import com.loloof64.chess_lib_java.rules.coords.BoardFile;
+
 /**
  * Holds position info : player turn, move number, castles rights ...
  */
