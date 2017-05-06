@@ -17,8 +17,10 @@ public class Knight extends Piece {
         final int absDeltaY = Math.abs(deltaY);
         final Piece pieceAtEndCell = position.getPieceAt(to);
 
+        final boolean targetCellHasNoFriendPiece = pieceAtEndCell == null || pieceAtEndCell.isWhitePiece() != whitePlayer;
+
         return ((absDeltaX == 1 && absDeltaY == 2) || (absDeltaX == 2 && absDeltaY == 1))
-                && (pieceAtEndCell == null || pieceAtEndCell.isWhitePiece() != whitePlayer);
+                && targetCellHasNoFriendPiece;
     }
 
     @Override
