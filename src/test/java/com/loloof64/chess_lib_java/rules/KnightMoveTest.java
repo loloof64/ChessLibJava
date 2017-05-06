@@ -22,11 +22,27 @@ public class KnightMoveTest {
         assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.B2));
         assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.D2));
         assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.B6));
+        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.F4));
+        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.A4));
+        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.C2));
+        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.C8));
+        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.F7));
+        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.A2));
+        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.B5));
+        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.E2));
 
         assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.A3));
         assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.B2));
         assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.D2));
         assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.B6));
+        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.F4));
+        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.A4));
+        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.C2));
+        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.C8));
+        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.F7));
+        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.A2));
+        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.B5));
+        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.E2));
     }
 
     @Test
