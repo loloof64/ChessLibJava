@@ -48,6 +48,17 @@ public class PawnMoveTest {
     }
 
     @Test
+    public void pawnCannotCaptureFriendPiece(){
+        assertEquals(false, pos1.canMove(BoardCell.B2, BoardCell.A3));
+        assertEquals(false, pos3.canMove(BoardCell.G2, BoardCell.H3));
+        assertEquals(false, pos3.canMove(BoardCell.A5, BoardCell.B6));
+
+        assertEquals(false, pos2.canMove(BoardCell.A6, BoardCell.B5));
+        assertEquals(false, pos4.canMove(BoardCell.H7, BoardCell.G6));
+        assertEquals(false, pos4.canMove(BoardCell.G6, BoardCell.F5));
+    }
+
+    @Test
     public void pawnCanCaptureEnemyPieceIfWellPlaced(){
         Position pos5 = Position.fromFEN("4k3/8/8/2p5/RPPNnbpp/6P1/8/4K3 w - - 0 1");
         assertEquals(true, pos5.canMove(BoardCell.G3, BoardCell.F4));

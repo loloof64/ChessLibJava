@@ -11,7 +11,14 @@ public class Knight extends Piece {
 
     @Override
     public boolean canMove(BoardCell from, BoardCell to, Position position) {
-        return false;
+        final int deltaX = to.file - from.file;
+        final int deltaY = to.rank - from.rank;
+        final int absDeltaX = Math.abs(deltaX);
+        final int absDeltaY = Math.abs(deltaY);
+        final Piece pieceAtEndCell = position.getPieceAt(to);
+
+        return ((absDeltaX == 1 && absDeltaY == 2) || (absDeltaX == 2 && absDeltaY == 1))
+                && (pieceAtEndCell == null || pieceAtEndCell.isWhitePiece() != whitePlayer);
     }
 
     @Override
