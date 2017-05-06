@@ -45,11 +45,12 @@ public class Position {
      * @return boolean - can we move as described ?
      */
     public boolean canMove(BoardCell from, BoardCell to){
-        Piece movingPiece = _board.values()[from.rank][from.file];
-        boolean noPieceAtStartCell = movingPiece == null;
-        boolean pieceIsNotOurs = movingPiece != null && movingPiece.isWhitePiece() != _info.whiteTurn;
+        final Piece movingPiece = _board.values()[from.rank][from.file];
+        final boolean noPieceAtStartCell = movingPiece == null;
+        final boolean pieceIsNotOurs = movingPiece != null && movingPiece.isWhitePiece() != _info.whiteTurn;
+        final boolean originSquareEqualsToTarget = from == to;
 
-        if (noPieceAtStartCell || pieceIsNotOurs) return false;
+        if (noPieceAtStartCell || pieceIsNotOurs || originSquareEqualsToTarget) return false;
         return movingPiece.canMove(from, to,this);
     }
 
@@ -60,6 +61,40 @@ public class Position {
      */
     public Piece getPieceAt(BoardCell cell){
         return _board.values()[cell.rank][cell.file];
+    }
+
+    /**
+     * Says if there is any piece between those two cells. Notice that if the two cells does not define
+     * a straight line, the result will be false (no obstacle).
+     * @param cell1 - BoardCell
+     * @param cell2 - BoardCell
+     * @return true if and only if there is an obstacle between the two cells (both not included, of course).
+     */
+    public boolean obstacleBetween(BoardCell cell1, BoardCell cell2){
+        final int deltaX = cell2.file - cell1.file;
+        final int deltaY = cell2.rank - cell1.rank;
+        final int absDeltaX = Math.abs(deltaX);
+        final int absDeltaY = Math.abs(deltaY);
+
+        final boolean notAStraightLine = (absDeltaX > 0 && absDeltaY > 0) && (absDeltaX != absDeltaY);
+        final boolean sameCell = absDeltaX == 0 && absDeltaY == 0;
+
+        if (notAStraightLine || sameCell) return false;
+
+        final int xSide = deltaX == 0 ? 0 : deltaX > 0 ? 1 : -1;
+        final int ySide = deltaY == 0 ? 0 : deltaY > 0 ? 1 : -1;
+
+        final int loopLimit = absDeltaX > 0 ? absDeltaX : absDeltaY;
+
+        for (int i = 1; i < loopLimit; i++){ // Caution ! The start cell and target cell are not included !
+            final int dxi = i * xSide;
+            final int dyi = i * ySide;
+            final BoardCell computedCell = new BoardCell(cell1.rank + dyi, cell1.file + dxi);
+
+            if (_board.values()[computedCell.rank][computedCell.file] != null) return true;
+        }
+
+        return false;
     }
 
     @Override

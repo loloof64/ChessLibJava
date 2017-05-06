@@ -7,6 +7,15 @@ import static org.junit.Assert.assertEquals;
 public class MiscMoveTest {
 
     @Test
+    public void cannotDefineAMoveWithOriginSquareEqualsToTarget(){
+        Position pos1 = Position.fromFEN("4k3/8/8/8/3R4/8/8/4K3 w - - 0 1");
+        assertEquals(false, pos1.canMove(BoardCell.D4, BoardCell.D4));
+
+        Position pos2 = Position.fromFEN("4k3/8/8/8/3r4/8/8/4K3 b - - 0 1");
+        assertEquals(false, pos2.canMove(BoardCell.D4, BoardCell.D4));
+    }
+
+    @Test
     public void cannotMoveFromAnEmptyCell(){
         Position pos1 = Position.fromFEN("3rr2k/1bq3pp/p2p1n2/np6/5N2/PB5Q/1PPB2PP/1K1R1R2 w - - 0 1");
         assertEquals(false, pos1.canMove(BoardCell.E6, BoardCell.F7));
