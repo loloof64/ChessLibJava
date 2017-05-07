@@ -2,6 +2,7 @@ package com.loloof64.chess_lib_java.rules.pieces;
 
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+import com.loloof64.functional.monad.Maybe;
 
 /**
  * Representation of a chess Piece.
@@ -46,13 +47,24 @@ public abstract class Piece {
     }
 
     /**
-     * Says if this piece can do the given move in the position.
+     * Says if this piece can do the given move in the given position.
      * @param from - BoardCell - start cell
-     * @param to - BoardCell - end cell
+     * @param to - BoardCell - target cell
      * @param position - Position - the position which this piece belongs to.
      * @return is this move correct ?
      */
     abstract public boolean canMove(BoardCell from, BoardCell to, Position position);
+
+    /**
+     * Executes the given move in the given position.
+     * @param from - BoardCell - start cell
+     * @param to - BoardCell - target cell
+     * @param position - Position - the position which this piece belongs to.
+     * @param promotionPiece - class of PromotablePiece - promotion piece if the move leads to pawn promotion.
+     * @return Nothing if the move cannot be done, otherwise Just of Position, wrapping the resulting position.
+     */
+    abstract public Maybe<Position> move(BoardCell from, BoardCell to,
+                                         Position position, Class<? extends PromotablePiece> promotionPiece);
 
     @Override
     public boolean equals(Object o) {

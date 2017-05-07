@@ -1,6 +1,11 @@
 package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+import com.loloof64.chess_lib_java.rules.pieces.Bishop;
+import com.loloof64.chess_lib_java.rules.pieces.Knight;
+import com.loloof64.chess_lib_java.rules.pieces.Queen;
+import com.loloof64.chess_lib_java.rules.pieces.Rook;
+import com.loloof64.functional.monad.Maybe;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -109,6 +114,69 @@ public class PawnMoveTest {
         assertEquals(false, pos2.canMove(BoardCell.D6, BoardCell.A3));
         assertEquals(false, pos2.canMove(BoardCell.G7, BoardCell.E6));
         assertEquals(false, pos2.canMove(BoardCell.G7, BoardCell.C6));
+    }
+
+    @Test
+    public void legalStandardPawnMoveGeneratesCorrectPosition(){
+        Position pos1 = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.E2, BoardCell.E4);
+        Position pos2 = wrapPos2.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"), pos2);
+
+        Maybe<Position> wrapPos3 = pos2.move(BoardCell.D7, BoardCell.D6);
+        Position pos3 = wrapPos3.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"), pos3);
+
+        Maybe<Position> wrapPos4 = pos3.move(BoardCell.D2, BoardCell.D4);
+        Position pos4 = wrapPos4.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2"), pos4);
+
+        Maybe<Position> wrapPos5 = pos4.move(BoardCell.E7, BoardCell.E5);
+        Position pos5 = wrapPos5.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq e6 0 3"), pos5);
+
+        Maybe<Position> wrapPos6 = pos5.move(BoardCell.D4, BoardCell.E5);
+        Position pos6 = wrapPos6.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3"), pos6);
+
+        Position pos7 = Position.fromFEN("8/2P4k/8/8/8/8/8/4K3 w - - 0 1");
+        Maybe<Position> wrapPos8 = pos7.move(BoardCell.C7, BoardCell.C8, Queen.class);
+        Position pos8 = wrapPos8.fromJust();
+        assertEquals(Position.fromFEN("2Q5/7k/8/8/8/8/8/4K3 b - - 0 1"), pos8);
+        Maybe<Position> wrapPos9 = pos7.move(BoardCell.C7, BoardCell.C8, Bishop.class);
+        Position pos9 = wrapPos9.fromJust();
+        assertEquals(Position.fromFEN("2B5/7k/8/8/8/8/8/4K3 b - - 0 1"), pos9);
+
+        Position pos10 = Position.fromFEN("4k3/8/8/8/8/8/3p3K/2N5 b - - 0 1");
+        Maybe<Position> wrapPos11 = pos10.move(BoardCell.D2, BoardCell.C1, Rook.class);
+        Position pos11 = wrapPos11.fromJust();
+        assertEquals(Position.fromFEN("4k3/8/8/8/8/8/7K/2r5 w - - 0 2"), pos11);
+        Maybe<Position> wrapPos12 = pos10.move(BoardCell.D2, BoardCell.C1, Knight.class);
+        Position pos12 = wrapPos12.fromJust();
+        assertEquals(Position.fromFEN("4k3/8/8/8/8/8/7K/2n5 w - - 0 2"), pos12);
+    }
+
+    @Test
+    public void enPassantPawnMoveGeneratesCorrectPosition(){
+        Position pos1 = Position.fromFEN("rnbqkb1r/ppp1pppp/7n/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.E5, BoardCell.D6);
+        Position pos2 = wrapPos2.fromJust();
+        assertEquals(Position.fromFEN("rnbqkb1r/ppp1pppp/3P3n/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3"), pos2);
+
+        Position pos3 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/6N1/3pP3/8/PPPP1PPP/RNBQKB1R b KQkq e3 0 3");
+        Maybe<Position> wrapPos4 = pos3.move(BoardCell.D4, BoardCell.E3);
+        Position pos4 = wrapPos4.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/8/6N1/8/4p3/PPPP1PPP/RNBQKB1R w KQkq - 0 4"), pos4);
+
+        Position pos5 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/3Pp3/8/3P4/PPP2PPP/RNBQKBNR w KQkq e6 0 1");
+        Maybe<Position> wrapPos6 = pos5.move(BoardCell.D5, BoardCell.E6);
+        Position pos6 = wrapPos6.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/4P3/8/8/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 1"), pos6);
+
+        Position pos7 = Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
+        Maybe<Position> wrapPos8 = pos7.move(BoardCell.D4, BoardCell.E3);
+        Position pos8 = wrapPos8.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2"), pos8);
     }
 
 }

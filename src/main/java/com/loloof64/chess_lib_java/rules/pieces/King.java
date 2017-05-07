@@ -4,6 +4,8 @@ import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import com.loloof64.chess_lib_java.rules.coords.BoardRank;
+import com.loloof64.functional.monad.Maybe;
+import com.loloof64.functional.monad.Nothing;
 
 public class King extends Piece {
 
@@ -36,6 +38,11 @@ public class King extends Piece {
 
         return (standardMove || kingSideCastleMove || queenSideCastleMove)
                 && targetCellHasNoFriendPiece;
+    }
+
+    @Override
+    public Maybe<Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
+        return new Nothing<>();
     }
 
     @Override

@@ -15,7 +15,7 @@ public class GameInfo {
      * @param nullityHalfMovesCount - int - half moves number since last capture or pawn move.
      * @param moveNumber - int - move number
      */
-    public GameInfo(boolean whiteTurn, CastlesRights castlesRights, BoardFile enPassantFile,
+    GameInfo(boolean whiteTurn, CastlesRights castlesRights, BoardFile enPassantFile,
                     int nullityHalfMovesCount, int moveNumber){
         if (castlesRights == null) throw new IllegalArgumentException("Castle rights can't be null");
         if (nullityHalfMovesCount < 0) throw new IllegalArgumentException("Nullity half moves count must be 0 or greater !");
@@ -69,6 +69,34 @@ public class GameInfo {
         }
 
         return String.format("%c %s %s %d %d", playerTurnChar, castlesRights.toFEN(), enPassantFileStr, nullityHalfMovesCount, moveNumber);
+    }
+
+    /**
+     * Gets a copy of this game info but with the player turn reversed.
+     * Caution ! This will also update the move number if we switch from black to white.
+     * @return GameInfo - the copy with player turn inverse, and eventually move number incremented.
+     */
+    public GameInfo copyWithTurnReversedAndMoveNumberUpdated() {
+        return new GameInfo(!whiteTurn, castlesRights, enPassantFile, nullityHalfMovesCount,
+                whiteTurn ? moveNumber : moveNumber+1);
+    }
+
+    /**
+     * Gets a copy of this game info but with the given en passant file.
+     * @param newEnPassantFile - BoardFile - the en passant file.
+     * @return GameInfo - the copy with the given en passant file.
+     */
+    public GameInfo copyWithThisEnPassantFile(BoardFile newEnPassantFile) {
+        return new GameInfo(whiteTurn, castlesRights, newEnPassantFile, nullityHalfMovesCount, moveNumber);
+    }
+
+    /**
+     * Gets a copy of this game info but with the given nullity half moves count.
+     * @param newCount - int - the new value for nullity half moves count.
+     * @return GameInfo - the copy with the given nullity half moves count.
+     */
+    public GameInfo copyWithThisNullityHalfMovesCount(int newCount){
+        return new GameInfo(whiteTurn, castlesRights, enPassantFile, newCount, moveNumber);
     }
 
     @Override

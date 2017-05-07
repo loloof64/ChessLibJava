@@ -1,8 +1,14 @@
 package com.loloof64.chess_lib_java.rules.pieces;
 
+import com.loloof64.chess_lib_java.rules.Board;
+import com.loloof64.chess_lib_java.rules.GameInfo;
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import com.loloof64.chess_lib_java.rules.coords.BoardRank;
+import com.loloof64.functional.monad.Just;
+import com.loloof64.functional.monad.Maybe;
+import com.loloof64.functional.monad.Nothing;
 
 public class Pawn extends Piece {
 
@@ -45,6 +51,50 @@ public class Pawn extends Piece {
             }
         }
         return false;
+    }
+
+    @Override
+    public Maybe<Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
+        final int deltaX = to.file - from.file;
+        final int deltaY = to.rank - from.rank;
+        final boolean isTwoCellsJump = (whitePlayer && deltaY == 2 && deltaX == 0
+                && from.rank == BoardRank.RANK_2.ordinal()) ||
+                (!whitePlayer && deltaY == -2 && deltaX == 0 && from.rank == BoardRank.RANK_7.ordinal());
+        final BoardFile newEnPassantFile = isTwoCellsJump ? BoardFile.values()[from.file] : null;
+        final boolean isPromotion = whitePlayer ?
+                to.rank == BoardRank.RANK_8.ordinal() : to.rank == BoardRank.RANK_1.ordinal();
+
+        Board newPositionBoard = Board.fromFEN(position._board.toFEN()); // A simple way to get a copy.
+        final Piece pieceAtEndSquare = position.getPieceAt(to);
+        Piece replacingPieceForEndSquare;
+        try {
+            replacingPieceForEndSquare = isPromotion ? promotionPiece.getDeclaredConstructor(boolean.class).
+                    newInstance(whitePlayer): position.getPieceAt(from);
+
+            final BoardFile enPassantFile = position._info.enPassantFile;
+
+            final boolean isEnPassantMove =
+                    ((whitePlayer && deltaY == 1) || (!whitePlayer && deltaY == -1)) && Math.abs(deltaX) == 1 &&
+                    pieceAtEndSquare == null && enPassantFile != null && enPassantFile.ordinal() == to.file;
+
+            newPositionBoard = newPositionBoard.copy(from, null);
+            newPositionBoard = newPositionBoard.copy(to, replacingPieceForEndSquare);
+            if (isEnPassantMove) {
+                int capturedPieceRank = whitePlayer ? BoardRank.RANK_5.ordinal() : BoardRank.RANK_4.ordinal();
+                BoardCell capturedPieceCell = new BoardCell(capturedPieceRank, position._info.enPassantFile.ordinal());
+                newPositionBoard = newPositionBoard.copy(capturedPieceCell, null);
+            }
+
+            GameInfo newPositionInfo = position._info;
+            newPositionInfo = newPositionInfo.copyWithTurnReversedAndMoveNumberUpdated();
+            newPositionInfo = newPositionInfo.copyWithThisEnPassantFile(newEnPassantFile);
+            newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(0);
+
+            return new Just<>(new Position(newPositionBoard, newPositionInfo));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Nothing<>();
+        }
     }
 
     @Override

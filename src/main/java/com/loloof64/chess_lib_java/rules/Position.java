@@ -2,6 +2,10 @@ package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.pieces.Piece;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+import com.loloof64.chess_lib_java.rules.pieces.PromotablePiece;
+import com.loloof64.chess_lib_java.rules.pieces.Queen;
+import com.loloof64.functional.monad.Maybe;
+import com.loloof64.functional.monad.Nothing;
 
 /**
  * Immutable chess position.
@@ -95,6 +99,31 @@ public class Position {
         }
 
         return false;
+    }
+
+    /**
+     * Executes the given move on the position (without modifying it) and returns the resulting position.
+     * @param from - BoardCell - the start cell
+     * @param to - BoardCell - the target cell
+     * @return Maybe of Position - Nothing on failure, otherwise Just of Position : wrapping the result.
+     */
+    public Maybe<Position> move(BoardCell from, BoardCell to){
+        return move(from, to, Queen.class);
+    }
+
+    /**
+     * Executes the given move on the position (without modifying it) and returns the resulting position.
+     * @param from - BoardCell - the start cell
+     * @param to - BoardCell - the target cell
+     * @param promotionPiece - Class of PromotablePiece - promotion piece if the move leads to pawn promotion.
+     * @return Maybe of Position - Nothing on failure, otherwise Just of Position : wrapping the result.
+     */
+    public Maybe<Position> move(BoardCell from, BoardCell to, Class<? extends PromotablePiece> promotionPiece){
+        final Piece movingPiece = _board.values()[from.rank][from.file];
+        boolean noPieceAtStartCell = movingPiece == null;
+
+        if (noPieceAtStartCell || !canMove(from, to)) return new Nothing<>();
+        return movingPiece.move(from, to, this, promotionPiece);
     }
 
     @Override

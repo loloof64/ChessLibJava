@@ -1,5 +1,6 @@
 package com.loloof64.chess_lib_java.rules;
 
+import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.chess_lib_java.rules.pieces.Piece;
 
 /**
@@ -11,7 +12,7 @@ public class Board {
      * Constructor from pieces values : null value indicates that there is no piece.
      * @param values - Array of array of Piece
      */
-    public Board(Piece[][] values){
+    Board(Piece[][] values){
         this._values = values;
     }
 
@@ -47,7 +48,7 @@ public class Board {
 
     /**
      * Gets the values of the board.
-     * First dimension is rank (careful ! index 0 is for line 8).
+     * First dimension is rank (caution ! index 0 is for line 8).
      * @return Array of Array of Piece
      */
     Piece[][] values(){
@@ -80,6 +81,27 @@ public class Board {
         return strBuilder.toString();
     }
 
+    /**
+     * Returns a copy of this board but with the given cell modified
+     * @param cell - BoardCell - cell to modify
+     * @param newValue - Piece - substitution value
+     * @return Board - the copy of the board with the modified cell.
+     */
+    public Board copy(BoardCell cell, Piece newValue){
+        Board boardToReturn = new Board(this._values);
+        boardToReturn._values[cell.rank][cell.file] = newValue;
+        return boardToReturn;
+    }
+
+    /**
+     * Returns the piece at a given cell.
+     * @param cell - BoardCell - the cell of which we want the piece.
+     * @return Piece - the piece at the given cell.
+     */
+    public Piece getPieceAt(BoardCell cell){
+        return _values[cell.rank][cell.file];
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Board && ((Board) obj).toFEN().equals(toFEN());
@@ -96,5 +118,4 @@ public class Board {
     }
 
     private final Piece[][] _values;
-
 }

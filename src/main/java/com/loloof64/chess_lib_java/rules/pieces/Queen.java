@@ -2,8 +2,10 @@ package com.loloof64.chess_lib_java.rules.pieces;
 
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+import com.loloof64.functional.monad.Maybe;
+import com.loloof64.functional.monad.Nothing;
 
-public class Queen extends Piece {
+public class Queen extends PromotablePiece {
 
     public Queen(boolean whitePlayer){
         this.whitePlayer = whitePlayer;
@@ -21,6 +23,11 @@ public class Queen extends Piece {
         final boolean isAGoodPath = (absDeltaX == absDeltaY) || (absDeltaX == 0 || absDeltaY == 0);
 
         return isAGoodPath && targetCellHasNoFriendPiece && noObstacleBefore;
+    }
+
+    @Override
+    public Maybe<Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
+        return new Nothing<>();
     }
 
     @Override

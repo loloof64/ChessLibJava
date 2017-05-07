@@ -102,8 +102,8 @@ public class BoardCell {
     @Override
     public String toString() {
         return "BoardCell{" +
-                "rank=" + (char) ('A' + rank) +
-                ", file=" + (char) ('1' + file) +
+                "file=" + (char) ('A' + file) +
+                ", rank=" + (char) ('1' + rank) +
                 '}';
     }
 
