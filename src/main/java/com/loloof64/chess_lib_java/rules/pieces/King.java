@@ -1,9 +1,12 @@
 package com.loloof64.chess_lib_java.rules.pieces;
 
+import com.loloof64.chess_lib_java.rules.Board;
+import com.loloof64.chess_lib_java.rules.GameInfo;
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import com.loloof64.chess_lib_java.rules.coords.BoardRank;
+import com.loloof64.functional.monad.Just;
 import com.loloof64.functional.monad.Maybe;
 import com.loloof64.functional.monad.Nothing;
 
@@ -42,7 +45,45 @@ public class King extends Piece {
 
     @Override
     public Maybe<Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
-        return new Nothing<>();
+        final boolean isCaptureMove = position.getPieceAt(to) != null;
+        final int deltaX = to.file - from.file;
+        final boolean isKingSideCastleMove = (whitePlayer ? from == BoardCell.E1 : from == BoardCell.E8) && deltaX == 2;
+        final boolean isQueenSideCastleMove = (whitePlayer ? from == BoardCell.E1 : from == BoardCell.E8) && deltaX == -2;
+
+        Board newPositionBoard = Board.fromFEN(position.toFEN()); // A simple way to get a copy.
+        final Piece pieceAtStartCell = position.getPieceAt(from);
+        newPositionBoard = newPositionBoard.copy(from, null);
+        newPositionBoard = newPositionBoard.copy(to, pieceAtStartCell);
+        if (isKingSideCastleMove){
+            final BoardCell movedRookCell = new BoardCell(from.rank, BoardFile.FILE_H.ordinal());
+            final BoardCell movedRookEndCell = new BoardCell(from.rank, BoardFile.FILE_F.ordinal());
+            final Piece movedRook = position.getPieceAt(movedRookCell);
+            newPositionBoard = newPositionBoard.copy(movedRookCell, null);
+            newPositionBoard = newPositionBoard.copy(movedRookEndCell, movedRook);
+        }
+        else if (isQueenSideCastleMove){
+            final BoardCell movedRookCell = new BoardCell(from.rank, BoardFile.FILE_A.ordinal());
+            final BoardCell movedRookEndCell = new BoardCell(from.rank, BoardFile.FILE_D.ordinal());
+            final Piece movedRook = position.getPieceAt(movedRookCell);
+            newPositionBoard = newPositionBoard.copy(movedRookCell, null);
+            newPositionBoard = newPositionBoard.copy(movedRookEndCell, movedRook);
+        }
+
+        GameInfo newPositionInfo = GameInfo.fromFEN(position.toFEN());  // A simple way to get a copy.
+        newPositionInfo = newPositionInfo.copyWithTurnReversedAndMoveNumberUpdated();
+        newPositionInfo = newPositionInfo.copyWithThisEnPassantFile(null);
+        int  newNullityHalfMovesCount = isCaptureMove ? 0 : newPositionInfo.nullityHalfMovesCount + 1;
+        if (whitePlayer) {
+            newPositionInfo = newPositionInfo.copyWithThisWhiteKingSideCastleState(false);
+            newPositionInfo = newPositionInfo.copyWithThisWhiteQueenSideCastleState(false);
+        }
+        else {
+            newPositionInfo = newPositionInfo.copyWithThisBlackKingSideCastleState(false);
+            newPositionInfo = newPositionInfo.copyWithThisBlackQueenSideCastleState(false);
+        }
+        newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
+
+        return new Just<>(new Position(newPositionBoard, newPositionInfo));
     }
 
     @Override
