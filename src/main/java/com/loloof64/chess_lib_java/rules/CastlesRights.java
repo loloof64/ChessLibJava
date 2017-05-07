@@ -12,7 +12,7 @@ public class CastlesRights {
      * @param blackKingSide - boolean - set if black can castle king side.
      * @param blackQueenSide - boolean - set if black can castle queen side.
      */
-    public CastlesRights(boolean whiteKingSide, boolean whiteQueenSide,
+    CastlesRights(boolean whiteKingSide, boolean whiteQueenSide,
                          boolean blackKingSide, boolean blackQueenSide){
         this.whiteKingSide = whiteKingSide;
         this.whiteQueenSide = whiteQueenSide;
@@ -33,6 +33,42 @@ public class CastlesRights {
         if (blackQueenSide) stringBuilder.append('q');
 
         return stringBuilder.length() > 0 ? stringBuilder.toString() : "-";
+    }
+
+    /**
+     * Returns a copy of these rights with the modified white king side castle right
+     * @param newState - boolean - new state for white king side castle.
+     * @return CastlesRights - a copy with the white king side castle modified.
+     */
+    public CastlesRights copyWithThisWhiteKingSideCastleRight(boolean newState){
+        return new CastlesRights(newState, whiteQueenSide, blackKingSide, blackQueenSide);
+    }
+
+    /**
+     * Returns a copy of these rights with the modified white queen side castle right
+     * @param newState - boolean - new state for white queen side castle.
+     * @return CastlesRights - a copy with the white queen side castle modified.
+     */
+    public CastlesRights copyWithThisWhiteQueenSideCastleRight(boolean newState){
+        return new CastlesRights(whiteKingSide, newState, blackKingSide, blackQueenSide);
+    }
+
+    /**
+     * Returns a copy of these rights with the modified black king side castle right
+     * @param newState - boolean - new state for black king side castle.
+     * @return CastlesRights - a copy with the black king side castle modified.
+     */
+    public CastlesRights copyWithThisBlackKingSideCastleRight(boolean newState){
+        return new CastlesRights(whiteKingSide, whiteQueenSide, newState, blackQueenSide);
+    }
+
+    /**
+     * Returns a copy of these rights with the modified white queen side castle right
+     * @param newState - boolean - new state for black queen side castle.
+     * @return CastlesRights - a copy with the black queen side castle modified.
+     */
+    public CastlesRights copyWithThisBlackQueenSideCastleRight(boolean newState){
+        return new CastlesRights(whiteKingSide, whiteQueenSide, blackKingSide, newState);
     }
 
     /**

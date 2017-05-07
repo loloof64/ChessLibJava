@@ -93,15 +93,6 @@ public class Board {
         return boardToReturn;
     }
 
-    /**
-     * Returns the piece at a given cell.
-     * @param cell - BoardCell - the cell of which we want the piece.
-     * @return Piece - the piece at the given cell.
-     */
-    public Piece getPieceAt(BoardCell cell){
-        return _values[cell.rank][cell.file];
-    }
-
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Board && ((Board) obj).toFEN().equals(toFEN());

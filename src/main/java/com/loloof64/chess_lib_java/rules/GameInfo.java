@@ -99,6 +99,46 @@ public class GameInfo {
         return new GameInfo(whiteTurn, castlesRights, enPassantFile, newCount, moveNumber);
     }
 
+    /**
+     * Gets a copy with a modified state for white king side castle availability.
+     * @param newState - boolean - new state for white king side castle.
+     * @return GameInfo - a copy with white king side castle availability modified
+     */
+    public GameInfo copyWithThisWhiteKingSideCastleState(boolean newState){
+        return new GameInfo(whiteTurn, castlesRights.copyWithThisWhiteKingSideCastleRight(newState), enPassantFile,
+                nullityHalfMovesCount, moveNumber);
+    }
+
+    /**
+     * Gets a copy with a modified state for white queen side castle availability.
+     * @param newState - boolean - new state for white queen side castle.
+     * @return GameInfo - a copy with white queen side castle availability modified
+     */
+    public GameInfo copyWithThisWhiteQueenSideCastleState(boolean newState){
+        return new GameInfo(whiteTurn, castlesRights.copyWithThisWhiteQueenSideCastleRight(newState), enPassantFile,
+                nullityHalfMovesCount, moveNumber);
+    }
+
+    /**
+     * Gets a copy with a modified state for black king side castle availability.
+     * @param newState - boolean - new state for black king side castle.
+     * @return GameInfo - a copy with white black side castle availability modified
+     */
+    public GameInfo copyWithThisBlackKingSideCastleState(boolean newState){
+        return new GameInfo(whiteTurn, castlesRights.copyWithThisBlackKingSideCastleRight(newState), enPassantFile,
+                nullityHalfMovesCount, moveNumber);
+    }
+
+    /**
+     * Gets a copy with a modified state for black queen side castle availability.
+     * @param newState - boolean - new state for black queen side castle.
+     * @return GameInfo - a copy with black queen side castle availability modified
+     */
+    public GameInfo copyWithThisBlackQueenSideCastleState(boolean newState){
+        return new GameInfo(whiteTurn, castlesRights.copyWithThisBlackQueenSideCastleRight(newState), enPassantFile,
+                nullityHalfMovesCount, moveNumber);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

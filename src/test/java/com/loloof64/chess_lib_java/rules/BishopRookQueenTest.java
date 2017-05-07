@@ -1,6 +1,7 @@
 package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+import com.loloof64.functional.monad.Maybe;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -148,6 +149,121 @@ public class BishopRookQueenTest {
         assertEquals(false, pos2.canMove(BoardCell.E4, BoardCell.H4));
         assertEquals(false, pos2.canMove(BoardCell.E4, BoardCell.B7));
         assertEquals(false, pos2.canMove(BoardCell.E4, BoardCell.A8));
+    }
+
+    @Test
+    public void bishopMoveGeneratesPositionCorrectly(){
+        Position pos1 = Position.fromFEN("4k3/8/5n2/8/3B4/8/8/4K3 w - - 0 1");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.D4, BoardCell.B2);
+        Position pos2 = wrapPos2.fromJust();
+        assertEquals(Position.fromFEN("4k3/8/5n2/8/8/8/1B6/4K3 b - - 1 1"), pos2);
+        Maybe<Position> wrapPos3 = pos1.move(BoardCell.D4, BoardCell.F6);
+        Position pos3 = wrapPos3.fromJust();
+        assertEquals(Position.fromFEN("4k3/8/5B2/8/8/8/8/4K3 b - - 0 1"), pos3);
+
+        Position pos4 = Position.fromFEN("4k3/8/8/4N3/3b4/8/8/4K3 b - - 0 1");
+        Maybe<Position> wrapPos5 = pos4.move(BoardCell.D4, BoardCell.A1);
+        Position pos5 = wrapPos5.fromJust();
+        assertEquals(Position.fromFEN("4k3/8/8/4N3/8/8/8/b3K3 w - - 1 2"), pos5);
+        Maybe<Position> wrapPos6 = pos4.move(BoardCell.D4, BoardCell.E5);
+        Position pos6 = wrapPos6.fromJust();
+        assertEquals(Position.fromFEN("4k3/8/8/4b3/8/8/8/4K3 w - - 0 2"), pos6);
+    }
+
+    @Test
+    public void bishopMoveClearsEnPassantFile(){
+        Position pos1 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.F1, BoardCell.C4);
+        assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2"),
+                wrapPos2.fromJust());
+
+        Position pos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2");
+        Maybe<Position> wrapPos4 = pos3.move(BoardCell.F8, BoardCell.B4);
+        assertEquals(Position.fromFEN("rnbqk1nr/pppp1ppp/8/4p3/1b1PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3"),
+                wrapPos4.fromJust());
+    }
+
+    @Test
+    public void rookMoveGeneratesPositionCorrectly(){
+        Position pos1 = Position.fromFEN("4k3/8/8/8/2R3n1/8/8/4K3 w - - 0 1");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.C4, BoardCell.C7);
+        Position pos2 = wrapPos2.fromJust();
+        assertEquals(Position.fromFEN("4k3/2R5/8/8/6n1/8/8/4K3 b - - 1 1"), pos2);
+        Maybe<Position> wrapPos3 = pos1.move(BoardCell.C4, BoardCell.G4);
+        Position pos3 = wrapPos3.fromJust();
+        assertEquals(Position.fromFEN("4k3/8/8/8/6R1/8/8/4K3 b - - 0 1"), pos3);
+
+        Position pos4 = Position.fromFEN("4k3/8/8/8/2r3N1/8/8/4K3 b - - 0 1");
+        Maybe<Position> wrapPos5 = pos4.move(BoardCell.C4, BoardCell.G4);
+        Position pos5 = wrapPos5.fromJust();
+        assertEquals(Position.fromFEN("4k3/8/8/8/6r1/8/8/4K3 w - - 0 2"), pos5);
+        Maybe<Position> wrapPos6 = pos4.move(BoardCell.C4, BoardCell.C7);
+        Position pos6 = wrapPos6.fromJust();
+        assertEquals(Position.fromFEN("4k3/2r5/8/8/6N1/8/8/4K3 w - - 1 2"), pos6);
+    }
+
+    @Test
+    public void rookMoveClearsEnPassantFile(){
+        Position pos1 = Position.fromFEN("rnbqkbnr/ppppppp1/8/7p/7P/8/PPPPPPP1/RNBQKBNR w KQkq h6 0 2");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.H1, BoardCell.H3);
+        assertEquals(Position.fromFEN("rnbqkbnr/ppppppp1/8/7p/7P/7R/PPPPPPP1/RNBQKBN1 b Qkq - 1 2"),
+                wrapPos2.fromJust());
+
+        Position pos3 = Position.fromFEN("rnbqkbnr/ppppppp1/8/7p/7P/5N2/PPPPPPP1/RNBQKB1R b KQkq h3 0 2");
+        Maybe<Position> wrapPos4 = pos3.move(BoardCell.H8, BoardCell.H6);
+        assertEquals(Position.fromFEN("rnbqkbn1/ppppppp1/7r/7p/7P/5N2/PPPPPPP1/RNBQKB1R w KQq - 1 3"),
+                wrapPos4.fromJust());
+    }
+
+    @Test
+    public void a1h1a8Orh8RookMoveCancelCastlesAccordinglyInGeneratedPosition(){
+        Position pos1 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/7P/8/PPPPPPP1/RNBQKBNR w KQkq e6 0 2");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.H1, BoardCell.H3);
+        Position pos2 = wrapPos2.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/7P/7R/PPPPPPP1/RNBQKBN1 b Qkq - 1 2"), pos2);
+
+        Position pos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/P7/8/1PPPPPPP/RNBQKBNR w KQkq e6 0 2");
+        Maybe<Position> wrapPos4 = pos3.move(BoardCell.A1, BoardCell.A3);
+        Position pos4 = wrapPos4.fromJust();
+        assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/P7/R7/1PPPPPPP/1NBQKBNR b Kkq - 1 2"), pos4);
+
+        Position pos5 = Position.fromFEN("rnbqk1nr/ppppppb1/6p1/7p/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 4");
+        Maybe<Position> wrapPos6 = pos5.move(BoardCell.H8, BoardCell.H6);
+        Position pos6 = wrapPos6.fromJust();
+        assertEquals(Position.fromFEN("rnbqk1n1/ppppppb1/6pr/7p/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w q - 4 5"), pos6);
+
+        Position pos7 = Position.fromFEN("rnbqkbnr/1ppppppp/8/p7/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2");
+        Maybe<Position> wrapPos8 = pos7.move(BoardCell.A8, BoardCell.A6);
+        Position pos8 = wrapPos8.fromJust();
+        assertEquals(Position.fromFEN("1nbqkbnr/1ppppppp/r7/p7/4P3/5N2/PPPP1PPP/RNBQKB1R w KQk - 2 3"), pos8);
+    }
+
+    @Test
+    public void queenMoveGeneratesPositionCorrectly(){
+        Position pos1 = Position.fromFEN("4k3/1b6/8/8/1Q6/8/8/4K3 w - - 0 1");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.B4, BoardCell.B7);
+        assertEquals(Position.fromFEN("4k3/1Q6/8/8/8/8/8/4K3 b - - 0 1"), wrapPos2.fromJust());
+        Maybe<Position> wrapPos3 = pos1.move(BoardCell.B4, BoardCell.D2);
+        assertEquals(Position.fromFEN("4k3/1b6/8/8/8/8/3Q4/4K3 b - - 1 1"), wrapPos3.fromJust());
+
+        Position pos4 = Position.fromFEN("4k3/8/1B5q/8/8/8/8/4K3 b - - 1 1");
+        Maybe<Position> wrapPos5 = pos4.move(BoardCell.H6, BoardCell.B6);
+        assertEquals(Position.fromFEN("4k3/8/1q6/8/8/8/8/4K3 w - - 0 2"), wrapPos5.fromJust());
+        Maybe<Position> wrapPos6 = pos4.move(BoardCell.H6, BoardCell.C1);
+        assertEquals(Position.fromFEN("4k3/8/1B6/8/8/8/8/2q1K3 w - - 2 2"), wrapPos6.fromJust());
+    }
+
+    @Test
+    public void queenMoveClearsEnPassantFile(){
+        Position pos1 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.D1, BoardCell.H5);
+        assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 2"),
+                wrapPos2.fromJust());
+
+        Position pos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2");
+        Maybe<Position> wrapPos4 = pos3.move(BoardCell.D8, BoardCell.H4);
+        assertEquals(Position.fromFEN("rnb1kbnr/pppp1ppp/8/4p3/3PP2q/8/PPP2PPP/RNBQKBNR w KQkq - 1 3"),
+                wrapPos4.fromJust());
     }
 
 }

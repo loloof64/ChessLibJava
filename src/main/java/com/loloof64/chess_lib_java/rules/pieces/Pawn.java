@@ -64,7 +64,7 @@ public class Pawn extends Piece {
         final boolean isPromotion = whitePlayer ?
                 to.rank == BoardRank.RANK_8.ordinal() : to.rank == BoardRank.RANK_1.ordinal();
 
-        Board newPositionBoard = Board.fromFEN(position._board.toFEN()); // A simple way to get a copy.
+        Board newPositionBoard = Board.fromFEN(position.toFEN()); // A simple way to get a copy.
         final Piece pieceAtEndSquare = position.getPieceAt(to);
         Piece replacingPieceForEndSquare;
         try {
@@ -85,7 +85,7 @@ public class Pawn extends Piece {
                 newPositionBoard = newPositionBoard.copy(capturedPieceCell, null);
             }
 
-            GameInfo newPositionInfo = position._info;
+            GameInfo newPositionInfo = GameInfo.fromFEN(position.toFEN());  // A simple way to get a copy.
             newPositionInfo = newPositionInfo.copyWithTurnReversedAndMoveNumberUpdated();
             newPositionInfo = newPositionInfo.copyWithThisEnPassantFile(newEnPassantFile);
             newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(0);

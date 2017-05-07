@@ -61,6 +61,9 @@ public class GeneralMoveTest {
         assertEquals(true, pos2.move(BoardCell.H3, BoardCell.C8).isNothing());
     }
 
+    /*
+    A pseudo move is a move where we don't check for the chess state neither before nor after the move.
+     */
     @Test
     public void illegalPseudoMoveGeneratesNothing(){
         Position pos1 = Position.fromFEN("rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2");
@@ -68,11 +71,15 @@ public class GeneralMoveTest {
         assertEquals(true, wrapPos2.isNothing());
         Maybe<Position> wrapPos3 = pos1.move(BoardCell.A1, BoardCell.A4);
         assertEquals(true, wrapPos3.isNothing());
+        Maybe<Position> wrapPos7 = pos1.move(BoardCell.B1, BoardCell.D2);
+        assertEquals(true, wrapPos7.isNothing());
 
         Position pos4 = Position.fromFEN("rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
         Maybe<Position> wrapPos5 = pos4.move(BoardCell.E8, BoardCell.D7);
         assertEquals(true, wrapPos5.isNothing());
         Maybe<Position> wrapPos6 = pos4.move(BoardCell.C8, BoardCell.A6);
         assertEquals(true, wrapPos6.isNothing());
+        Maybe<Position> wrapPos8 = pos4.move(BoardCell.F6, BoardCell.D7);
+        assertEquals(true, wrapPos8.isNothing());
     }
 }
