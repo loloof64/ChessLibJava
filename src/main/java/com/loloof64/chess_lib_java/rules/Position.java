@@ -125,48 +125,61 @@ public class Position {
         boolean noPieceAtStartCell = movingPiece == null;
 
         if (noPieceAtStartCell || !canMove(from, to)) return new Nothing<>();
-        return movingPiece.move(from, to, this, promotionPiece);
+        Maybe<Position> positionAfterMove = movingPiece.move(from, to, this, promotionPiece);
+        if (positionAfterMove.isNothing()) return positionAfterMove;
+
+        boolean theMovingSideHasLeftHisKingInChess = positionAfterMove.fromJust().kingIsInChess(_info.whiteTurn);
+        if (theMovingSideHasLeftHisKingInChess) return new Nothing<>();
+        else return positionAfterMove;
     }
 
     /**
-     * Says if the king of the player to move is in chess.
-     * @return boolean - true if the king of the player to move is in chess.
+     * Says if the king of the given side is in chess, whatever is the player turn.
+     * @param whiteKing - boolean - true if we want to test if white king is attacked, false otherwise.
+     * @return boolean - true if the king of the given side is in chess.
      */
-    public boolean kingIsInChess() {
-        Maybe<BoardCell> wrapPlayerKingCell = findPlayerKingCell();
+    public boolean kingIsInChess(boolean whiteKing) {
+        Maybe<BoardCell> wrapPlayerKingCell = findKingCell(whiteKing);
         if (wrapPlayerKingCell.isNothing()) throw new RuntimeException("Player has no king !");
         BoardCell playerKingCell = wrapPlayerKingCell.fromJust();
 
-        return checkIfThisSquareUnderAttack(playerKingCell);
+        return checkIfThisSquareUnderAttackByAnEnemyPiece(playerKingCell);
     }
 
     /**
-     * Find the cell of the king of the player to move.
+     * Find the cell of the king of the given side.
+     * @param whiteKing - boolean - true if we want to find white king, false otherwise.
      * @return BoardCell - the cell of the king of the player to move.
      */
-    private Maybe<BoardCell> findPlayerKingCell() {
+    private Maybe<BoardCell> findKingCell(boolean whiteKing) {
         for (int rankIndex = 0; rankIndex < 8; rankIndex++){
             for (int fileIndex = 0; fileIndex < 8; fileIndex++){
                 final Piece currentPiece = _board.values()[rankIndex][fileIndex];
-                final boolean isPlayerKing = currentPiece != null && (currentPiece instanceof King) &&
-                        currentPiece.isWhitePiece() == _info.whiteTurn;
-                if (isPlayerKing) return new Just<>(new BoardCell(rankIndex, fileIndex));
+                final boolean isSideKing = currentPiece != null && (currentPiece instanceof King) &&
+                        currentPiece.isWhitePiece() == whiteKing;
+                if (isSideKing) return new Just<>(new BoardCell(rankIndex, fileIndex));
             }
         }
         return new Nothing<>();
     }
 
     /**
-     * Says if the given cell is under attack (by a piece of the player who hasn't got the turn).
+     * Says if the given cell is under attack (by an enemy piece of the testedCell).
      * Caution ! Does not take into account the fact that the attacker may be pinned.
      * @param testedCell - BoardCell - cell to test.
      * @return boolean - true if cell is under attack, false otherwise.
      */
-    private boolean checkIfThisSquareUnderAttack(BoardCell testedCell) {
+    private boolean checkIfThisSquareUnderAttackByAnEnemyPiece(BoardCell testedCell) {
+        final Piece pieceAtTestedCell = _board.values()[testedCell.rank][testedCell.file];
+        if (pieceAtTestedCell == null) return false;
+
         for (int rankIndex = 0; rankIndex < 8; rankIndex++) {
             for (int fileIndex = 0; fileIndex < 8; fileIndex++) {
-                BoardCell currentCell = new BoardCell(rankIndex, fileIndex);
-                if (pieceAtTheFirstCellIsAttackingTheSecondCell(currentCell, testedCell)) return true;
+                final BoardCell currentCell = new BoardCell(rankIndex, fileIndex);
+                final Piece currentPiece = _board.values()[rankIndex][fileIndex];
+                boolean pieceAtCurrentCellIsEnemyPiece =
+                        currentPiece != null && currentPiece.isWhitePiece() != pieceAtTestedCell.isWhitePiece();
+                if (pieceAtTheFirstCellIsAttackingTheSecondCell(currentCell, testedCell) && pieceAtCurrentCellIsEnemyPiece) return true;
             }
         }
         return false;
@@ -180,11 +193,7 @@ public class Position {
      */
     private boolean pieceAtTheFirstCellIsAttackingTheSecondCell(BoardCell attackerCell, BoardCell testedCell) {
         final Piece pieceAtAttackerCell = _board.values()[attackerCell.rank][attackerCell.file];
-        final boolean pieceAtAttackerCellIsNotEnemyPiece = pieceAtAttackerCell == null ||
-                pieceAtAttackerCell.isWhitePiece() == _info.whiteTurn;
-
-        if (pieceAtAttackerCellIsNotEnemyPiece) return false;
-        return pieceAtAttackerCell.isAttackingCell(attackerCell, testedCell, this);
+        return pieceAtAttackerCell != null && pieceAtAttackerCell.isAttackingCell(attackerCell, testedCell, this);
     }
 
     @Override
