@@ -51,6 +51,18 @@ public class Rook extends PromotablePiece {
     }
 
     @Override
+    public boolean isAttackingCell(BoardCell pieceCell, BoardCell testedCell, Position position) {
+        final int deltaX = testedCell.file - pieceCell.file;
+        final int deltaY = testedCell.rank - pieceCell.rank;
+        final int absDeltaX = Math.abs(deltaX);
+        final int absDeltaY = Math.abs(deltaY);
+        final boolean noObstacleBefore = !position.obstacleBetween(pieceCell, testedCell);
+        final boolean isAGoodPath = (absDeltaX == 0 || absDeltaY == 0) && (absDeltaX > 0 || absDeltaY > 0);
+
+        return isAGoodPath && noObstacleBefore;
+    }
+
+    @Override
     public String toString() {
         return "Rook{" +
                 "whitePlayer=" + whitePlayer +

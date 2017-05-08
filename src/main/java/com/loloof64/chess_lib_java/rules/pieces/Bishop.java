@@ -47,6 +47,18 @@ public class Bishop extends PromotablePiece {
     }
 
     @Override
+    public boolean isAttackingCell(BoardCell pieceCell, BoardCell testedCell, Position position) {
+        final int deltaX = testedCell.file - pieceCell.file;
+        final int deltaY = testedCell.rank - pieceCell.rank;
+        final int absDeltaX = Math.abs(deltaX);
+        final int absDeltaY = Math.abs(deltaY);
+        final boolean noObstacleBefore = !position.obstacleBetween(pieceCell, testedCell);
+        final boolean isAGoodPath = absDeltaX == absDeltaY;
+
+        return isAGoodPath && noObstacleBefore;
+    }
+
+    @Override
     public String toString() {
         return "Bishop{" +
                 "whitePlayer=" + whitePlayer +

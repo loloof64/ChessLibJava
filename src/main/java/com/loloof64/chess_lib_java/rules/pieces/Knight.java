@@ -47,6 +47,15 @@ public class Knight extends PromotablePiece {
     }
 
     @Override
+    public boolean isAttackingCell(BoardCell pieceCell, BoardCell testedCell, Position position) {
+        final int deltaX = testedCell.file - pieceCell.file;
+        final int deltaY = testedCell.rank - pieceCell.rank;
+
+        return (Math.abs(deltaX) == 2 && Math.abs(deltaY) == 1)
+                || (Math.abs(deltaX) == 1 && Math.abs(deltaY) == 2);
+    }
+
+    @Override
     public String toString() {
         return "Knight{" +
                 "whitePlayer=" + whitePlayer +

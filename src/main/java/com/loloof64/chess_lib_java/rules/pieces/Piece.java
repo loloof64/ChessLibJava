@@ -66,6 +66,16 @@ public abstract class Piece {
     abstract public Maybe<Position> move(BoardCell from, BoardCell to,
                                          Position position, Class<? extends PromotablePiece> promotionPiece);
 
+    /**
+     * Says if the piece is attacking the given cell, with no consideration about the current player turn
+     * not the color of the piece on tested cell, nor the fact that it could be taken on this square.
+     * @param pieceCell - BoardCell - the cell where is this piece on the board.
+     * @param testedCell - BoardCell - tested cell.
+     * @param position - Position - the position where all happens.
+     * @return boolean - true if the tested cell is attacked, false otherwise.
+     */
+    public abstract boolean isAttackingCell(BoardCell pieceCell, BoardCell testedCell, Position position);
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,5 +91,5 @@ public abstract class Piece {
         return (whitePlayer ? 1 : 0);
     }
 
-    protected boolean whitePlayer;
+    boolean whitePlayer;
 }

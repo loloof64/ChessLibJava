@@ -1,6 +1,7 @@
 package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+import com.loloof64.chess_lib_java.rules.pieces.Piece;
 import com.loloof64.functional.monad.Maybe;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class KingMoveTest {
 
-    Position pos1, pos2, pos3, pos4, pos5, pos6;
+    private Position pos1, pos2, pos3, pos4, pos5, pos6;
 
     @Before
     public void setupBeforeEach(){
@@ -231,6 +232,37 @@ public class KingMoveTest {
         Maybe<Position> wrapPos8 = pos7.move(BoardCell.E8, BoardCell.C8);
         assertEquals(Position.fromFEN("2kr1bnr/pppqpppp/2n5/3p4/3PP1b1/5N2/PPP1BPPP/RNBQ1RK1 w - - 1 6"),
                 wrapPos8.fromJust());
+    }
+
+    @Test
+    public void kingAttackAllCellsJustAroundHim(){
+        Position pos1 = Position.fromFEN("4k3/8/8/8/2n1P3/3K4/8/8 w - - 0 1");
+        Piece pos1WhiteKing = pos1.getPieceAt(BoardCell.D3);
+        assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.C4, pos1));
+        assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.D4, pos1));
+        assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.E4, pos1));
+        assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.C3, pos1));
+        assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.E3, pos1));
+        assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.C2, pos1));
+        assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.D2, pos1));
+        assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.E2, pos1));
+        assertEquals(false, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.D5, pos1));
+        assertEquals(false, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.F1, pos1));
+        assertEquals(false, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.G3, pos1));
+
+        Position pos2 = Position.fromFEN("8/6R1/5k2/6p1/4K3/8/8/8 b - - 0 1");
+        Piece pos2BlackKing = pos2.getPieceAt(BoardCell.F6);
+        assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.E7, pos2));
+        assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.F7, pos2));
+        assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.G7, pos2));
+        assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.E6, pos2));
+        assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.G6, pos2));
+        assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.E5, pos2));
+        assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.F5, pos2));
+        assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.G5, pos2));
+        assertEquals(false, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.H6, pos2));
+        assertEquals(false, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.B6, pos2));
+        assertEquals(false, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.C3, pos2));
     }
 
 }

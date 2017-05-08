@@ -47,6 +47,19 @@ public class Queen extends PromotablePiece {
     }
 
     @Override
+    public boolean isAttackingCell(BoardCell pieceCell, BoardCell testedCell, Position position) {
+        final int deltaX = testedCell.file - pieceCell.file;
+        final int deltaY = testedCell.rank - pieceCell.rank;
+        final int absDeltaX = Math.abs(deltaX);
+        final int absDeltaY = Math.abs(deltaY);
+        final boolean noObstacleBefore = !position.obstacleBetween(pieceCell, testedCell);
+        final boolean isBishopPath = absDeltaX == absDeltaY;
+        final boolean isRookPath = (absDeltaX == 0 || absDeltaY == 0) && (absDeltaX > 0 || absDeltaY > 0);
+
+        return (isBishopPath || isRookPath) && noObstacleBefore;
+    }
+
+    @Override
     public String toString() {
         return "Queen{" +
                 "whitePlayer=" + whitePlayer +

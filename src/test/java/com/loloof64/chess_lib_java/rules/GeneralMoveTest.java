@@ -82,4 +82,22 @@ public class GeneralMoveTest {
         Maybe<Position> wrapPos8 = pos4.move(BoardCell.F6, BoardCell.D7);
         assertEquals(true, wrapPos8.isNothing());
     }
+
+    @Test
+    public void kingIsInChess(){
+        Position pos1 = Position.fromFEN("rn1qkb1r/ppp2Bpp/3p1n2/4N3/4P3/2N5/PPPP1PPP/R1BbK2R b KQkq - 0 6");
+        assertEquals(true, pos1.kingIsInChess());
+
+        Position pos2 = Position.fromFEN("rnb1kbnr/ppNp1pp1/7p/4p3/4P2q/8/PPPP1PPP/R1BQKBNR b KQkq - 0 4");
+        assertEquals(true, pos2.kingIsInChess());
+
+        Position pos3 = Position.fromFEN("rnbqkb1r/pppppppp/7n/1B6/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 2 2");
+        assertEquals(false, pos3.kingIsInChess());
+
+        Position pos4 = Position.fromFEN("rnb1kbnr/ppp1pppp/4q3/8/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4");
+        assertEquals(true, pos4.kingIsInChess());
+
+        Position pos5 = Position.fromFEN("rnbqk1nr/pppp1ppp/8/4N3/1b6/8/PPPPPPPP/RNBQKB1R w KQkq - 1 3");
+        assertEquals(false, pos5.kingIsInChess());
+    }
 }

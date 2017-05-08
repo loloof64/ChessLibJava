@@ -1,10 +1,7 @@
 package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
-import com.loloof64.chess_lib_java.rules.pieces.Bishop;
-import com.loloof64.chess_lib_java.rules.pieces.Knight;
-import com.loloof64.chess_lib_java.rules.pieces.Queen;
-import com.loloof64.chess_lib_java.rules.pieces.Rook;
+import com.loloof64.chess_lib_java.rules.pieces.*;
 import com.loloof64.functional.monad.Maybe;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 public class PawnMoveTest {
 
-    Position pos1, pos2, pos3, pos4;
+    private Position pos1, pos2, pos3, pos4;
 
     @Before
     public void beforeEach(){
@@ -177,6 +174,50 @@ public class PawnMoveTest {
         Maybe<Position> wrapPos8 = pos7.move(BoardCell.D4, BoardCell.E3);
         Position pos8 = wrapPos8.fromJust();
         assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2"), pos8);
+    }
+
+    @Test
+    public void pawnAttackCellsDirectlyInFrontOfHimAndInDiagonal(){
+        Position pos1 = Position.fromFEN("4kr1R/6P1/8/2p5/2P5/8/1p6/N1n1K3 w - - 0 1");
+
+        Pawn pos1Pawn1 = (Pawn) pos1.getPieceAt(BoardCell.C4);
+        assertEquals(true, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.B5, pos1));
+        assertEquals(true, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.D5, pos1));
+        assertEquals(false, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.B4, pos1));
+        assertEquals(false, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.C5, pos1));
+        assertEquals(false, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.A6, pos1));
+        assertEquals(false, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.F7, pos1));
+        assertEquals(false, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.B3, pos1));
+        assertEquals(false, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.C3, pos1));
+        assertEquals(false, pos1Pawn1.isAttackingCell(BoardCell.C4, BoardCell.D3, pos1));
+        Pawn pos1Pawn2 = (Pawn) pos1.getPieceAt(BoardCell.G7);
+        assertEquals(true, pos1Pawn2.isAttackingCell(BoardCell.G7, BoardCell.F8, pos1));
+        assertEquals(true, pos1Pawn2.isAttackingCell(BoardCell.G7, BoardCell.H8, pos1));
+        assertEquals(false, pos1Pawn2.isAttackingCell(BoardCell.G7, BoardCell.G8, pos1));
+        assertEquals(false, pos1Pawn2.isAttackingCell(BoardCell.G7, BoardCell.H7, pos1));
+        assertEquals(false, pos1Pawn2.isAttackingCell(BoardCell.G7, BoardCell.F6, pos1));
+
+        Position pos2 = Position.fromFEN("4kr1R/6P1/8/2p5/2P5/8/1p6/N1n1K3 b - - 0 1");
+        Pawn pos2Pawn1 = (Pawn) pos2.getPieceAt(BoardCell.C5);
+        assertEquals(true, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.B4, pos2));
+        assertEquals(true, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.D4, pos2));
+        assertEquals(false, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.C4, pos2));
+        assertEquals(false, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.D5, pos2));
+        assertEquals(false, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.F2, pos2));
+        assertEquals(false, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.A3, pos2));
+        assertEquals(false, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.B6, pos2));
+        assertEquals(false, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.C6, pos2));
+        assertEquals(false, pos2Pawn1.isAttackingCell(BoardCell.C5, BoardCell.D6, pos2));
+        Pawn pos2Pawn2 = (Pawn) pos2.getPieceAt(BoardCell.B2);
+        assertEquals(true, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.A1, pos2));
+        assertEquals(true, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.C1, pos2));
+        assertEquals(false, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.B1, pos2));
+        assertEquals(false, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.E5, pos2));
+        assertEquals(false, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.A2, pos2));
+        assertEquals(false, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.C2, pos2));
+        assertEquals(false, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.A3, pos2));
+        assertEquals(false, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.B3, pos2));
+        assertEquals(false, pos2Pawn2.isAttackingCell(BoardCell.B2, BoardCell.C3, pos2));
     }
 
 }

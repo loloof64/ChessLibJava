@@ -98,6 +98,14 @@ public class Pawn extends Piece {
     }
 
     @Override
+    public boolean isAttackingCell(BoardCell pieceCell, BoardCell testedCell, Position position) {
+        final int deltaX = testedCell.file - pieceCell.file;
+        final int deltaY = testedCell.rank - pieceCell.rank;
+
+        return Math.abs(deltaX) == 1 && deltaY == (whitePlayer ? 1 : -1);
+    }
+
+    @Override
     public String toString() {
         return "Pawn{" +
                 "whitePlayer=" + whitePlayer +

@@ -87,6 +87,16 @@ public class King extends Piece {
     }
 
     @Override
+    public boolean isAttackingCell(BoardCell pieceCell, BoardCell testedCell, Position position) {
+        final int deltaX = testedCell.file - pieceCell.file;
+        final int deltaY = testedCell.rank - pieceCell.rank;
+
+        return (Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0) &&
+                (Math.abs(deltaX) < 2 && Math.abs(deltaY) < 2);
+    }
+
+
+    @Override
     public String toString() {
         return "King{" +
                 "whitePlayer=" + whitePlayer +

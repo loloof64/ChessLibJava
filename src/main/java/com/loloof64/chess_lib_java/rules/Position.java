@@ -1,9 +1,11 @@
 package com.loloof64.chess_lib_java.rules;
 
+import com.loloof64.chess_lib_java.rules.pieces.King;
 import com.loloof64.chess_lib_java.rules.pieces.Piece;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.chess_lib_java.rules.pieces.PromotablePiece;
 import com.loloof64.chess_lib_java.rules.pieces.Queen;
+import com.loloof64.functional.monad.Just;
 import com.loloof64.functional.monad.Maybe;
 import com.loloof64.functional.monad.Nothing;
 
@@ -126,6 +128,65 @@ public class Position {
         return movingPiece.move(from, to, this, promotionPiece);
     }
 
+    /**
+     * Says if the king of the player to move is in chess.
+     * @return boolean - true if the king of the player to move is in chess.
+     */
+    public boolean kingIsInChess() {
+        Maybe<BoardCell> wrapPlayerKingCell = findPlayerKingCell();
+        if (wrapPlayerKingCell.isNothing()) throw new RuntimeException("Player has no king !");
+        BoardCell playerKingCell = wrapPlayerKingCell.fromJust();
+
+        return checkIfThisSquareUnderAttack(playerKingCell);
+    }
+
+    /**
+     * Find the cell of the king of the player to move.
+     * @return BoardCell - the cell of the king of the player to move.
+     */
+    private Maybe<BoardCell> findPlayerKingCell() {
+        for (int rankIndex = 0; rankIndex < 8; rankIndex++){
+            for (int fileIndex = 0; fileIndex < 8; fileIndex++){
+                final Piece currentPiece = _board.values()[rankIndex][fileIndex];
+                final boolean isPlayerKing = currentPiece != null && (currentPiece instanceof King) &&
+                        currentPiece.isWhitePiece() == _info.whiteTurn;
+                if (isPlayerKing) return new Just<>(new BoardCell(rankIndex, fileIndex));
+            }
+        }
+        return new Nothing<>();
+    }
+
+    /**
+     * Says if the given cell is under attack (by a piece of the player who hasn't got the turn).
+     * Caution ! Does not take into account the fact that the attacker may be pinned.
+     * @param testedCell - BoardCell - cell to test.
+     * @return boolean - true if cell is under attack, false otherwise.
+     */
+    private boolean checkIfThisSquareUnderAttack(BoardCell testedCell) {
+        for (int rankIndex = 0; rankIndex < 8; rankIndex++) {
+            for (int fileIndex = 0; fileIndex < 8; fileIndex++) {
+                BoardCell currentCell = new BoardCell(rankIndex, fileIndex);
+                if (pieceAtTheFirstCellIsAttackingTheSecondCell(currentCell, testedCell)) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Says if the piece at the first cell is attacking piece at the second cell.
+     * @param attackerCell - BoardCell - cell where we suppose there is an attacking piece.
+     * @param testedCell - BoardCell - cell where we suppose to be attacked.
+     * @return true if testedCell is attacked, false otherwise.
+     */
+    private boolean pieceAtTheFirstCellIsAttackingTheSecondCell(BoardCell attackerCell, BoardCell testedCell) {
+        final Piece pieceAtAttackerCell = _board.values()[attackerCell.rank][attackerCell.file];
+        final boolean pieceAtAttackerCellIsNotEnemyPiece = pieceAtAttackerCell == null ||
+                pieceAtAttackerCell.isWhitePiece() == _info.whiteTurn;
+
+        if (pieceAtAttackerCellIsNotEnemyPiece) return false;
+        return pieceAtAttackerCell.isAttackingCell(attackerCell, testedCell, this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -151,6 +212,6 @@ public class Position {
                 '}';
     }
 
-    public final Board _board;
+    private final Board _board;
     public final GameInfo _info;
 }
