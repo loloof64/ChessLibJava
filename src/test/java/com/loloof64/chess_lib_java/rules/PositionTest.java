@@ -374,4 +374,41 @@ public class PositionTest {
         Maybe<Position> wrapPos3 = Position.fromFEN("rnbqkb1r/pppp1Bpp/5n2/4p3/4P3/8/PPPP1PPP/RNBQK1NR w KQkq - 0 3");
         assertEquals(true, wrapPos3.isNothing());
     }
+
+    @Test
+    public void cannotGenerateAPositionWhereKingOutsideE1E8AndMatchingCastleRightsAreStillActive(){
+        Maybe<Position> wrapPos1 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b KQkq - 1 2");
+        assertEquals(true, wrapPos1.isNothing());
+        Maybe<Position> wrapPos2 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b Kkq - 1 2");
+        assertEquals(true, wrapPos2.isNothing());
+        Maybe<Position> wrapPos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b Qkq - 1 2");
+        assertEquals(true, wrapPos3.isNothing());
+
+        Maybe<Position> wrapPos4 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3");
+        assertEquals(true, wrapPos4.isNothing());
+        Maybe<Position> wrapPos5 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQk - 2 3");
+        assertEquals(true, wrapPos5.isNothing());
+        Maybe<Position> wrapPos6 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQq - 2 3");
+        assertEquals(true, wrapPos6.isNothing());
+
+        Maybe<Position> wrapPos7 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b kq - 1 2");
+        assertEquals(false, wrapPos7.isNothing());
+        Maybe<Position> wrapPos8 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQ - 2 3");
+        assertEquals(false, wrapPos8.isNothing());
+    }
+
+    @Test
+    public void cannotGenerateAPositionWhereARookIsMissingInCornerAndTheMatchingCastleRightStillActive(){
+        Maybe<Position> wrapPos1 = Position.fromFEN("r1bqkbnr/pppppppp/2n5/8/7P/8/PPPPPPPR/RNBQKBN1 b KQkq - 2 2");
+        assertEquals(true, wrapPos1.isNothing());
+
+        Maybe<Position> wrapPos2 = Position.fromFEN("rnbqkb1r/pppppppp/5n2/8/P7/R7/1PPPPPPP/1NBQKBNR b KQkq - 2 2");
+        assertEquals(true, wrapPos2.isNothing());
+
+        Maybe<Position> wrapPos3 = Position.fromFEN("1nbqkbnr/1ppppppp/r7/p7/8/4PN2/PPPP1PPP/RNBQKB1R w KQkq - 1 3");
+        assertEquals(true, wrapPos3.isNothing());
+
+        Maybe<Position> wrapPos4 = Position.fromFEN("rnbqkbn1/ppppppp1/7r/7p/8/2NP4/PPP1PPPP/R1BQKBNR w KQkq - 1 3");
+        assertEquals(true, wrapPos4.isNothing());
+    }
 }

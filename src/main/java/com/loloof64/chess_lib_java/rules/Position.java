@@ -1,5 +1,6 @@
 package com.loloof64.chess_lib_java.rules;
 
+import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import com.loloof64.chess_lib_java.rules.coords.BoardRank;
 import com.loloof64.chess_lib_java.rules.pieces.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
@@ -61,6 +62,41 @@ public class Position {
         boolean thePlayerWhoHasNotTheTurnHasKingInChess = resultingPosition
                 .kingIsInChess(!resultingPosition._info.whiteTurn);
         if (thePlayerWhoHasNotTheTurnHasKingInChess) return new Nothing<>();
+
+        final boolean whiteHasLostRightToCastleBecauseOfKingPosition =
+                !resultingPosition.findKingCell(true).fromJust().equals(BoardCell.E1);
+        final boolean blackHasLostRightToCastleBecauseOfKingPosition =
+                !resultingPosition.findKingCell(false).fromJust().equals(BoardCell.E8);
+        if (whiteHasLostRightToCastleBecauseOfKingPosition &&
+                (resultingPosition._info.castlesRights.whiteKingSide ||
+                        resultingPosition._info.castlesRights.whiteQueenSide)) return new Nothing<>();
+        if (blackHasLostRightToCastleBecauseOfKingPosition &&
+                (resultingPosition._info.castlesRights.blackKingSide ||
+                    resultingPosition._info.castlesRights.blackQueenSide)) return new Nothing<>();
+
+        final Piece pieceOnH1 = resultingPosition._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_H.ordinal()];
+        final boolean whiteKingSideCastleLostBecauseOfMissingRook =
+                pieceOnH1 == null || !pieceOnH1.equals(new Rook(true));
+        if (whiteKingSideCastleLostBecauseOfMissingRook &&
+                resultingPosition._info.castlesRights.whiteKingSide) return new Nothing<>();
+
+        final Piece pieceOnA1 = resultingPosition._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_A.ordinal()];
+        final boolean whiteQueenSideCastleLostBecauseOfMissingRook =
+                pieceOnA1 == null || !pieceOnA1.equals(new Rook(true));
+        if (whiteQueenSideCastleLostBecauseOfMissingRook &&
+                resultingPosition._info.castlesRights.whiteQueenSide) return new Nothing<>();
+
+        final Piece pieceOnH8 = resultingPosition._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_H.ordinal()];
+        final boolean blackKingSideCastleLostBecauseOfMissingRook =
+                pieceOnH8 == null || !pieceOnH8.equals(new Rook(false));
+        if (blackKingSideCastleLostBecauseOfMissingRook &&
+                resultingPosition._info.castlesRights.blackKingSide) return new Nothing<>();
+
+        final Piece pieceOnA8 = resultingPosition._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_A.ordinal()];
+        final boolean blackQueenSideCastleLostBecauseOfMissingRook =
+                pieceOnA8 == null || !pieceOnA8.equals(new Rook(false));
+        if (blackQueenSideCastleLostBecauseOfMissingRook &&
+                resultingPosition._info.castlesRights.blackQueenSide) return new Nothing<>();
 
         return new Just<>(resultingPosition);
     }
