@@ -30,10 +30,35 @@ public class Position {
     /**
      * Generates a position from a Forsyth-Edwards Notation.
      * @param fenStr - String - the FEN to convert.
-     * @return Position - the converted position.
+     * @return Maybe of Position - the converted position wrapped in Just if success, Nothing otherwise.
      */
-    public static Position fromFEN(String fenStr){
-        return new Position(Board.fromFEN(fenStr), GameInfo.fromFEN(fenStr));
+    public static Maybe<Position> fromFEN(String fenStr){
+        Position resultingPosition = new Position(Board.fromFEN(fenStr), GameInfo.fromFEN(fenStr));
+        final int whiteKingCount = countPiece(resultingPosition, new King(true));
+        final int blackKingCount = countPiece(resultingPosition, new King(false));
+
+        if (whiteKingCount != 1 || blackKingCount != 1) return new Nothing<>();
+
+        return new Just<>(resultingPosition);
+    }
+
+    /**
+     * Simply count the given piece in the given position.
+     * @param position - Position - position where we want to count.
+     * @param pieceToCount - Piece - the piece we want to count.
+     * @return int - the count.
+     */
+    private static int countPiece(Position position, Piece pieceToCount) {
+        int count = 0;
+
+        for (int rankIndex = 0; rankIndex < 8; rankIndex++){
+            for (int fileIndex = 0; fileIndex < 8; fileIndex++){
+                final Piece currentPiece = position._board.values()[rankIndex][fileIndex];
+                if (currentPiece != null && currentPiece.equals(pieceToCount)) count++;
+            }
+        }
+
+        return count;
     }
 
     /**
@@ -128,7 +153,8 @@ public class Position {
         Maybe<Position> positionAfterMove = movingPiece.move(from, to, this, promotionPiece);
         if (positionAfterMove.isNothing()) return positionAfterMove;
 
-        boolean theMovingSideHasLeftHisKingInChess = positionAfterMove.fromJust().kingIsInChess(_info.whiteTurn);
+        boolean theMovingSideHasLeftHisKingInChess = positionAfterMove.isJust() &&
+                positionAfterMove.fromJust().kingIsInChess(_info.whiteTurn);
         if (theMovingSideHasLeftHisKingInChess) return new Nothing<>();
         else return positionAfterMove;
     }

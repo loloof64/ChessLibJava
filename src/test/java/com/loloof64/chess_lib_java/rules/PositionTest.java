@@ -2,6 +2,7 @@ package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.pieces.Piece;
 import com.loloof64.chess_lib_java.rules.coords.BoardFile;
+import com.loloof64.functional.monad.Maybe;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +15,7 @@ public class PositionTest {
      * @param boardLines1To8 - Array of array of Piece - Board FEN values, from rank 1 to rank 8.
      * @return String - the brute string representation of the board.
      */
-    String boardArrayToBruteString(Piece[][] boardLines1To8){
+    private String boardArrayToBruteString(Piece[][] boardLines1To8){
         StringBuilder strBuilder  = new StringBuilder();
         int lineIndex = 0;
         for (Piece[] line : boardLines1To8){
@@ -27,7 +28,7 @@ public class PositionTest {
         return strBuilder.toString();
     }
 
-    Piece[][] boardValuesFromBruteString(String boardStr){
+    private Piece[][] boardValuesFromBruteString(String boardStr){
         Piece [][] boardToReturn = new Piece[8][8];
 
         final String boardPart = boardStr.split("\\s+")[0];
@@ -161,7 +162,7 @@ public class PositionTest {
 
     @Test
     public void positionIsGeneratedFromFENCorrectly(){
-        final Position pos1 = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        final Position pos1 = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").fromJust();
         final Board board1 = new Board(boardValuesFromBruteString(
                 "RNBQKBNR/PPPPPPPP/________/________/________/________/pppppppp/rnbqkbnr"));
         final GameInfo info1 = new GameInfo(true, new CastlesRights(
@@ -169,7 +170,7 @@ public class PositionTest {
                 null, 0, 1);
         assertEquals(new Position(board1, info1), pos1);
 
-        final Position pos2 = Position.fromFEN("k2rr3/2pn2pp/p4p2/8/8/6P1/2P2P1P/RR4K1 b - - 13 20");
+        final Position pos2 = Position.fromFEN("k2rr3/2pn2pp/p4p2/8/8/6P1/2P2P1P/RR4K1 b - - 13 20").fromJust();
         final Board board2 = new Board(boardValuesFromBruteString(
                 "RR____K_/__P__P_P/______P_/________/________/p____p__/__pn__pp/k__rr___"));
         final GameInfo info2 = new GameInfo(false, new CastlesRights(
@@ -177,7 +178,7 @@ public class PositionTest {
                 null, 13, 20);
         assertEquals(new Position(board2, info2), pos2);
 
-        final Position pos3 = Position.fromFEN("r1bqkbnr/ppp1pppp/2n5/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3");
+        final Position pos3 = Position.fromFEN("r1bqkbnr/ppp1pppp/2n5/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3").fromJust();
         final Board board3 = new Board(boardValuesFromBruteString(
                 "RNBQKBNR/PPPP_PPP/________/________/___pP___/__n_____/ppp_pppp/r_bqkbnr"));
         final GameInfo info3 = new GameInfo(true, new CastlesRights(
@@ -185,7 +186,7 @@ public class PositionTest {
                 BoardFile.FILE_D, 0, 3);
         assertEquals(new Position(board3, info3), pos3);
 
-        final Position pos4 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/8/3pP3/5N1P/PPPP1PP1/RNBQKB1R b KQkq e3 0 3");
+        final Position pos4 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/8/3pP3/5N1P/PPPP1PP1/RNBQKB1R b KQkq e3 0 3").fromJust();
         final Board board4 = new Board(boardValuesFromBruteString(
                 "RNBQKB_R/PPPP_PP_/_____N_P/___pP___/________/________/ppp_pppp/rnbqkbnr"));
         final GameInfo info4 = new GameInfo(false, new CastlesRights(
@@ -227,6 +228,24 @@ public class PositionTest {
                 BoardFile.FILE_E, 0, 3);
         final Position pos4 = new Position(board4, info4);
         assertEquals("rnbqkbnr/ppp1pppp/8/8/3pP3/5N1P/PPPP1PP1/RNBQKB1R b KQkq e3 0 3", pos4.toFEN());
+    }
+
+    @Test
+    public void weCannotGenerateAPositionFromAFENIfTheKingNumberPerSideIsNotOne(){
+        Maybe<Position> wrapPos1 = Position.fromFEN("8/8/8/8/8/8/8/8 w - - 0 1");
+        assertEquals(true, wrapPos1.isNothing());
+
+        Maybe<Position> wrapPos2 = Position.fromFEN("8/8/8/8/8/8/8/8 b - - 0 1");
+        assertEquals(true, wrapPos2.isNothing());
+
+        Maybe<Position> wrapPos3 = Position.fromFEN("K7/K7/8/8/8/8/k7/8 w - - 0 1");
+        assertEquals(true, wrapPos3.isNothing());
+
+        Maybe<Position> wrapPos4 = Position.fromFEN("K7/k7/8/8/8/8/k7/8 w - - 0 1");
+        assertEquals(true, wrapPos4.isNothing());
+
+        Maybe<Position> wrapPos5 = Position.fromFEN("K7/K7/K7/8/8/8/k/8 w - - 0 1");
+        assertEquals(true, wrapPos5.isNothing());
     }
 
 }

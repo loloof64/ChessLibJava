@@ -14,12 +14,12 @@ public class KingMoveTest {
 
     @Before
     public void setupBeforeEach(){
-        pos1 = Position.fromFEN("6k1/8/8/2nNn3/2NKN3/2nNn3/8/8 w - - 0 1");
-        pos2 = Position.fromFEN("4K3/8/8/2NnN3/2nkn3/2NnN3/8/8 b - - 0 1");
-        pos3 = Position.fromFEN("4k3/8/8/8/3K4/8/8/8 w - - 0 1");
-        pos4 = Position.fromFEN("4K3/8/8/8/3k4/8/8/8 b - - 0 1");
-        pos5 = Position.fromFEN("6k1/8/8/2NnN3/2nKn3/2NnN3/8/8 w - - 0 1");
-        pos6 = Position.fromFEN("6K1/8/8/2nNn3/2NkN3/2nNn3/8/8 b - - 0 1");
+        pos1 = Position.fromFEN("6k1/8/8/2nNn3/2NKN3/2nNn3/8/8 w - - 0 1").fromJust();
+        pos2 = Position.fromFEN("4K3/8/8/2NnN3/2nkn3/2NnN3/8/8 b - - 0 1").fromJust();
+        pos3 = Position.fromFEN("4k3/8/8/8/3K4/8/8/8 w - - 0 1").fromJust();
+        pos4 = Position.fromFEN("4K3/8/8/8/3k4/8/8/8 b - - 0 1").fromJust();
+        pos5 = Position.fromFEN("6k1/8/8/2NnN3/2nKn3/2NnN3/8/8 w - - 0 1").fromJust();
+        pos6 = Position.fromFEN("6K1/8/8/2nNn3/2NkN3/2nNn3/8/8 b - - 0 1").fromJust();
     }
 
     @Test
@@ -104,139 +104,139 @@ public class KingMoveTest {
 
     @Test
     public void kingCanDoKingSideCastleIfFeatureAvailableAndPathFree(){
-        Position pos1 = Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4");
+        Position pos1 = Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4").fromJust();
         assertEquals(true, pos1.canMove(BoardCell.E1, BoardCell.G1));
 
-        Position pos2 = Position.fromFEN("r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3");
+        Position pos2 = Position.fromFEN("r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3").fromJust();
         assertEquals(false, pos2.canMove(BoardCell.E1, BoardCell.G1));
 
-        Position pos3 = Position.fromFEN("rnbqk1nr/pppp1ppp/8/2b1p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3");
+        Position pos3 = Position.fromFEN("rnbqk1nr/pppp1ppp/8/2b1p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3").fromJust();
         assertEquals(false, pos3.canMove(BoardCell.E1, BoardCell.G1));
 
-        Position pos4 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/3P1N2/PPPN1PPP/R1BQKB1R b KQkq - 2 4");
+        Position pos4 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/3P1N2/PPPN1PPP/R1BQKB1R b KQkq - 2 4").fromJust();
         assertEquals(true, pos4.canMove(BoardCell.E8, BoardCell.G8));
 
-        Position pos5 = Position.fromFEN("rnbqkb1r/pppp1ppp/5n2/4p3/4P3/3P1N2/PPP2PPP/RNBQKB1R b KQkq - 0 3");
+        Position pos5 = Position.fromFEN("rnbqkb1r/pppp1ppp/5n2/4p3/4P3/3P1N2/PPP2PPP/RNBQKB1R b KQkq - 0 3").fromJust();
         assertEquals(false, pos5.canMove(BoardCell.E8, BoardCell.G8));
 
-        Position pos6 = Position.fromFEN("rnbqk1nr/pppp1ppp/8/2b1p3/4P3/3P1N2/PPP2PPP/RNBQKB1R b KQkq - 0 3");
+        Position pos6 = Position.fromFEN("rnbqk1nr/pppp1ppp/8/2b1p3/4P3/3P1N2/PPP2PPP/RNBQKB1R b KQkq - 0 3").fromJust();
         assertEquals(false, pos6.canMove(BoardCell.E8, BoardCell.G8));
 
-        Position pos7 = Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w Qkq - 4 4");
+        Position pos7 = Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w Qkq - 4 4").fromJust();
         assertEquals(false, pos7.canMove(BoardCell.E1, BoardCell.G1));
 
-        Position pos8 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/3P1N2/PPPN1PPP/R1BQKB1R b KQq - 2 4");
+        Position pos8 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/3P1N2/PPPN1PPP/R1BQKB1R b KQq - 2 4").fromJust();
         assertEquals(false, pos8.canMove(BoardCell.E8, BoardCell.G8));
     }
 
     @Test
     public void kingCanDoQueenSideCastleIfFeatureAvailableAndPathFree(){
-        Position pos1 = Position.fromFEN("rnbq1rk1/ppp1bppp/3p1n2/4p1B1/4P3/2NP4/PPPQ1PPP/R3KBNR w KQ - 4 6");
+        Position pos1 = Position.fromFEN("rnbq1rk1/ppp1bppp/3p1n2/4p1B1/4P3/2NP4/PPPQ1PPP/R3KBNR w KQ - 4 6").fromJust();
         assertEquals(true, pos1.canMove(BoardCell.E1, BoardCell.C1));
 
-        Position pos2 = Position.fromFEN("rnbq1rk1/pppp1ppp/5n2/2b1p1B1/4P3/2NP4/PPP2PPP/R2QKBNR w KQ - 5 5");
+        Position pos2 = Position.fromFEN("rnbq1rk1/pppp1ppp/5n2/2b1p1B1/4P3/2NP4/PPP2PPP/R2QKBNR w KQ - 5 5").fromJust();
         assertEquals(false, pos2.canMove(BoardCell.E1, BoardCell.C1));
 
-        Position pos3 = Position.fromFEN("rnbqk2r/ppp1bppp/3p1n2/4p1B1/4P3/3P4/PPPQ1PPP/RN2KBNR w KQkq - 2 5");
+        Position pos3 = Position.fromFEN("rnbqk2r/ppp1bppp/3p1n2/4p1B1/4P3/3P4/PPPQ1PPP/RN2KBNR w KQkq - 2 5").fromJust();
         assertEquals(false, pos3.canMove(BoardCell.E1, BoardCell.C1));
 
-        Position pos4 = Position.fromFEN("rnbq1rk1/ppppbppp/5n2/4p3/4P3/2NP4/PPPQ1PPP/R1B1KBNR w KQ - 5 5");
+        Position pos4 = Position.fromFEN("rnbq1rk1/ppppbppp/5n2/4p3/4P3/2NP4/PPPQ1PPP/R1B1KBNR w KQ - 5 5").fromJust();
         assertEquals(false, pos4.canMove(BoardCell.E1, BoardCell.C1));
 
-        Position pos5 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p3/2B1P1b1/P1N2N2/1PPP1PPP/R1BQ1RK1 b kq - 2 6");
+        Position pos5 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p3/2B1P1b1/P1N2N2/1PPP1PPP/R1BQ1RK1 b kq - 2 6").fromJust();
         assertEquals(true, pos5.canMove(BoardCell.E8, BoardCell.C8));
 
-        Position pos6 = Position.fromFEN("r2qkbnr/ppp2ppp/2np4/4p3/2B1P1b1/P4N2/1PPP1PPP/RNBQ1RK1 b kq - 0 5");
+        Position pos6 = Position.fromFEN("r2qkbnr/ppp2ppp/2np4/4p3/2B1P1b1/P4N2/1PPP1PPP/RNBQ1RK1 b kq - 0 5").fromJust();
         assertEquals(false, pos6.canMove(BoardCell.E8, BoardCell.C8));
 
-        Position pos7 = Position.fromFEN("rn2kbnr/pppq1ppp/3p4/4p3/2B1P1b1/P4N2/1PPP1PPP/RNBQ1RK1 b kq - 0 5");
+        Position pos7 = Position.fromFEN("rn2kbnr/pppq1ppp/3p4/4p3/2B1P1b1/P4N2/1PPP1PPP/RNBQ1RK1 b kq - 0 5").fromJust();
         assertEquals(false, pos7.canMove(BoardCell.E8, BoardCell.C8));
 
-        Position pos8 = Position.fromFEN("r1b1kbnr/pppq1ppp/2np4/4p3/2B1P3/P4N2/1PPP1PPP/RNBQ1RK1 b kq - 0 5");
+        Position pos8 = Position.fromFEN("r1b1kbnr/pppq1ppp/2np4/4p3/2B1P3/P4N2/1PPP1PPP/RNBQ1RK1 b kq - 0 5").fromJust();
         assertEquals(false, pos8.canMove(BoardCell.E8, BoardCell.C8));
 
-        Position pos9 = Position.fromFEN("rnbq1rk1/ppp1bppp/3p1n2/4p1B1/4P3/2NP4/PPPQ1PPP/R3KBNR w K - 4 6");
+        Position pos9 = Position.fromFEN("rnbq1rk1/ppp1bppp/3p1n2/4p1B1/4P3/2NP4/PPPQ1PPP/R3KBNR w K - 4 6").fromJust();
         assertEquals(false, pos9.canMove(BoardCell.E1, BoardCell.C1));
 
-        Position pos10 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p3/2B1P1b1/P1N2N2/1PPP1PPP/R1BQ1RK1 b k - 2 6");
+        Position pos10 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p3/2B1P1b1/P1N2N2/1PPP1PPP/R1BQ1RK1 b k - 2 6").fromJust();
         assertEquals(false, pos10.canMove(BoardCell.E8, BoardCell.C8));
     }
 
     @Test
     public void kingMoveGeneratesPositionCorrectly(){
-        Position pos1 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/5P2/8/PPPPP1PP/RNBQKBNR w KQkq e6 0 2");
+        Position pos1 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/5P2/8/PPPPP1PP/RNBQKBNR w KQkq e6 0 2").fromJust();
         Maybe<Position> wrapPos2 = pos1.move(BoardCell.E1, BoardCell.F2);
-        assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/5P2/8/PPPPPKPP/RNBQ1BNR b kq - 1 2"),
+        assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/5P2/8/PPPPPKPP/RNBQ1BNR b kq - 1 2").fromJust(),
                 wrapPos2.fromJust());
 
-        Position pos3 = Position.fromFEN("rnbqkbnr/ppppp1pp/8/5p2/8/2N4P/PPPPPPP1/R1BQKBNR b KQkq - 0 2");
+        Position pos3 = Position.fromFEN("rnbqkbnr/ppppp1pp/8/5p2/8/2N4P/PPPPPPP1/R1BQKBNR b KQkq - 0 2").fromJust();
         Maybe<Position> wrapPos4 = pos3.move(BoardCell.E8, BoardCell.F7);
-        assertEquals(Position.fromFEN("rnbq1bnr/pppppkpp/8/5p2/8/2N4P/PPPPPPP1/R1BQKBNR w KQ - 1 3"),
+        assertEquals(Position.fromFEN("rnbq1bnr/pppppkpp/8/5p2/8/2N4P/PPPPPPP1/R1BQKBNR w KQ - 1 3").fromJust(),
                 wrapPos4.fromJust());
     }
 
     @Test
     public void kingMoveClearsEnPassantFile(){
-        Position pos1 = Position.fromFEN("rnbqkbnr/pp1ppppp/8/2p5/8/4P3/PPPP1PPP/RNBQKBNR w KQkq c6 0 2");
+        Position pos1 = Position.fromFEN("rnbqkbnr/pp1ppppp/8/2p5/8/4P3/PPPP1PPP/RNBQKBNR w KQkq c6 0 2").fromJust();
         Maybe<Position> wrapPos2 = pos1.move(BoardCell.E1, BoardCell.E2);
-        assertEquals(Position.fromFEN("rnbqkbnr/pp1ppppp/8/2p5/8/4P3/PPPPKPPP/RNBQ1BNR b kq - 1 2"),
+        assertEquals(Position.fromFEN("rnbqkbnr/pp1ppppp/8/2p5/8/4P3/PPPPKPPP/RNBQ1BNR b kq - 1 2").fromJust(),
                 wrapPos2.fromJust());
 
-        Position pos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/4p3/8/3P4/P7/1PP1PPPP/RNBQKBNR b KQkq d3 0 2");
+        Position pos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/4p3/8/3P4/P7/1PP1PPPP/RNBQKBNR b KQkq d3 0 2").fromJust();
         Maybe<Position> wrapPos4 = pos3.move(BoardCell.E8, BoardCell.E7);
-        assertEquals(Position.fromFEN("rnbq1bnr/ppppkppp/4p3/8/3P4/P7/1PP1PPPP/RNBQKBNR w KQ - 1 3"),
+        assertEquals(Position.fromFEN("rnbq1bnr/ppppkppp/4p3/8/3P4/P7/1PP1PPPP/RNBQKBNR w KQ - 1 3").fromJust(),
                 wrapPos4.fromJust());
     }
 
     @Test
     public void castleMoveGeneratesPositionCorrectly(){
-        Position pos1 = Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4");
+        Position pos1 = Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4").fromJust();
         Maybe<Position> wrapPos2 = pos1.move(BoardCell.E1, BoardCell.G1);
-        assertEquals(Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4"),
+        assertEquals(Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4").fromJust(),
                 wrapPos2.fromJust());
 
-        Position pos3 = Position.fromFEN("rnbq1rk1/ppp2ppp/3p1n2/2b1p3/4P3/2NPB3/PPPQ1PPP/R3KBNR w KQ - 0 6");
+        Position pos3 = Position.fromFEN("rnbq1rk1/ppp2ppp/3p1n2/2b1p3/4P3/2NPB3/PPPQ1PPP/R3KBNR w KQ - 0 6").fromJust();
         Maybe<Position> wrapPos4 = pos3.move(BoardCell.E1, BoardCell.C1);
-        assertEquals(Position.fromFEN("rnbq1rk1/ppp2ppp/3p1n2/2b1p3/4P3/2NPB3/PPPQ1PPP/2KR1BNR b - - 1 6"),
+        assertEquals(Position.fromFEN("rnbq1rk1/ppp2ppp/3p1n2/2b1p3/4P3/2NPB3/PPPQ1PPP/2KR1BNR b - - 1 6").fromJust(),
                 wrapPos4.fromJust());
 
-        Position pos5 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4");
+        Position pos5 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4").fromJust();
         Maybe<Position> wrapPos6 = pos5.move(BoardCell.E8, BoardCell.G8);
-        assertEquals(Position.fromFEN("rnbq1rk1/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 6 5"),
+        assertEquals(Position.fromFEN("rnbq1rk1/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 6 5").fromJust(),
                 wrapPos6.fromJust());
 
-        Position pos7 = Position.fromFEN("r3kbnr/pppqpppp/2n5/1B1pP3/6b1/5N2/PPPP1PPP/RNBQ1RK1 b kq - 6 5");
+        Position pos7 = Position.fromFEN("r3kbnr/pppqpppp/2n5/1B1pP3/6b1/5N2/PPPP1PPP/RNBQ1RK1 b kq - 6 5").fromJust();
         Maybe<Position> wrapPos8 = pos7.move(BoardCell.E8, BoardCell.C8);
-        assertEquals(Position.fromFEN("2kr1bnr/pppqpppp/2n5/1B1pP3/6b1/5N2/PPPP1PPP/RNBQ1RK1 w - - 7 6"),
+        assertEquals(Position.fromFEN("2kr1bnr/pppqpppp/2n5/1B1pP3/6b1/5N2/PPPP1PPP/RNBQ1RK1 w - - 7 6").fromJust(),
                 wrapPos8.fromJust());
     }
 
     @Test
     public void castleMoveClearsEnPassantFile(){
-        Position pos1 = Position.fromFEN("r1bqkbnr/p1pp1ppp/1pn5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq e6 0 4");
+        Position pos1 = Position.fromFEN("r1bqkbnr/p1pp1ppp/1pn5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq e6 0 4").fromJust();
         Maybe<Position> wrapPos2 = pos1.move(BoardCell.E1, BoardCell.G1);
-        assertEquals(Position.fromFEN("r1bqkbnr/p1pp1ppp/1pn5/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4"),
+        assertEquals(Position.fromFEN("r1bqkbnr/p1pp1ppp/1pn5/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4").fromJust(),
                 wrapPos2.fromJust());
 
-        Position pos3 = Position.fromFEN("r2qkb1r/pppb1ppp/2np1n2/4p3/4P3/2NPB3/PPPQ1PPP/R3KBNR w KQkq e6 0 6");
+        Position pos3 = Position.fromFEN("r2qkb1r/pppb1ppp/2np1n2/4p3/4P3/2NPB3/PPPQ1PPP/R3KBNR w KQkq e6 0 6").fromJust();
         Maybe<Position> wrapPos4 = pos3.move(BoardCell.E1, BoardCell.C1);
-        assertEquals(Position.fromFEN("r2qkb1r/pppb1ppp/2np1n2/4p3/4P3/2NPB3/PPPQ1PPP/2KR1BNR b kq - 1 6"),
+        assertEquals(Position.fromFEN("r2qkb1r/pppb1ppp/2np1n2/4p3/4P3/2NPB3/PPPQ1PPP/2KR1BNR b kq - 1 6").fromJust(),
                 wrapPos4.fromJust());
 
-        Position pos5 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R b KQkq e3 0 4");
+        Position pos5 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R b KQkq e3 0 4").fromJust();
         Maybe<Position> wrapPos6 = pos5.move(BoardCell.E8, BoardCell.G8);
-        assertEquals(Position.fromFEN("rnbq1rk1/pppp1ppp/5n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQ - 1 5"),
+        assertEquals(Position.fromFEN("rnbq1rk1/pppp1ppp/5n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQ - 1 5").fromJust(),
                 wrapPos6.fromJust());
 
-        Position pos7 = Position.fromFEN("r3kbnr/pppqpppp/2n5/3p4/3PP1b1/5N2/PPP1BPPP/RNBQ1RK1 b kq d3 0 5");
+        Position pos7 = Position.fromFEN("r3kbnr/pppqpppp/2n5/3p4/3PP1b1/5N2/PPP1BPPP/RNBQ1RK1 b kq d3 0 5").fromJust();
         Maybe<Position> wrapPos8 = pos7.move(BoardCell.E8, BoardCell.C8);
-        assertEquals(Position.fromFEN("2kr1bnr/pppqpppp/2n5/3p4/3PP1b1/5N2/PPP1BPPP/RNBQ1RK1 w - - 1 6"),
+        assertEquals(Position.fromFEN("2kr1bnr/pppqpppp/2n5/3p4/3PP1b1/5N2/PPP1BPPP/RNBQ1RK1 w - - 1 6").fromJust(),
                 wrapPos8.fromJust());
     }
 
     @Test
     public void kingAttackAllCellsJustAroundHim(){
-        Position pos1 = Position.fromFEN("4k3/8/8/8/2n1P3/3K4/8/8 w - - 0 1");
+        Position pos1 = Position.fromFEN("4k3/8/8/8/2n1P3/3K4/8/8 w - - 0 1").fromJust();
         Piece pos1WhiteKing = pos1.getPieceAt(BoardCell.D3);
         assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.C4, pos1));
         assertEquals(true, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.D4, pos1));
@@ -250,7 +250,7 @@ public class KingMoveTest {
         assertEquals(false, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.F1, pos1));
         assertEquals(false, pos1WhiteKing.isAttackingCell(BoardCell.D3, BoardCell.G3, pos1));
 
-        Position pos2 = Position.fromFEN("8/6R1/5k2/6p1/4K3/8/8/8 b - - 0 1");
+        Position pos2 = Position.fromFEN("8/6R1/5k2/6p1/4K3/8/8/8 b - - 0 1").fromJust();
         Piece pos2BlackKing = pos2.getPieceAt(BoardCell.F6);
         assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.E7, pos2));
         assertEquals(true, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.F7, pos2));
@@ -267,46 +267,46 @@ public class KingMoveTest {
 
     @Test
     public void weCannotCastleWhenTheKingIsInChess(){
-        Position pos1 = Position.fromFEN("r1b1kbnr/ppp1pppp/2n5/4q3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 5");
+        Position pos1 = Position.fromFEN("r1b1kbnr/ppp1pppp/2n5/4q3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 5").fromJust();
         Maybe<Position> wrapPos2 = pos1.move(BoardCell.E1, BoardCell.G1);
         assertEquals(true, wrapPos2.isNothing());
 
-        Position pos3 = Position.fromFEN("rnbqk2r/pppp1ppp/3b1n2/8/8/P3QN2/1PP1PPPP/RNB1KB1R b KQkq - 4 5");
+        Position pos3 = Position.fromFEN("rnbqk2r/pppp1ppp/3b1n2/8/8/P3QN2/1PP1PPPP/RNB1KB1R b KQkq - 4 5").fromJust();
         Maybe<Position> wrapPos4 = pos3.move(BoardCell.E8, BoardCell.G8);
         assertEquals(true, wrapPos4.isNothing());
 
-        Position pos5 = Position.fromFEN("r1bqk1nr/pppp1pp1/n6p/8/1b1QPB2/N7/PPP2PPP/R3KBNR w KQkq - 2 6");
+        Position pos5 = Position.fromFEN("r1bqk1nr/pppp1pp1/n6p/8/1b1QPB2/N7/PPP2PPP/R3KBNR w KQkq - 2 6").fromJust();
         Maybe<Position> wrapPos6 = pos5.move(BoardCell.E1, BoardCell.C1);
         assertEquals(true, wrapPos6.isNothing());
 
-        Position pos7 = Position.fromFEN("r3kbnr/ppp1qppp/n2p4/1B2p3/4P1b1/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 7 6");
+        Position pos7 = Position.fromFEN("r3kbnr/ppp1qppp/n2p4/1B2p3/4P1b1/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 7 6").fromJust();
         Maybe<Position> wrapPos8 = pos7.move(BoardCell.E8, BoardCell.C8);
         assertEquals(true, wrapPos8.isNothing());
     }
 
     @Test
     public void weCannotCastleWhenTheKingGoesAcrossAttackedCells(){
-        Position pos1 = Position.fromFEN("r2qkbnr/ppp2ppp/2np4/1B2p3/2b1P3/P1N2N2/1PPP1PPP/R1BQK2R w KQkq - 1 6");
+        Position pos1 = Position.fromFEN("r2qkbnr/ppp2ppp/2np4/1B2p3/2b1P3/P1N2N2/1PPP1PPP/R1BQK2R w KQkq - 1 6").fromJust();
         Maybe<Position> wrapPos2 = pos1.move(BoardCell.E1, BoardCell.G1);
         assertEquals(true, wrapPos2.isNothing());
 
-        Position pos3 = Position.fromFEN("rnbqk2r/1ppp1ppp/pb3n2/1B2p3/1B2P3/3P1N2/PPP2PPP/RN1QK2R b KQkq - 1 6");
+        Position pos3 = Position.fromFEN("rnbqk2r/1ppp1ppp/pb3n2/1B2p3/1B2P3/3P1N2/PPP2PPP/RN1QK2R b KQkq - 1 6").fromJust();
         Maybe<Position> wrapPos4 = pos3.move(BoardCell.E8, BoardCell.G8);
         assertEquals(true, wrapPos4.isNothing());
 
-        Position pos5 = Position.fromFEN("rn1qk2r/ppp2ppp/3p1n2/2b1p1B1/4P1b1/2NP4/PPPQ1PPP/R3KBNR w KQkq - 2 6");
+        Position pos5 = Position.fromFEN("rn1qk2r/ppp2ppp/3p1n2/2b1p1B1/4P1b1/2NP4/PPPQ1PPP/R3KBNR w KQkq - 2 6").fromJust();
         Maybe<Position> wrapPos6 = pos5.move(BoardCell.E1, BoardCell.C1);
         assertEquals(true, wrapPos6.isNothing());
 
-        Position pos7 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p1B1/4P1b1/3P1N2/PPP1BPPP/RN1Q1RK1 b kq - 6 6");
+        Position pos7 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p1B1/4P1b1/3P1N2/PPP1BPPP/RN1Q1RK1 b kq - 6 6").fromJust();
         Maybe<Position> wrapPos8 = pos7.move(BoardCell.E8, BoardCell.C8);
         assertEquals(true, wrapPos8.isNothing());
 
-        Position pos9 = Position.fromFEN("r1bqk1nr/ppp2ppp/2np4/2b1p3/2B1PP2/5N2/PPPP2PP/RNBQK2R w KQkq - 2 5");
+        Position pos9 = Position.fromFEN("r1bqk1nr/ppp2ppp/2np4/2b1p3/2B1PP2/5N2/PPPP2PP/RNBQK2R w KQkq - 2 5").fromJust();
         Maybe<Position> wrapPos10 = pos9.move(BoardCell.E1, BoardCell.G1);
         assertEquals(true, wrapPos10.isNothing());
 
-        Position pos11 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p1B1/4P1b1/P1NP1N2/1PP2PPP/R2QKB1R b KQkq - 2 6");
+        Position pos11 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p1B1/4P1b1/P1NP1N2/1PP2PPP/R2QKB1R b KQkq - 2 6").fromJust();
         Maybe<Position> wrapPos12 = pos11.move(BoardCell.E8, BoardCell.C8);
         assertEquals(true, wrapPos12.isNothing());
     }
