@@ -1,5 +1,6 @@
 package com.loloof64.chess_lib_java.rules;
 
+import com.loloof64.chess_lib_java.rules.coords.BoardRank;
 import com.loloof64.chess_lib_java.rules.pieces.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Just;
@@ -54,7 +55,24 @@ public class Position {
         final int blackQueensCount = countPiece(resultingPosition, new Queen(false));
         if (whiteQueensCount > 9 - whitePawnsCount || blackQueensCount > 9 - blackPawnsCount) return new Nothing<>();
 
+        final int pawnsOnRank1Or8Count = countPawnsOnRank1Or8(resultingPosition);
+        if (pawnsOnRank1Or8Count > 0) return new Nothing<>();
+
         return new Just<>(resultingPosition);
+    }
+
+    private static int countPawnsOnRank1Or8(Position resultingPosition) {
+        int count = 0;
+
+        final int ranks[] = {BoardRank.RANK_1.ordinal(), BoardRank.RANK_8.ordinal()};
+        for (int rankIndex : ranks){
+            for (int fileIndex = 0; fileIndex < 8; fileIndex++){
+                final Piece currentPiece = resultingPosition._board.values()[rankIndex][fileIndex];
+                if (currentPiece instanceof Pawn) count++;
+            }
+        }
+
+        return count;
     }
 
     /**

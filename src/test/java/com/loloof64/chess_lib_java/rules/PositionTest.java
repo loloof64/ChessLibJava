@@ -353,4 +353,13 @@ public class PositionTest {
         Maybe<Position> wrapPos8 = Position.fromFEN("1n5K/q7/q7/q7/q7/q4p2/qn2p1p1/6nk w - - 0 1");
         assertEquals(false, wrapPos8.isNothing());
     }
+
+    @Test
+    public void cannotGenerateAPositionWithPawnOnRankOneOrHeight(){
+        Maybe<Position> wrapPos1 = Position.fromFEN("P7/K1k5/8/8/8/8/8/8 w - - 0 1");
+        assertEquals(true, wrapPos1.isNothing());
+
+        Maybe<Position> wrapPos2 = Position.fromFEN("8/K1k5/8/8/8/8/8/2p5 w - - 0 1");
+        assertEquals(true, wrapPos2.isNothing());
+    }
 }
