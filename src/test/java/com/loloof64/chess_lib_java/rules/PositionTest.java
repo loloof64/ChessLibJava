@@ -259,6 +259,39 @@ public class PositionTest {
         Maybe<Position> wrapPos3 = Position.fromFEN("8/K1p5/ppp5/1ppp4/pp6/PPP5/k7/8 w - - 0 1");
         assertEquals(true, wrapPos3.isNothing());
 
+        Maybe<Position> wrapPos4 = Position.fromFEN("8/K1p5/ppp5/1ppp4/p7/PPP5/k7/8 w - - 0 1");
+        assertEquals(false, wrapPos4.isNothing());
+
+    }
+
+    @Test
+    public void whenGeneratingPositionEachPlayerRooksBishopsAndKnightsCountCannotBeGreaterThanTen(){
+        Maybe<Position> wrapPos1 = Position.fromFEN("K1k5/RRRRRRRR/RR6/R7/8/8/8/8 w - - 0 1");
+        assertEquals(true, wrapPos1.isNothing());
+
+        Maybe<Position> wrapPos2 = Position.fromFEN("K1k5/rrrrrrrr/rr6/r7/8/8/8/8 w - - 0 1");
+        assertEquals(true, wrapPos2.isNothing());
+
+        Maybe<Position> wrapPos3 = Position.fromFEN("K1k5/rrrrrrrr/rr6/8/8/8/8/8 w - - 0 1");
+        assertEquals(false, wrapPos3.isNothing());
+
+        Maybe<Position> wrapPos4 = Position.fromFEN("K1k5/BBBBBBBB/BB6/B7/8/8/8/8 w - - 0 1");
+        assertEquals(true, wrapPos4.isNothing());
+
+        Maybe<Position> wrapPos5 = Position.fromFEN("K1k5/bbbbbbbb/bb6/b7/8/8/8/8 w - - 0 1");
+        assertEquals(true, wrapPos5.isNothing());
+
+        Maybe<Position> wrapPos6 = Position.fromFEN("K1k5/bbbbbbbb/bb6/8/8/8/8/8 w - - 0 1");
+        assertEquals(false, wrapPos6.isNothing());
+
+        Maybe<Position> wrapPos7 = Position.fromFEN("K1k5/NNNNNNNN/NN6/N7/8/8/8/8 w - - 0 1");
+        assertEquals(true, wrapPos7.isNothing());
+
+        Maybe<Position> wrapPos8 = Position.fromFEN("K1k5/nnnnnnnn/nn6/n7/8/8/8/8 w - - 0 1");
+        assertEquals(true, wrapPos8.isNothing());
+
+        Maybe<Position> wrapPos9 = Position.fromFEN("K1k5/nnnnnnnn/nn6/8/8/8/8/8 w - - 0 1");
+        assertEquals(false, wrapPos9.isNothing());
     }
 
 }

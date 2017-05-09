@@ -40,6 +40,16 @@ public class Position {
         final int blackPawnsCount = countPiece(resultingPosition, new Pawn(false));
         if (whitePawnsCount > 8 || blackPawnsCount > 8) return new Nothing<>();
 
+        final int whiteKnightsCount = countPiece(resultingPosition, new Knight(true));
+        final int blackKnightsCount = countPiece(resultingPosition, new Knight(false));
+        final int whiteBishopsCount = countPiece(resultingPosition, new Bishop(true));
+        final int blackBishopsCount = countPiece(resultingPosition, new Bishop(false));
+        final int whiteRooksCount = countPiece(resultingPosition, new Rook(true));
+        final int blackRooksCount = countPiece(resultingPosition, new Rook(false));
+        if (whiteKnightsCount > 10 || blackKnightsCount > 10 ||
+                whiteBishopsCount > 10 || blackBishopsCount > 10 ||
+                whiteRooksCount > 10 || blackRooksCount > 10) return new Nothing<>();
+
         return new Just<>(resultingPosition);
     }
 
