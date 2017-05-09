@@ -34,34 +34,16 @@ public class Position {
     public static Maybe<Position> fromFEN(String fenStr){
         Position resultingPosition = new Position(Board.fromFEN(fenStr), GameInfo.fromFEN(fenStr));
 
-        final int whiteKingCount = countPiece(resultingPosition, new King(true));
-        final int blackKingCount = countPiece(resultingPosition, new King(false));
-        if (whiteKingCount != 1 || blackKingCount != 1) return new Nothing<>();
+        if (!rightPiecesCountForPosition(resultingPosition)) return new Nothing<>();
+        if (!rightCastleRightsRemainsInPosition(resultingPosition)) return new Nothing<>();
 
-        final int whitePawnsCount = countPiece(resultingPosition, new Pawn(true));
-        final int blackPawnsCount = countPiece(resultingPosition, new Pawn(false));
-        if (whitePawnsCount > 8 || blackPawnsCount > 8) return new Nothing<>();
+        return new Just<>(resultingPosition);
+    }
 
-        final int whiteKnightsCount = countPiece(resultingPosition, new Knight(true));
-        final int blackKnightsCount = countPiece(resultingPosition, new Knight(false));
-        final int whiteBishopsCount = countPiece(resultingPosition, new Bishop(true));
-        final int blackBishopsCount = countPiece(resultingPosition, new Bishop(false));
-        final int whiteRooksCount = countPiece(resultingPosition, new Rook(true));
-        final int blackRooksCount = countPiece(resultingPosition, new Rook(false));
-        if (whiteKnightsCount > 10 - whitePawnsCount || blackKnightsCount > 10 - blackPawnsCount ||
-                whiteBishopsCount > 10 - whitePawnsCount || blackBishopsCount > 10 - blackPawnsCount ||
-                whiteRooksCount > 10 - whitePawnsCount || blackRooksCount > 10 - blackPawnsCount) return new Nothing<>();
-
-        final int whiteQueensCount = countPiece(resultingPosition, new Queen(true));
-        final int blackQueensCount = countPiece(resultingPosition, new Queen(false));
-        if (whiteQueensCount > 9 - whitePawnsCount || blackQueensCount > 9 - blackPawnsCount) return new Nothing<>();
-
-        final int pawnsOnRank1Or8Count = countPawnsOnRank1Or8(resultingPosition);
-        if (pawnsOnRank1Or8Count > 0) return new Nothing<>();
-
+    private static boolean rightCastleRightsRemainsInPosition(final Position resultingPosition){
         boolean thePlayerWhoHasNotTheTurnHasKingInChess = resultingPosition
                 .kingIsInChess(!resultingPosition._info.whiteTurn);
-        if (thePlayerWhoHasNotTheTurnHasKingInChess) return new Nothing<>();
+        if (thePlayerWhoHasNotTheTurnHasKingInChess) return false;
 
         final boolean whiteHasLostRightToCastleBecauseOfKingPosition =
                 !resultingPosition.findKingCell(true).fromJust().equals(BoardCell.E1);
@@ -69,36 +51,61 @@ public class Position {
                 !resultingPosition.findKingCell(false).fromJust().equals(BoardCell.E8);
         if (whiteHasLostRightToCastleBecauseOfKingPosition &&
                 (resultingPosition._info.castlesRights.whiteKingSide ||
-                        resultingPosition._info.castlesRights.whiteQueenSide)) return new Nothing<>();
+                        resultingPosition._info.castlesRights.whiteQueenSide)) return false;
         if (blackHasLostRightToCastleBecauseOfKingPosition &&
                 (resultingPosition._info.castlesRights.blackKingSide ||
-                    resultingPosition._info.castlesRights.blackQueenSide)) return new Nothing<>();
+                        resultingPosition._info.castlesRights.blackQueenSide)) return false;
 
         final Piece pieceOnH1 = resultingPosition._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_H.ordinal()];
         final boolean whiteKingSideCastleLostBecauseOfMissingRook =
                 pieceOnH1 == null || !pieceOnH1.equals(new Rook(true));
         if (whiteKingSideCastleLostBecauseOfMissingRook &&
-                resultingPosition._info.castlesRights.whiteKingSide) return new Nothing<>();
+                resultingPosition._info.castlesRights.whiteKingSide) return false;
 
         final Piece pieceOnA1 = resultingPosition._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_A.ordinal()];
         final boolean whiteQueenSideCastleLostBecauseOfMissingRook =
                 pieceOnA1 == null || !pieceOnA1.equals(new Rook(true));
         if (whiteQueenSideCastleLostBecauseOfMissingRook &&
-                resultingPosition._info.castlesRights.whiteQueenSide) return new Nothing<>();
+                resultingPosition._info.castlesRights.whiteQueenSide) return false;
 
         final Piece pieceOnH8 = resultingPosition._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_H.ordinal()];
         final boolean blackKingSideCastleLostBecauseOfMissingRook =
                 pieceOnH8 == null || !pieceOnH8.equals(new Rook(false));
         if (blackKingSideCastleLostBecauseOfMissingRook &&
-                resultingPosition._info.castlesRights.blackKingSide) return new Nothing<>();
+                resultingPosition._info.castlesRights.blackKingSide) return false;
 
         final Piece pieceOnA8 = resultingPosition._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_A.ordinal()];
         final boolean blackQueenSideCastleLostBecauseOfMissingRook =
                 pieceOnA8 == null || !pieceOnA8.equals(new Rook(false));
-        if (blackQueenSideCastleLostBecauseOfMissingRook &&
-                resultingPosition._info.castlesRights.blackQueenSide) return new Nothing<>();
+        return !blackQueenSideCastleLostBecauseOfMissingRook ||
+                !resultingPosition._info.castlesRights.blackQueenSide;
+    }
 
-        return new Just<>(resultingPosition);
+    private static boolean rightPiecesCountForPosition(final Position position){
+        final int whiteKingCount = countPiece(position, new King(true));
+        final int blackKingCount = countPiece(position, new King(false));
+        if (whiteKingCount != 1 || blackKingCount != 1) return false;
+
+        final int whitePawnsCount = countPiece(position, new Pawn(true));
+        final int blackPawnsCount = countPiece(position, new Pawn(false));
+        if (whitePawnsCount > 8 || blackPawnsCount > 8) return false;
+
+        final int whiteKnightsCount = countPiece(position, new Knight(true));
+        final int blackKnightsCount = countPiece(position, new Knight(false));
+        final int whiteBishopsCount = countPiece(position, new Bishop(true));
+        final int blackBishopsCount = countPiece(position, new Bishop(false));
+        final int whiteRooksCount = countPiece(position, new Rook(true));
+        final int blackRooksCount = countPiece(position, new Rook(false));
+        if (whiteKnightsCount > 10 - whitePawnsCount || blackKnightsCount > 10 - blackPawnsCount ||
+                whiteBishopsCount > 10 - whitePawnsCount || blackBishopsCount > 10 - blackPawnsCount ||
+                whiteRooksCount > 10 - whitePawnsCount || blackRooksCount > 10 - blackPawnsCount) return false;
+
+        final int whiteQueensCount = countPiece(position, new Queen(true));
+        final int blackQueensCount = countPiece(position, new Queen(false));
+        if (whiteQueensCount > 9 - whitePawnsCount || blackQueensCount > 9 - blackPawnsCount) return false;
+
+        final int pawnsOnRank1Or8Count = countPawnsOnRank1Or8(position);
+        return pawnsOnRank1Or8Count == 0;
     }
 
     private static int countPawnsOnRank1Or8(Position resultingPosition) {
