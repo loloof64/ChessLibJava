@@ -265,4 +265,50 @@ public class KingMoveTest {
         assertEquals(false, pos2BlackKing.isAttackingCell(BoardCell.F6, BoardCell.C3, pos2));
     }
 
+    @Test
+    public void weCannotCastleWhenTheKingIsInChess(){
+        Position pos1 = Position.fromFEN("r1b1kbnr/ppp1pppp/2n5/4q3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 5");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.E1, BoardCell.G1);
+        assertEquals(true, wrapPos2.isNothing());
+
+        Position pos3 = Position.fromFEN("rnbqk2r/pppp1ppp/3b1n2/8/8/P3QN2/1PP1PPPP/RNB1KB1R b KQkq - 4 5");
+        Maybe<Position> wrapPos4 = pos3.move(BoardCell.E8, BoardCell.G8);
+        assertEquals(true, wrapPos4.isNothing());
+
+        Position pos5 = Position.fromFEN("r1bqk1nr/pppp1pp1/n6p/8/1b1QPB2/N7/PPP2PPP/R3KBNR w KQkq - 2 6");
+        Maybe<Position> wrapPos6 = pos5.move(BoardCell.E1, BoardCell.C1);
+        assertEquals(true, wrapPos6.isNothing());
+
+        Position pos7 = Position.fromFEN("r3kbnr/ppp1qppp/n2p4/1B2p3/4P1b1/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 7 6");
+        Maybe<Position> wrapPos8 = pos7.move(BoardCell.E8, BoardCell.C8);
+        assertEquals(true, wrapPos8.isNothing());
+    }
+
+    @Test
+    public void weCannotCastleWhenTheKingGoesAcrossAttackedCells(){
+        Position pos1 = Position.fromFEN("r2qkbnr/ppp2ppp/2np4/1B2p3/2b1P3/P1N2N2/1PPP1PPP/R1BQK2R w KQkq - 1 6");
+        Maybe<Position> wrapPos2 = pos1.move(BoardCell.E1, BoardCell.G1);
+        assertEquals(true, wrapPos2.isNothing());
+
+        Position pos3 = Position.fromFEN("rnbqk2r/1ppp1ppp/pb3n2/1B2p3/1B2P3/3P1N2/PPP2PPP/RN1QK2R b KQkq - 1 6");
+        Maybe<Position> wrapPos4 = pos3.move(BoardCell.E8, BoardCell.G8);
+        assertEquals(true, wrapPos4.isNothing());
+
+        Position pos5 = Position.fromFEN("rn1qk2r/ppp2ppp/3p1n2/2b1p1B1/4P1b1/2NP4/PPPQ1PPP/R3KBNR w KQkq - 2 6");
+        Maybe<Position> wrapPos6 = pos5.move(BoardCell.E1, BoardCell.C1);
+        assertEquals(true, wrapPos6.isNothing());
+
+        Position pos7 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p1B1/4P1b1/3P1N2/PPP1BPPP/RN1Q1RK1 b kq - 6 6");
+        Maybe<Position> wrapPos8 = pos7.move(BoardCell.E8, BoardCell.C8);
+        assertEquals(true, wrapPos8.isNothing());
+
+        Position pos9 = Position.fromFEN("r1bqk1nr/ppp2ppp/2np4/2b1p3/2B1PP2/5N2/PPPP2PP/RNBQK2R w KQkq - 2 5");
+        Maybe<Position> wrapPos10 = pos9.move(BoardCell.E1, BoardCell.G1);
+        assertEquals(true, wrapPos10.isNothing());
+
+        Position pos11 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p1B1/4P1b1/P1NP1N2/1PP2PPP/R2QKB1R b KQkq - 2 6");
+        Maybe<Position> wrapPos12 = pos11.move(BoardCell.E8, BoardCell.C8);
+        assertEquals(true, wrapPos12.isNothing());
+    }
+
 }

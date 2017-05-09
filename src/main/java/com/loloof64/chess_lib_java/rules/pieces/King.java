@@ -55,15 +55,29 @@ public class King extends Piece {
         newPositionBoard = newPositionBoard.copy(from, null);
         newPositionBoard = newPositionBoard.copy(to, pieceAtStartCell);
         if (isKingSideCastleMove){
+            if (position.kingIsInChess(position._info.whiteTurn)) return new Nothing<>();
+
             final BoardCell movedRookCell = new BoardCell(from.rank, BoardFile.FILE_H.ordinal());
             final BoardCell movedRookEndCell = new BoardCell(from.rank, BoardFile.FILE_F.ordinal());
+
+            Maybe<Position> positionIfKingCrossF1OrF8 = position.move(from, movedRookEndCell);
+            // If king cannot cross F1/F8
+            if (positionIfKingCrossF1OrF8.isNothing()) return new Nothing<>();
+
             final Piece movedRook = position.getPieceAt(movedRookCell);
             newPositionBoard = newPositionBoard.copy(movedRookCell, null);
             newPositionBoard = newPositionBoard.copy(movedRookEndCell, movedRook);
         }
         else if (isQueenSideCastleMove){
+            if (position.kingIsInChess(position._info.whiteTurn)) return new Nothing<>();
+
             final BoardCell movedRookCell = new BoardCell(from.rank, BoardFile.FILE_A.ordinal());
             final BoardCell movedRookEndCell = new BoardCell(from.rank, BoardFile.FILE_D.ordinal());
+
+            Maybe<Position> positionIfKingCrossD1OrD8 = position.move(from, movedRookEndCell);
+            // If king cannot cross D1/D8
+            if (positionIfKingCrossD1OrD8.isNothing()) return new Nothing<>();
+
             final Piece movedRook = position.getPieceAt(movedRookCell);
             newPositionBoard = newPositionBoard.copy(movedRookCell, null);
             newPositionBoard = newPositionBoard.copy(movedRookEndCell, movedRook);
