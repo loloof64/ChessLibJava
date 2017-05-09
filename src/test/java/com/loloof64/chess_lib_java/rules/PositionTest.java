@@ -327,4 +327,30 @@ public class PositionTest {
         assertEquals(false, wrapPos6.isNothing());
     }
 
+    @Test
+    public void whenGeneratingPositionEachPlayerQueensCountCannotBeGreaterThanElevenMinusPawnsCount(){
+        Maybe<Position> wrapPos1 = Position.fromFEN("Qn5k/QnQ3n1/Q1Q5/Q7/Q7/Q7/Q7/Q6K w - - 0 1");
+        assertEquals(true, wrapPos1.isNothing());
+
+        Maybe<Position> wrapPos2 = Position.fromFEN("qn5K/q1q5/q7/q7/q7/q7/qnq5/q5nk w - - 0 1");
+        assertEquals(true, wrapPos2.isNothing());
+
+        Maybe<Position> wrapPos3 = Position.fromFEN("Qn5k/Qn4n1/Q7/Q7/Q7/Q1Q5/Q7/Q6K w - - 0 1");
+        assertEquals(false, wrapPos3.isNothing());
+
+        Maybe<Position> wrapPos4 = Position.fromFEN("qn5K/q7/q7/q7/q1q5/q7/qn6/q5nk w - - 0 1");
+        assertEquals(false, wrapPos4.isNothing());
+
+        Maybe<Position> wrapPos5 = Position.fromFEN("Qn5k/Qn4n1/Q7/Q7/Q7/Q3P1P1/Q4P2/7K w - - 0 1");
+        assertEquals(true, wrapPos5.isNothing());
+
+        Maybe<Position> wrapPos6 = Position.fromFEN("1n5k/Qn4n1/Q7/Q7/Q7/Q3P1P1/Q4P2/7K w - - 0 1");
+        assertEquals(false, wrapPos6.isNothing());
+
+        Maybe<Position> wrapPos7 = Position.fromFEN("qn5K/q7/q7/q7/q7/q4p2/qn2p1p1/6nk w - - 0 1");
+        assertEquals(true, wrapPos7.isNothing());
+
+        Maybe<Position> wrapPos8 = Position.fromFEN("1n5K/q7/q7/q7/q7/q4p2/qn2p1p1/6nk w - - 0 1");
+        assertEquals(false, wrapPos8.isNothing());
+    }
 }

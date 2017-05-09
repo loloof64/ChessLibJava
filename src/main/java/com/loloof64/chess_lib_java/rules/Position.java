@@ -50,6 +50,10 @@ public class Position {
                 whiteBishopsCount > 10 - whitePawnsCount || blackBishopsCount > 10 - blackPawnsCount ||
                 whiteRooksCount > 10 - whitePawnsCount || blackRooksCount > 10 - blackPawnsCount) return new Nothing<>();
 
+        final int whiteQueensCount = countPiece(resultingPosition, new Queen(true));
+        final int blackQueensCount = countPiece(resultingPosition, new Queen(false));
+        if (whiteQueensCount > 9 - whitePawnsCount || blackQueensCount > 9 - blackPawnsCount) return new Nothing<>();
+
         return new Just<>(resultingPosition);
     }
 
