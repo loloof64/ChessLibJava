@@ -248,4 +248,17 @@ public class PositionTest {
         assertEquals(true, wrapPos5.isNothing());
     }
 
+    @Test
+    public void weCannotGenerateAPositionWhereAPlayerHasMoreThanEightPawns(){
+        Maybe<Position> wrapPos1 = Position.fromFEN("8/K1PP4/PPPPPPPP/8/8/pppppppp/k1pp4/8 w - - 0 1");
+        assertEquals(true, wrapPos1.isNothing());
+
+        Maybe<Position> wrapPos2 = Position.fromFEN("8/K1P5/PPPPPPPP/8/8/ppp5/k7/8 w - - 0 1");
+        assertEquals(true, wrapPos2.isNothing());
+
+        Maybe<Position> wrapPos3 = Position.fromFEN("8/K1p5/ppp5/1ppp4/pp6/PPP5/k7/8 w - - 0 1");
+        assertEquals(true, wrapPos3.isNothing());
+
+    }
+
 }

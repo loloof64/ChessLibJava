@@ -1,10 +1,7 @@
 package com.loloof64.chess_lib_java.rules;
 
-import com.loloof64.chess_lib_java.rules.pieces.King;
-import com.loloof64.chess_lib_java.rules.pieces.Piece;
+import com.loloof64.chess_lib_java.rules.pieces.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
-import com.loloof64.chess_lib_java.rules.pieces.PromotablePiece;
-import com.loloof64.chess_lib_java.rules.pieces.Queen;
 import com.loloof64.functional.monad.Just;
 import com.loloof64.functional.monad.Maybe;
 import com.loloof64.functional.monad.Nothing;
@@ -34,10 +31,14 @@ public class Position {
      */
     public static Maybe<Position> fromFEN(String fenStr){
         Position resultingPosition = new Position(Board.fromFEN(fenStr), GameInfo.fromFEN(fenStr));
+
         final int whiteKingCount = countPiece(resultingPosition, new King(true));
         final int blackKingCount = countPiece(resultingPosition, new King(false));
-
         if (whiteKingCount != 1 || blackKingCount != 1) return new Nothing<>();
+
+        final int whitePawnsCount = countPiece(resultingPosition, new Pawn(true));
+        final int blackPawnsCount = countPiece(resultingPosition, new Pawn(false));
+        if (whitePawnsCount > 8 || blackPawnsCount > 8) return new Nothing<>();
 
         return new Just<>(resultingPosition);
     }
