@@ -58,6 +58,10 @@ public class Position {
         final int pawnsOnRank1Or8Count = countPawnsOnRank1Or8(resultingPosition);
         if (pawnsOnRank1Or8Count > 0) return new Nothing<>();
 
+        boolean thePlayerWhoHasNotTheTurnHasKingInChess = resultingPosition
+                .kingIsInChess(!resultingPosition._info.whiteTurn);
+        if (thePlayerWhoHasNotTheTurnHasKingInChess) return new Nothing<>();
+
         return new Just<>(resultingPosition);
     }
 
