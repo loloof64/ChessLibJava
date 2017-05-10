@@ -2,7 +2,6 @@ package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Maybe;
-import com.loloof64.functional.monad.Nothing;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

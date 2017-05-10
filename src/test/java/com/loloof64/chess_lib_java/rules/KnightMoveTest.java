@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class KnightMoveTest {
 
@@ -20,49 +22,49 @@ public class KnightMoveTest {
 
     @Test
     public void knightHasParticularMoveAndCanJumpOverPieces(){
-        assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.A3));
-        assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.B2));
-        assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.D2));
-        assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.B6));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.F4));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.A4));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.C2));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.C8));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.F7));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.A2));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.B5));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.E2));
+        assertTrue(pos1.canMove(BoardCell.C4, BoardCell.A3));
+        assertTrue(pos1.canMove(BoardCell.C4, BoardCell.B2));
+        assertTrue(pos1.canMove(BoardCell.C4, BoardCell.D2));
+        assertTrue(pos1.canMove(BoardCell.C4, BoardCell.B6));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.F4));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.A4));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.C2));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.C8));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.F7));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.A2));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.B5));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.E2));
 
-        assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.A3));
-        assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.B2));
-        assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.D2));
-        assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.B6));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.F4));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.A4));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.C2));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.C8));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.F7));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.A2));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.B5));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.E2));
+        assertTrue(pos2.canMove(BoardCell.C4, BoardCell.A3));
+        assertTrue(pos2.canMove(BoardCell.C4, BoardCell.B2));
+        assertTrue(pos2.canMove(BoardCell.C4, BoardCell.D2));
+        assertTrue(pos2.canMove(BoardCell.C4, BoardCell.B6));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.F4));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.A4));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.C2));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.C8));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.F7));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.A2));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.B5));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.E2));
     }
 
     @Test
     public void knightCannotGoOnCellOccupiedByFriendPiece(){
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.A5));
-        assertEquals(false, pos1.canMove(BoardCell.C4, BoardCell.D6));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.A5));
+        assertFalse(pos1.canMove(BoardCell.C4, BoardCell.D6));
 
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.A5));
-        assertEquals(false, pos2.canMove(BoardCell.C4, BoardCell.D6));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.A5));
+        assertFalse(pos2.canMove(BoardCell.C4, BoardCell.D6));
     }
 
     @Test
     public void knightCanCaptureEnemyPieceIfOnItsTargetCell(){
-        assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.E3));
-        assertEquals(true, pos1.canMove(BoardCell.C4, BoardCell.E5));
+        assertTrue(pos1.canMove(BoardCell.C4, BoardCell.E3));
+        assertTrue(pos1.canMove(BoardCell.C4, BoardCell.E5));
 
-        assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.E3));
-        assertEquals(true, pos2.canMove(BoardCell.C4, BoardCell.E5));
+        assertTrue(pos2.canMove(BoardCell.C4, BoardCell.E3));
+        assertTrue(pos2.canMove(BoardCell.C4, BoardCell.E5));
     }
 
     @Test
@@ -99,28 +101,28 @@ public class KnightMoveTest {
     public void knightAttackCellsTheSameWayHeMoves(){
         Position pos3 = Position.fromFEN("4k3/8/8/1P3b2/3N4/5K2/2B5/8 w - - 0 1").fromJust();
         Piece pos3WhiteKnight = pos3.getPieceAt(BoardCell.D4);
-        assertEquals(true, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.C2, pos3));
-        assertEquals(true, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.B3, pos3));
-        assertEquals(true, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.B5, pos3));
-        assertEquals(true, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.C6, pos3));
-        assertEquals(true, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.E6, pos3));
-        assertEquals(true, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.F5, pos3));
-        assertEquals(true, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.F3, pos3));
-        assertEquals(true, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.E2, pos3));
-        assertEquals(false, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.D6, pos3));
-        assertEquals(false, pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.E4, pos3));
+        assertTrue(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.C2, pos3));
+        assertTrue(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.B3, pos3));
+        assertTrue(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.B5, pos3));
+        assertTrue(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.C6, pos3));
+        assertTrue(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.E6, pos3));
+        assertTrue(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.F5, pos3));
+        assertTrue(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.F3, pos3));
+        assertTrue(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.E2, pos3));
+        assertFalse(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.D6, pos3));
+        assertFalse(pos3WhiteKnight.isAttackingCell(BoardCell.D4, BoardCell.E4, pos3));
 
         Position pos4 = Position.fromFEN("8/8/3k4/P7/2n5/1B1p4/8/4K3 b - - 0 1").fromJust();
         Piece pos4BlackKnight = pos4.getPieceAt(BoardCell.C4);
-        assertEquals(true, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.B2, pos4));
-        assertEquals(true, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.A3, pos4));
-        assertEquals(true, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.A5, pos4));
-        assertEquals(true, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.B6, pos4));
-        assertEquals(true, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.D6, pos4));
-        assertEquals(true, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.E5, pos4));
-        assertEquals(true, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.E3, pos4));
-        assertEquals(true, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.D2, pos4));
-        assertEquals(false, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.E4, pos4));
-        assertEquals(false, pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.C5, pos4));
+        assertTrue(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.B2, pos4));
+        assertTrue(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.A3, pos4));
+        assertTrue(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.A5, pos4));
+        assertTrue(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.B6, pos4));
+        assertTrue(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.D6, pos4));
+        assertTrue(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.E5, pos4));
+        assertTrue(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.E3, pos4));
+        assertTrue(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.D2, pos4));
+        assertFalse(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.E4, pos4));
+        assertFalse(pos4BlackKnight.isAttackingCell(BoardCell.C4, BoardCell.C5, pos4));
     }
 }

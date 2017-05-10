@@ -6,7 +6,6 @@ import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Just;
 import com.loloof64.functional.monad.Maybe;
-import com.loloof64.functional.monad.Nothing;
 
 public class Knight extends PromotablePiece {
 
