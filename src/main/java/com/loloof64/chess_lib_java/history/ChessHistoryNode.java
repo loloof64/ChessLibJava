@@ -86,10 +86,35 @@ public class ChessHistoryNode {
      * @return boolean - true if the node is a direct child of this node, false otherwise.
      */
     public boolean hasDirectChild(ChessHistoryNode nodeToTest){
-        for (ChessHistoryNode currentChild : _childrenNodes){
-            if (currentChild == nodeToTest) return true;
-        }
-        return false;
+        return _childrenNodes.contains(nodeToTest);
+    }
+
+    /**
+     * Promotes a child node so that it is placed first. Cancel process if the given child is not a direct child,
+     * or if the given child is already the first child.
+     * @param childToPromote - {@link ChessHistoryNode} - the node to promote.
+     * @return boolean - true if operation successful, false otherwise.
+     */
+    public boolean promoteVariation(ChessHistoryNode childToPromote){
+        if (!_childrenNodes.contains(childToPromote)) return false;
+
+        final int childToPromoteIndex = _childrenNodes.indexOf(childToPromote);
+        if (childToPromoteIndex == 0) return false;
+
+        ChessHistoryNode oldMainLine = _childrenNodes.get(0);
+        _childrenNodes.set(childToPromoteIndex, oldMainLine);
+        _childrenNodes.set(0, childToPromote);
+
+        return true;
+    }
+
+    /**
+     * Deletes a child node. Cancel process if the given child is not a direct child.
+     * @param childToRemove - {@link ChessHistoryNode} - the node to promote.
+     * @return boolean - true if operation successful, false otherwise.
+     */
+    public boolean deleteVariation(ChessHistoryNode childToRemove){
+        return _childrenNodes.remove(childToRemove);
     }
 
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Pair<BoardCell, BoardCell> move){
