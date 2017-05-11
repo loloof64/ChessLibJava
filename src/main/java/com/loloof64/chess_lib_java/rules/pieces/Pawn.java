@@ -6,9 +6,7 @@ import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import com.loloof64.chess_lib_java.rules.coords.BoardRank;
-import com.loloof64.functional.monad.Just;
-import com.loloof64.functional.monad.Maybe;
-import com.loloof64.functional.monad.Nothing;
+import com.loloof64.functional.monad.Either;
 
 public class Pawn extends Piece {
 
@@ -54,7 +52,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Maybe<Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
         final int deltaX = to.file - from.file;
         final int deltaY = to.rank - from.rank;
         final boolean isTwoCellsJump = (whitePlayer && deltaY == 2 && deltaX == 0
@@ -90,10 +88,10 @@ public class Pawn extends Piece {
             newPositionInfo = newPositionInfo.copyWithThisEnPassantFile(newEnPassantFile);
             newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(0);
 
-            return new Just<>(new Position(newPositionBoard, newPositionInfo));
+            return Either.right(new Position(newPositionBoard, newPositionInfo));
         } catch (Exception e) {
             e.printStackTrace();
-            return new Nothing<>();
+            return Either.left(e);
         }
     }
 

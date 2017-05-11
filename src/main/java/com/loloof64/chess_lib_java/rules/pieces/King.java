@@ -6,9 +6,7 @@ import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import com.loloof64.chess_lib_java.rules.coords.BoardRank;
-import com.loloof64.functional.monad.Just;
-import com.loloof64.functional.monad.Maybe;
-import com.loloof64.functional.monad.Nothing;
+import com.loloof64.functional.monad.Either;
 
 public class King extends Piece {
 
@@ -44,39 +42,43 @@ public class King extends Piece {
     }
 
     @Override
-    public Maybe<Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
         final boolean isCaptureMove = position.getPieceAt(to) != null;
         final int deltaX = to.file - from.file;
         final boolean isKingSideCastleMove = (whitePlayer ? from == BoardCell.E1 : from == BoardCell.E8) && deltaX == 2;
         final boolean isQueenSideCastleMove = (whitePlayer ? from == BoardCell.E1 : from == BoardCell.E8) && deltaX == -2;
+        Either<Exception, Boolean> kingIsInChess = position.kingIsInChess(position._info.whiteTurn);
+        if (kingIsInChess.isLeft()) return Either.left(kingIsInChess.left());
 
         Board newPositionBoard = Board.fromFEN(position.toFEN()); // A simple way to get a copy.
         final Piece pieceAtStartCell = position.getPieceAt(from);
         newPositionBoard = newPositionBoard.copy(from, null);
         newPositionBoard = newPositionBoard.copy(to, pieceAtStartCell);
         if (isKingSideCastleMove){
-            if (position.kingIsInChess(position._info.whiteTurn)) return new Nothing<>();
+            if (kingIsInChess.right()) return Either.left(new RuntimeException("The player who has not the turn " +
+                    "has its king in chess ! Faulty position : "+position));
 
             final BoardCell movedRookCell = new BoardCell(from.rank, BoardFile.FILE_H.ordinal());
             final BoardCell movedRookEndCell = new BoardCell(from.rank, BoardFile.FILE_F.ordinal());
 
-            Maybe<Position> positionIfKingCrossF1OrF8 = position.move(from, movedRookEndCell);
+            Either<Exception, Position> positionIfKingCrossF1OrF8 = position.move(from, movedRookEndCell);
             // If king cannot cross F1/F8
-            if (positionIfKingCrossF1OrF8.isNothing()) return new Nothing<>();
+            if (positionIfKingCrossF1OrF8.isLeft()) return Either.left(positionIfKingCrossF1OrF8.left());
 
             final Piece movedRook = position.getPieceAt(movedRookCell);
             newPositionBoard = newPositionBoard.copy(movedRookCell, null);
             newPositionBoard = newPositionBoard.copy(movedRookEndCell, movedRook);
         }
         else if (isQueenSideCastleMove){
-            if (position.kingIsInChess(position._info.whiteTurn)) return new Nothing<>();
+            if (kingIsInChess.right()) return Either.left(new RuntimeException("The player who has not the turn " +
+                    "has its king in chess ! Faulty position : "+position));
 
             final BoardCell movedRookCell = new BoardCell(from.rank, BoardFile.FILE_A.ordinal());
             final BoardCell movedRookEndCell = new BoardCell(from.rank, BoardFile.FILE_D.ordinal());
 
-            Maybe<Position> positionIfKingCrossD1OrD8 = position.move(from, movedRookEndCell);
+            Either<Exception, Position> positionIfKingCrossD1OrD8 = position.move(from, movedRookEndCell);
             // If king cannot cross D1/D8
-            if (positionIfKingCrossD1OrD8.isNothing()) return new Nothing<>();
+            if (positionIfKingCrossD1OrD8.isLeft()) return Either.left(positionIfKingCrossD1OrD8.left());
 
             final Piece movedRook = position.getPieceAt(movedRookCell);
             newPositionBoard = newPositionBoard.copy(movedRookCell, null);
@@ -97,7 +99,7 @@ public class King extends Piece {
         }
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
-        return new Just<>(new Position(newPositionBoard, newPositionInfo));
+        return Either.right(new Position(newPositionBoard, newPositionInfo));
     }
 
     @Override

@@ -4,14 +4,18 @@ import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import com.loloof64.chess_lib_java.rules.coords.BoardRank;
 import com.loloof64.chess_lib_java.rules.pieces.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
-import com.loloof64.functional.monad.Just;
-import com.loloof64.functional.monad.Maybe;
-import com.loloof64.functional.monad.Nothing;
+import com.loloof64.functional.monad.Either;
 
 /**
  * Immutable chess position.
  */
 public class Position {
+
+    /**
+     * The very first position of any game.
+     */
+    public final static Position INITIAL = Position.fromFEN(
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").right();
 
     /**
      * Constructor with a board and a game info.
@@ -29,66 +33,104 @@ public class Position {
     /**
      * Generates a position from a Forsyth-Edwards Notation.
      * @param fenStr - String - the FEN to convert.
-     * @return Maybe of Position - the converted position wrapped in Just if success, Nothing otherwise.
+     * @return Either of Exception and Position - the converted position wrapped in Right if success,
+     * the exception wrapped in Left otherwise.
      */
-    public static Maybe<Position> fromFEN(String fenStr){
-        Position resultingPosition = new Position(Board.fromFEN(fenStr), GameInfo.fromFEN(fenStr));
+    public static Either<Exception, Position> fromFEN(String fenStr){
+        final Position resultingPosition = new Position(Board.fromFEN(fenStr), GameInfo.fromFEN(fenStr));
+        final Either<Exception, Void> piecesCountCheckReport = rightPiecesCountForPosition(resultingPosition);
+        final Either<Exception, Void> rightRemainingCastlesCheckReport = rightCastleRightsRemainsInPosition(resultingPosition);
 
-        if (!rightPiecesCountForPosition(resultingPosition)) return new Nothing<>();
-        if (!rightCastleRightsRemainsInPosition(resultingPosition)) return new Nothing<>();
+        if (piecesCountCheckReport.isLeft()) return Either.left(piecesCountCheckReport.left());
+        if (rightRemainingCastlesCheckReport.isLeft()) return Either.left(rightRemainingCastlesCheckReport.left());
 
-        return new Just<>(resultingPosition);
+        return Either.right(resultingPosition);
     }
 
-    private static boolean rightCastleRightsRemainsInPosition(final Position resultingPosition){
-        boolean thePlayerWhoHasNotTheTurnHasKingInChess = resultingPosition
-                .kingIsInChess(!resultingPosition._info.whiteTurn);
-        if (thePlayerWhoHasNotTheTurnHasKingInChess) return false;
+    /**
+     * Checks that the position has the right remaining castles availabilities.
+     * @param position - Position - the position to test.
+     * @return Either of Exception and Void - exception wrapped in Left if checks is a failure, Right of Void otherwise.
+     */
+    private static Either<Exception, Void> rightCastleRightsRemainsInPosition(final Position position){
+        Either<Exception, Boolean> thePlayerWhoHasNotTheTurnHasKingInChess = position.kingIsInChess(!position._info.whiteTurn);
+        if (thePlayerWhoHasNotTheTurnHasKingInChess.isLeft()) return Either.left(thePlayerWhoHasNotTheTurnHasKingInChess.left());
+        if (thePlayerWhoHasNotTheTurnHasKingInChess.right()) return Either.left(new RuntimeException("The player who has not the " +
+                "turn has its king in chess ! Faulty position : "+position.toFEN()));
 
         final boolean whiteHasLostRightToCastleBecauseOfKingPosition =
-                !resultingPosition.findKingCell(true).fromJust().equals(BoardCell.E1);
+                !position.findKingCell(true).right().equals(BoardCell.E1);
         final boolean blackHasLostRightToCastleBecauseOfKingPosition =
-                !resultingPosition.findKingCell(false).fromJust().equals(BoardCell.E8);
+                !position.findKingCell(false).right().equals(BoardCell.E8);
         if (whiteHasLostRightToCastleBecauseOfKingPosition &&
-                (resultingPosition._info.castlesRights.whiteKingSide ||
-                        resultingPosition._info.castlesRights.whiteQueenSide)) return false;
+                (position._info.castlesRights.whiteKingSide ||
+                        position._info.castlesRights.whiteQueenSide)) return Either.left(new RuntimeException(
+                                "White has lost right to castle because its king has moved but its castle(s) flag " +
+                                "is/are still active. Faulty position : "+position.toFEN()
+        ));
         if (blackHasLostRightToCastleBecauseOfKingPosition &&
-                (resultingPosition._info.castlesRights.blackKingSide ||
-                        resultingPosition._info.castlesRights.blackQueenSide)) return false;
+                (position._info.castlesRights.blackKingSide ||
+                        position._info.castlesRights.blackQueenSide)) return Either.left(new RuntimeException(
+                "Black has lost right to castle because its king has moved but its castle(s) flag " +
+                        "is/are still active. Faulty position : "+position.toFEN()
+        ));
 
-        final Piece pieceOnH1 = resultingPosition._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_H.ordinal()];
+        final Piece pieceOnH1 = position._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_H.ordinal()];
         final boolean whiteKingSideCastleLostBecauseOfMissingRook =
                 pieceOnH1 == null || !pieceOnH1.equals(new Rook(true));
         if (whiteKingSideCastleLostBecauseOfMissingRook &&
-                resultingPosition._info.castlesRights.whiteKingSide) return false;
+                position._info.castlesRights.whiteKingSide) return Either.left(new RuntimeException(
+                "White has lost right to castle because its king has moved but its kingSide castle flag " +
+                        "is still active. Faulty position : "+position.toFEN()
+        ));
 
-        final Piece pieceOnA1 = resultingPosition._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_A.ordinal()];
+        final Piece pieceOnA1 = position._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_A.ordinal()];
         final boolean whiteQueenSideCastleLostBecauseOfMissingRook =
                 pieceOnA1 == null || !pieceOnA1.equals(new Rook(true));
         if (whiteQueenSideCastleLostBecauseOfMissingRook &&
-                resultingPosition._info.castlesRights.whiteQueenSide) return false;
+                position._info.castlesRights.whiteQueenSide) return Either.left(new RuntimeException(
+                "White has lost right to castle because its king has moved but its queenSide castle flag " +
+                        "is still active. Faulty position : "+position.toFEN()
+        ));
 
-        final Piece pieceOnH8 = resultingPosition._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_H.ordinal()];
+        final Piece pieceOnH8 = position._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_H.ordinal()];
         final boolean blackKingSideCastleLostBecauseOfMissingRook =
                 pieceOnH8 == null || !pieceOnH8.equals(new Rook(false));
         if (blackKingSideCastleLostBecauseOfMissingRook &&
-                resultingPosition._info.castlesRights.blackKingSide) return false;
+                position._info.castlesRights.blackKingSide) return Either.left(new RuntimeException(
+                "Black has lost right to castle because its king has moved but its kingSide castle flag " +
+                        "is still active. Faulty position : "+position.toFEN()
+        ));
 
-        final Piece pieceOnA8 = resultingPosition._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_A.ordinal()];
+        final Piece pieceOnA8 = position._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_A.ordinal()];
         final boolean blackQueenSideCastleLostBecauseOfMissingRook =
                 pieceOnA8 == null || !pieceOnA8.equals(new Rook(false));
-        return !blackQueenSideCastleLostBecauseOfMissingRook ||
-                !resultingPosition._info.castlesRights.blackQueenSide;
+        if (blackQueenSideCastleLostBecauseOfMissingRook &&
+                position._info.castlesRights.blackQueenSide) return Either.left(new RuntimeException(
+                "Black has lost right to castle because its king has moved but its queenSide castle flag " +
+                        "is still active. Faulty position : "+position.toFEN()
+        ));
+
+        return Either.right(null);
     }
 
-    private static boolean rightPiecesCountForPosition(final Position position){
+    /**
+     * Checks that the count of all pieces are right for the given position.
+     * @param position - Position - the position to check.
+     * @return Either of Exception and Void - wraps the error in Left if failure, Void in Right otherwise.
+     */
+    private static Either<Exception, Void> rightPiecesCountForPosition(final Position position){
         final int whiteKingCount = countPiece(position, new King(true));
         final int blackKingCount = countPiece(position, new King(false));
-        if (whiteKingCount != 1 || blackKingCount != 1) return false;
+        if (whiteKingCount != 1 || blackKingCount != 1) return Either.left(new RuntimeException(
+                "Each player must have exactly one king ! Faulty position : "+position.toFEN()
+        ));
 
         final int whitePawnsCount = countPiece(position, new Pawn(true));
         final int blackPawnsCount = countPiece(position, new Pawn(false));
-        if (whitePawnsCount > 8 || blackPawnsCount > 8) return false;
+        if (whitePawnsCount > 8 || blackPawnsCount > 8) return Either.left(new RuntimeException(
+                "Each player must have less than 8 pawns ! Faulty position : "+position.toFEN()
+        ));
 
         final int whiteKnightsCount = countPiece(position, new Knight(true));
         final int blackKnightsCount = countPiece(position, new Knight(false));
@@ -98,14 +140,22 @@ public class Position {
         final int blackRooksCount = countPiece(position, new Rook(false));
         if (whiteKnightsCount > 10 - whitePawnsCount || blackKnightsCount > 10 - blackPawnsCount ||
                 whiteBishopsCount > 10 - whitePawnsCount || blackBishopsCount > 10 - blackPawnsCount ||
-                whiteRooksCount > 10 - whitePawnsCount || blackRooksCount > 10 - blackPawnsCount) return false;
+                whiteRooksCount > 10 - whitePawnsCount || blackRooksCount > 10 - blackPawnsCount) return Either.left(new RuntimeException(
+                "A player knights,bishops or rooks count cannot exceed (10-pawnsCount) ! Faulty position : "+position.toFEN()
+        ));
 
         final int whiteQueensCount = countPiece(position, new Queen(true));
         final int blackQueensCount = countPiece(position, new Queen(false));
-        if (whiteQueensCount > 9 - whitePawnsCount || blackQueensCount > 9 - blackPawnsCount) return false;
+        if (whiteQueensCount > 9 - whitePawnsCount || blackQueensCount > 9 - blackPawnsCount) return Either.left(new RuntimeException(
+                "A player queens cannot exceed (9-pawnsCount) ! Faulty position : "+position.toFEN()
+        ));
 
         final int pawnsOnRank1Or8Count = countPawnsOnRank1Or8(position);
-        return pawnsOnRank1Or8Count == 0;
+        if (pawnsOnRank1Or8Count > 0) return Either.left(new RuntimeException(
+                "A player knights,bishops or rooks cannot exceed (10-pawnsCount) ! Faulty position : "+position.toFEN()
+        ));
+
+        return Either.right(null);
     }
 
     private static int countPawnsOnRank1Or8(Position resultingPosition) {
@@ -212,9 +262,9 @@ public class Position {
      * Executes the given move on the position (without modifying it) and returns the resulting position.
      * @param from - BoardCell - the start cell
      * @param to - BoardCell - the target cell
-     * @return Maybe of Position - Nothing on failure, otherwise Just of Position : wrapping the result.
+     * @return Either of Exception and Position - Left of Exception on failure, otherwise Right of Position : wrapping the result.
      */
-    public Maybe<Position> move(BoardCell from, BoardCell to){
+    public Either<Exception, Position> move(BoardCell from, BoardCell to){
         return move(from, to, Queen.class);
     }
 
@@ -223,31 +273,36 @@ public class Position {
      * @param from - BoardCell - the start cell
      * @param to - BoardCell - the target cell
      * @param promotionPiece - Class of PromotablePiece - promotion piece if the move leads to pawn promotion.
-     * @return Maybe of Position - Nothing on failure, otherwise Just of Position : wrapping the result.
+     * @return Either of Exception and Position - Left of Exception on failure, otherwise Right of Position : wrapping the result.
      */
-    public Maybe<Position> move(BoardCell from, BoardCell to, Class<? extends PromotablePiece> promotionPiece){
+    public Either<Exception, Position> move(BoardCell from, BoardCell to, Class<? extends PromotablePiece> promotionPiece){
         final Piece movingPiece = _board.values()[from.rank][from.file];
         boolean noPieceAtStartCell = movingPiece == null;
 
-        if (noPieceAtStartCell || !canMove(from, to)) return new Nothing<>();
-        Maybe<Position> positionAfterMove = movingPiece.move(from, to, this, promotionPiece);
-        if (positionAfterMove.isNothing()) return positionAfterMove;
+        if (noPieceAtStartCell) return Either.left(new RuntimeException(String.format(
+                "No piece at move start cell (%s) ! Faulty position : %s", from, this.toFEN())));
+        if (!canMove(from, to)) return Either.left(new IllegalArgumentException(String.format(
+                "Illegal move (%s => %s) ! Faulty position : %s", from, to, this.toFEN())));
+        Either<Exception, Position> positionAfterMove = movingPiece.move(from, to, this, promotionPiece);
+        if (positionAfterMove.isLeft()) return Either.left(positionAfterMove.left());
 
-        boolean theMovingSideHasLeftHisKingInChess = positionAfterMove.isJust() &&
-                positionAfterMove.fromJust().kingIsInChess(_info.whiteTurn);
-        if (theMovingSideHasLeftHisKingInChess) return new Nothing<>();
+        Either<Exception, Boolean> theMovingSideHasLeftHisKingInChess = positionAfterMove.right().kingIsInChess(_info.whiteTurn);
+        if (theMovingSideHasLeftHisKingInChess.isLeft()) return Either.left(theMovingSideHasLeftHisKingInChess.left());
+        if (theMovingSideHasLeftHisKingInChess.right()) return Either.left(new RuntimeException(String.format(
+                "The moving side has left its king in chess (%s player) ! Faulty position : %s", _info.whiteTurn ? "white" : "black", this.toFEN())));
         else return positionAfterMove;
     }
 
     /**
      * Says if the king of the given side is in chess, whatever is the player turn.
      * @param whiteKing - boolean - true if we want to test if white king is attacked, false otherwise.
-     * @return boolean - true if the king of the given side is in chess.
+     * @return Either of Exception and Boolean - Left of Exception if failure, Right of Boolean otherwise : the wrapped
+     * result will say if the tested king is in chess.
      */
-    public boolean kingIsInChess(boolean whiteKing) {
-        Maybe<BoardCell> wrapPlayerKingCell = findKingCell(whiteKing);
-        if (wrapPlayerKingCell.isNothing()) throw new RuntimeException("Player has no king !");
-        BoardCell playerKingCell = wrapPlayerKingCell.fromJust();
+    public Either<Exception, Boolean> kingIsInChess(boolean whiteKing) {
+        Either<Exception, BoardCell> wrapPlayerKingCell = findKingCell(whiteKing);
+        if (wrapPlayerKingCell.isLeft()) return Either.left(new RuntimeException("Player has no king !"));
+        BoardCell playerKingCell = wrapPlayerKingCell.right();
 
         return checkIfThisSquareUnderAttackByAnEnemyPiece(playerKingCell);
     }
@@ -255,29 +310,33 @@ public class Position {
     /**
      * Find the cell of the king of the given side.
      * @param whiteKing - boolean - true if we want to find white king, false otherwise.
-     * @return BoardCell - the cell of the king of the player to move.
+     * @return Either of Exception and BoardCell - if failure, the exception wrapped in Left, otherwise
+     * the cell of the king of the player to move wrapped in Right.
      */
-    private Maybe<BoardCell> findKingCell(boolean whiteKing) {
+    private Either<Exception, BoardCell> findKingCell(boolean whiteKing) {
         for (int rankIndex = 0; rankIndex < 8; rankIndex++){
             for (int fileIndex = 0; fileIndex < 8; fileIndex++){
                 final Piece currentPiece = _board.values()[rankIndex][fileIndex];
                 final boolean isSideKing = currentPiece != null && (currentPiece instanceof King) &&
                         currentPiece.isWhitePiece() == whiteKing;
-                if (isSideKing) return new Just<>(new BoardCell(rankIndex, fileIndex));
+                if (isSideKing) return Either.right(new BoardCell(rankIndex, fileIndex));
             }
         }
-        return new Nothing<>();
+        return Either.left(new RuntimeException(String.format("Could not find king cell for %s player ! Faulty position : %s",
+                whiteKing ? "white" : "black", this.toFEN())));
     }
 
     /**
      * Says if the given cell is under attack (by an enemy piece of the testedCell).
      * Caution ! Does not take into account the fact that the attacker may be pinned.
      * @param testedCell - BoardCell - cell to test.
-     * @return boolean - true if cell is under attack, false otherwise.
+     * @return Either of Exception and Boolean - Left of Exception if failure, Right of
+     * Boolean if success (true if cell is under attack, false otherwise).
      */
-    private boolean checkIfThisSquareUnderAttackByAnEnemyPiece(BoardCell testedCell) {
+    private Either<Exception, Boolean> checkIfThisSquareUnderAttackByAnEnemyPiece(BoardCell testedCell) {
         final Piece pieceAtTestedCell = _board.values()[testedCell.rank][testedCell.file];
-        if (pieceAtTestedCell == null) return false;
+        if (pieceAtTestedCell == null) return Either.left(new IllegalArgumentException(String.format(
+                "No piece at tested cell (%s) ! Faulty position : %s", testedCell, this.toFEN())));
 
         for (int rankIndex = 0; rankIndex < 8; rankIndex++) {
             for (int fileIndex = 0; fileIndex < 8; fileIndex++) {
@@ -285,10 +344,10 @@ public class Position {
                 final Piece currentPiece = _board.values()[rankIndex][fileIndex];
                 boolean pieceAtCurrentCellIsEnemyPiece =
                         currentPiece != null && currentPiece.isWhitePiece() != pieceAtTestedCell.isWhitePiece();
-                if (pieceAtTheFirstCellIsAttackingTheSecondCell(currentCell, testedCell) && pieceAtCurrentCellIsEnemyPiece) return true;
+                if (pieceAtTheFirstCellIsAttackingTheSecondCell(currentCell, testedCell) && pieceAtCurrentCellIsEnemyPiece) return Either.right(true);
             }
         }
-        return false;
+        return Either.right(false);
     }
 
     /**

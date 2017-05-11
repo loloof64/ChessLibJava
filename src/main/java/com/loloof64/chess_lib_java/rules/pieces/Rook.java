@@ -4,9 +4,7 @@ import com.loloof64.chess_lib_java.rules.Board;
 import com.loloof64.chess_lib_java.rules.GameInfo;
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
-import com.loloof64.functional.monad.Just;
-import com.loloof64.functional.monad.Maybe;
-import com.loloof64.functional.monad.Nothing;
+import com.loloof64.functional.monad.Either;
 
 public class Rook extends PromotablePiece {
 
@@ -29,7 +27,7 @@ public class Rook extends PromotablePiece {
     }
 
     @Override
-    public Maybe<Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
         final boolean isCaptureMove = position.getPieceAt(to) != null;
 
         Board newPositionBoard = Board.fromFEN(position.toFEN()); // A simple way to get a copy.
@@ -47,7 +45,7 @@ public class Rook extends PromotablePiece {
         else if (from == BoardCell.A8) newPositionInfo = newPositionInfo.copyWithThisBlackQueenSideCastleState(false);
         else if (from == BoardCell.H8) newPositionInfo = newPositionInfo.copyWithThisBlackKingSideCastleState(false);
 
-        return new Just<>(new Position(newPositionBoard, newPositionInfo));
+        return Either.right(new Position(newPositionBoard, newPositionInfo));
     }
 
     @Override

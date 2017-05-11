@@ -2,7 +2,7 @@ package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.pieces.Piece;
 import com.loloof64.chess_lib_java.rules.coords.BoardFile;
-import com.loloof64.functional.monad.Maybe;
+import com.loloof64.functional.monad.Either;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -165,7 +165,7 @@ public class PositionTest {
 
     @Test
     public void positionIsGeneratedFromFENCorrectly(){
-        final Position pos1 = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").fromJust();
+        final Position pos1 = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").right();
         final Board board1 = new Board(boardValuesFromBruteString(
                 "RNBQKBNR/PPPPPPPP/________/________/________/________/pppppppp/rnbqkbnr"));
         final GameInfo info1 = new GameInfo(true, new CastlesRights(
@@ -173,7 +173,7 @@ public class PositionTest {
                 null, 0, 1);
         assertEquals(new Position(board1, info1), pos1);
 
-        final Position pos2 = Position.fromFEN("k2rr3/2pn2pp/p4p2/8/8/6P1/2P2P1P/RR4K1 b - - 13 20").fromJust();
+        final Position pos2 = Position.fromFEN("k2rr3/2pn2pp/p4p2/8/8/6P1/2P2P1P/RR4K1 b - - 13 20").right();
         final Board board2 = new Board(boardValuesFromBruteString(
                 "RR____K_/__P__P_P/______P_/________/________/p____p__/__pn__pp/k__rr___"));
         final GameInfo info2 = new GameInfo(false, new CastlesRights(
@@ -181,7 +181,7 @@ public class PositionTest {
                 null, 13, 20);
         assertEquals(new Position(board2, info2), pos2);
 
-        final Position pos3 = Position.fromFEN("r1bqkbnr/ppp1pppp/2n5/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3").fromJust();
+        final Position pos3 = Position.fromFEN("r1bqkbnr/ppp1pppp/2n5/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3").right();
         final Board board3 = new Board(boardValuesFromBruteString(
                 "RNBQKBNR/PPPP_PPP/________/________/___pP___/__n_____/ppp_pppp/r_bqkbnr"));
         final GameInfo info3 = new GameInfo(true, new CastlesRights(
@@ -189,7 +189,7 @@ public class PositionTest {
                 BoardFile.FILE_D, 0, 3);
         assertEquals(new Position(board3, info3), pos3);
 
-        final Position pos4 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/8/3pP3/5N1P/PPPP1PP1/RNBQKB1R b KQkq e3 0 3").fromJust();
+        final Position pos4 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/8/3pP3/5N1P/PPPP1PP1/RNBQKB1R b KQkq e3 0 3").right();
         final Board board4 = new Board(boardValuesFromBruteString(
                 "RNBQKB_R/PPPP_PP_/_____N_P/___pP___/________/________/ppp_pppp/rnbqkbnr"));
         final GameInfo info4 = new GameInfo(false, new CastlesRights(
@@ -235,183 +235,183 @@ public class PositionTest {
 
     @Test
     public void weCannotGenerateAPositionFromAFENIfTheKingNumberPerSideIsNotOne(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("8/8/8/8/8/8/8/8 w - - 0 1");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("8/8/8/8/8/8/8/8 w - - 0 1");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("8/8/8/8/8/8/8/8 b - - 0 1");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("8/8/8/8/8/8/8/8 b - - 0 1");
+        assertTrue(wrapPos2.isLeft());
 
-        Maybe<Position> wrapPos3 = Position.fromFEN("K7/K7/8/8/8/8/k7/8 w - - 0 1");
-        assertTrue(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("K7/K7/8/8/8/8/k7/8 w - - 0 1");
+        assertTrue(wrapPos3.isLeft());
 
-        Maybe<Position> wrapPos4 = Position.fromFEN("K7/k7/8/8/8/8/k7/8 w - - 0 1");
-        assertTrue(wrapPos4.isNothing());
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("K7/k7/8/8/8/8/k7/8 w - - 0 1");
+        assertTrue(wrapPos4.isLeft());
 
-        Maybe<Position> wrapPos5 = Position.fromFEN("K7/K7/K7/8/8/8/k/8 w - - 0 1");
-        assertTrue(wrapPos5.isNothing());
+        Either<Exception, Position> wrapPos5 = Position.fromFEN("K7/K7/K7/8/8/8/k/8 w - - 0 1");
+        assertTrue(wrapPos5.isLeft());
     }
 
     @Test
     public void weCannotGenerateAPositionWhereAPlayerHasMoreThanEightPawns(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("8/K1PP4/PPPPPPPP/8/8/pppppppp/k1pp4/8 w - - 0 1");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("8/K1PP4/PPPPPPPP/8/8/pppppppp/k1pp4/8 w - - 0 1");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("8/K1P5/PPPPPPPP/8/8/ppp5/k7/8 w - - 0 1");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("8/K1P5/PPPPPPPP/8/8/ppp5/k7/8 w - - 0 1");
+        assertTrue(wrapPos2.isLeft());
 
-        Maybe<Position> wrapPos3 = Position.fromFEN("8/K1p5/ppp5/1ppp4/pp6/PPP5/k7/8 w - - 0 1");
-        assertTrue(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("8/K1p5/ppp5/1ppp4/pp6/PPP5/k7/8 w - - 0 1");
+        assertTrue(wrapPos3.isLeft());
 
-        Maybe<Position> wrapPos4 = Position.fromFEN("8/K1p5/ppp5/1ppp4/p7/PPP5/k7/8 w - - 0 1");
-        assertFalse(wrapPos4.isNothing());
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("8/K1p5/ppp5/1ppp4/p7/PPP5/k7/8 w - - 0 1");
+        assertFalse(wrapPos4.isLeft());
 
     }
 
     @Test
     public void whenGeneratingPositionEachPlayerRooksCountCannotBeGreaterThanTenMinusPawnsCount(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("K7/RRRRRRRR/RR6/R7/8/8/1P6/1k6 w - - 0 1");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("K7/RRRRRRRR/RR6/R7/8/8/1P6/1k6 w - - 0 1");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("K1k5/rrrrrrrr/rr6/r7/8/8/8/8 w - - 0 1");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("K1k5/rrrrrrrr/rr6/r7/8/8/8/8 w - - 0 1");
+        assertTrue(wrapPos2.isLeft());
 
-        Maybe<Position> wrapPos3 = Position.fromFEN("K1k5/rrrrrrrr/rr6/8/8/8/8/8 w - - 0 1");
-        assertFalse(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("K1k5/rrrrrrrr/rr6/8/8/8/8/8 w - - 0 1");
+        assertFalse(wrapPos3.isLeft());
 
-        Maybe<Position> wrapPos4 = Position.fromFEN("K7/RRRRR3/PPPPPP2/8/8/8/8/k7 w - - 0 1");
-        assertTrue(wrapPos4.isNothing());
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("K7/RRRRR3/PPPPPP2/8/8/8/8/k7 w - - 0 1");
+        assertTrue(wrapPos4.isLeft());
 
-        Maybe<Position> wrapPos5 = Position.fromFEN("K1k5/rrrrr3/pppppp2/8/8/8/8/8 w - - 0 1");
-        assertTrue(wrapPos5.isNothing());
+        Either<Exception, Position> wrapPos5 = Position.fromFEN("K1k5/rrrrr3/pppppp2/8/8/8/8/8 w - - 0 1");
+        assertTrue(wrapPos5.isLeft());
 
-        Maybe<Position> wrapPos6 = Position.fromFEN("K1k5/rrr5/ppppppp1/8/8/8/8/8 w - - 0 1");
-        assertFalse(wrapPos6.isNothing());
+        Either<Exception, Position> wrapPos6 = Position.fromFEN("K1k5/rrr5/ppppppp1/8/8/8/8/8 w - - 0 1");
+        assertFalse(wrapPos6.isLeft());
     }
 
     @Test
     public void whenGeneratingPositionEachPlayerBishopsCountCannotBeGreaterThanTenMinusPawnsCount(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("K7/BBBBBBBB/BB6/B7/8/8/1p6/k7 w - - 0 1");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("K7/BBBBBBBB/BB6/B7/8/8/1p6/k7 w - - 0 1");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("2k5/bbbbbbbb/bb6/b7/8/8/1P6/K7 w - - 0 1");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("2k5/bbbbbbbb/bb6/b7/8/8/1P6/K7 w - - 0 1");
+        assertTrue(wrapPos2.isLeft());
 
-        Maybe<Position> wrapPos3 = Position.fromFEN("K1k5/bbbbbbbb/bb6/8/8/8/8/8 w - - 0 1");
-        assertFalse(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("K1k5/bbbbbbbb/bb6/8/8/8/8/8 w - - 0 1");
+        assertFalse(wrapPos3.isLeft());
 
-        Maybe<Position> wrapPos4 = Position.fromFEN("K7/BBBBB3/PPPPPP2/8/8/8/8/k7 w - - 0 1");
-        assertTrue(wrapPos4.isNothing());
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("K7/BBBBB3/PPPPPP2/8/8/8/8/k7 w - - 0 1");
+        assertTrue(wrapPos4.isLeft());
 
-        Maybe<Position> wrapPos5 = Position.fromFEN("2k5/bbbbb3/pppppp2/8/8/8/8/K7 w - - 0 1");
-        assertTrue(wrapPos5.isNothing());
+        Either<Exception, Position> wrapPos5 = Position.fromFEN("2k5/bbbbb3/pppppp2/8/8/8/8/K7 w - - 0 1");
+        assertTrue(wrapPos5.isLeft());
 
-        Maybe<Position> wrapPos6 = Position.fromFEN("2k5/bbb5/ppppppp1/8/8/8/8/K7 w - - 0 1");
-        assertFalse(wrapPos6.isNothing());
+        Either<Exception, Position> wrapPos6 = Position.fromFEN("2k5/bbb5/ppppppp1/8/8/8/8/K7 w - - 0 1");
+        assertFalse(wrapPos6.isLeft());
     }
 
     @Test
     public void whenGeneratingPositionEachPlayerKnightsCountCannotBeGreaterThanTenMinusPawnsCount(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("K7/NNNNNNNN/NN6/N7/8/8/8/k7 w - - 0 1");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("K7/NNNNNNNN/NN6/N7/8/8/8/k7 w - - 0 1");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("2k5/nnnnnnnn/nn6/n7/8/8/8/K7 w - - 0 1");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("2k5/nnnnnnnn/nn6/n7/8/8/8/K7 w - - 0 1");
+        assertTrue(wrapPos2.isLeft());
 
-        Maybe<Position> wrapPos3 = Position.fromFEN("K1k5/nnnnnnnn/nn6/8/8/8/8/8 w - - 0 1");
-        assertFalse(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("K1k5/nnnnnnnn/nn6/8/8/8/8/8 w - - 0 1");
+        assertFalse(wrapPos3.isLeft());
 
-        Maybe<Position> wrapPos4 = Position.fromFEN("K7/NNNNN3/PPPPPP2/8/8/8/8/k7 w - - 0 1");
-        assertTrue(wrapPos4.isNothing());
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("K7/NNNNN3/PPPPPP2/8/8/8/8/k7 w - - 0 1");
+        assertTrue(wrapPos4.isLeft());
 
-        Maybe<Position> wrapPos5 = Position.fromFEN("K1k5/nnnnn3/pppppp2/8/8/8/8/8 w - - 0 1");
-        assertTrue(wrapPos5.isNothing());
+        Either<Exception, Position> wrapPos5 = Position.fromFEN("K1k5/nnnnn3/pppppp2/8/8/8/8/8 w - - 0 1");
+        assertTrue(wrapPos5.isLeft());
 
-        Maybe<Position> wrapPos6 = Position.fromFEN("K1k5/nnn5/ppppppp1/8/8/8/8/8 w - - 0 1");
-        assertFalse(wrapPos6.isNothing());
+        Either<Exception, Position> wrapPos6 = Position.fromFEN("K1k5/nnn5/ppppppp1/8/8/8/8/8 w - - 0 1");
+        assertFalse(wrapPos6.isLeft());
     }
 
     @Test
     public void whenGeneratingPositionEachPlayerQueensCountCannotBeGreaterThanElevenMinusPawnsCount(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("Qn5k/QnQ3n1/Q1Q5/Q7/Q7/Q7/Q7/Q6K w - - 0 1");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("Qn5k/QnQ3n1/Q1Q5/Q7/Q7/Q7/Q7/Q6K w - - 0 1");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("qn5K/q1q5/q7/q7/q7/q7/qnq5/q5nk w - - 0 1");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("qn5K/q1q5/q7/q7/q7/q7/qnq5/q5nk w - - 0 1");
+        assertTrue(wrapPos2.isLeft());
 
-        Maybe<Position> wrapPos3 = Position.fromFEN("Qn5k/Qn4n1/Q7/Q7/Q7/Q1Q5/Q7/Q6K w - - 0 1");
-        assertFalse(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("Qn5k/Qn4n1/Q7/Q7/Q7/Q1Q5/Q7/Q6K w - - 0 1");
+        assertFalse(wrapPos3.isLeft());
 
-        Maybe<Position> wrapPos4 = Position.fromFEN("qn5K/q7/q7/q7/q1q5/q7/qn6/q5nk w - - 0 1");
-        assertFalse(wrapPos4.isNothing());
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("qn5K/q7/q7/q7/q1q5/q7/qn6/q5nk w - - 0 1");
+        assertFalse(wrapPos4.isLeft());
 
-        Maybe<Position> wrapPos5 = Position.fromFEN("Qn5k/Qn4n1/Q7/Q7/Q7/Q3P1P1/Q4P2/7K w - - 0 1");
-        assertTrue(wrapPos5.isNothing());
+        Either<Exception, Position> wrapPos5 = Position.fromFEN("Qn5k/Qn4n1/Q7/Q7/Q7/Q3P1P1/Q4P2/7K w - - 0 1");
+        assertTrue(wrapPos5.isLeft());
 
-        Maybe<Position> wrapPos6 = Position.fromFEN("1n5k/Qn4n1/Q7/Q7/Q7/Q3P1P1/Q4P2/7K w - - 0 1");
-        assertFalse(wrapPos6.isNothing());
+        Either<Exception, Position> wrapPos6 = Position.fromFEN("1n5k/Qn4n1/Q7/Q7/Q7/Q3P1P1/Q4P2/7K w - - 0 1");
+        assertFalse(wrapPos6.isLeft());
 
-        Maybe<Position> wrapPos7 = Position.fromFEN("qn5K/q7/q7/q7/q7/q4p2/qn2p1p1/6nk w - - 0 1");
-        assertTrue(wrapPos7.isNothing());
+        Either<Exception, Position> wrapPos7 = Position.fromFEN("qn5K/q7/q7/q7/q7/q4p2/qn2p1p1/6nk w - - 0 1");
+        assertTrue(wrapPos7.isLeft());
 
-        Maybe<Position> wrapPos8 = Position.fromFEN("1n5K/q7/q7/q7/q7/q4p2/qn2p1p1/6nk w - - 0 1");
-        assertFalse(wrapPos8.isNothing());
+        Either<Exception, Position> wrapPos8 = Position.fromFEN("1n5K/q7/q7/q7/q7/q4p2/qn2p1p1/6nk w - - 0 1");
+        assertFalse(wrapPos8.isLeft());
     }
 
     @Test
     public void cannotGenerateAPositionWithPawnOnRankOneOrHeight(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("P7/K1k5/8/8/8/8/8/8 w - - 0 1");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("P7/K1k5/8/8/8/8/8/8 w - - 0 1");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("8/K1k5/8/8/8/8/8/2p5 w - - 0 1");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("8/K1k5/8/8/8/8/8/2p5 w - - 0 1");
+        assertTrue(wrapPos2.isLeft());
     }
 
     @Test
     public void cannotGenerateAPositionWhereKingOfPlayerNotHavingTheTurnIsInChess(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("kK6/8/8/8/8/8/8/8 w - - 0 1");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("kK6/8/8/8/8/8/8/8 w - - 0 1");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("rnbqk1nr/pppp1ppp/8/4p3/4P3/P4N2/1PPb1PPP/RNBQKB1R b KQkq - 0 4");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("rnbqk1nr/pppp1ppp/8/4p3/4P3/P4N2/1PPb1PPP/RNBQKB1R b KQkq - 0 4");
+        assertTrue(wrapPos2.isLeft());
 
-        Maybe<Position> wrapPos3 = Position.fromFEN("rnbqkb1r/pppp1Bpp/5n2/4p3/4P3/8/PPPP1PPP/RNBQK1NR w KQkq - 0 3");
-        assertTrue(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("rnbqkb1r/pppp1Bpp/5n2/4p3/4P3/8/PPPP1PPP/RNBQK1NR w KQkq - 0 3");
+        assertTrue(wrapPos3.isLeft());
     }
 
     @Test
     public void cannotGenerateAPositionWhereKingOutsideE1E8AndMatchingCastleRightsAreStillActive(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b KQkq - 1 2");
-        assertTrue(wrapPos1.isNothing());
-        Maybe<Position> wrapPos2 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b Kkq - 1 2");
-        assertTrue(wrapPos2.isNothing());
-        Maybe<Position> wrapPos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b Qkq - 1 2");
-        assertTrue(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b KQkq - 1 2");
+        assertTrue(wrapPos1.isLeft());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b Kkq - 1 2");
+        assertTrue(wrapPos2.isLeft());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b Qkq - 1 2");
+        assertTrue(wrapPos3.isLeft());
 
-        Maybe<Position> wrapPos4 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3");
-        assertTrue(wrapPos4.isNothing());
-        Maybe<Position> wrapPos5 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQk - 2 3");
-        assertTrue(wrapPos5.isNothing());
-        Maybe<Position> wrapPos6 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQq - 2 3");
-        assertTrue(wrapPos6.isNothing());
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3");
+        assertTrue(wrapPos4.isLeft());
+        Either<Exception, Position> wrapPos5 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQk - 2 3");
+        assertTrue(wrapPos5.isLeft());
+        Either<Exception, Position> wrapPos6 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQq - 2 3");
+        assertTrue(wrapPos6.isLeft());
 
-        Maybe<Position> wrapPos7 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b kq - 1 2");
-        assertFalse(wrapPos7.isNothing());
-        Maybe<Position> wrapPos8 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQ - 2 3");
-        assertFalse(wrapPos8.isNothing());
+        Either<Exception, Position> wrapPos7 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b kq - 1 2");
+        assertFalse(wrapPos7.isLeft());
+        Either<Exception, Position> wrapPos8 = Position.fromFEN("rnbq1bnr/pppkpppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQ - 2 3");
+        assertFalse(wrapPos8.isLeft());
     }
 
     @Test
     public void cannotGenerateAPositionWhereARookIsMissingInCornerAndTheMatchingCastleRightStillActive(){
-        Maybe<Position> wrapPos1 = Position.fromFEN("r1bqkbnr/pppppppp/2n5/8/7P/8/PPPPPPPR/RNBQKBN1 b KQkq - 2 2");
-        assertTrue(wrapPos1.isNothing());
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("r1bqkbnr/pppppppp/2n5/8/7P/8/PPPPPPPR/RNBQKBN1 b KQkq - 2 2");
+        assertTrue(wrapPos1.isLeft());
 
-        Maybe<Position> wrapPos2 = Position.fromFEN("rnbqkb1r/pppppppp/5n2/8/P7/R7/1PPPPPPP/1NBQKBNR b KQkq - 2 2");
-        assertTrue(wrapPos2.isNothing());
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("rnbqkb1r/pppppppp/5n2/8/P7/R7/1PPPPPPP/1NBQKBNR b KQkq - 2 2");
+        assertTrue(wrapPos2.isLeft());
 
-        Maybe<Position> wrapPos3 = Position.fromFEN("1nbqkbnr/1ppppppp/r7/p7/8/4PN2/PPPP1PPP/RNBQKB1R w KQkq - 1 3");
-        assertTrue(wrapPos3.isNothing());
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("1nbqkbnr/1ppppppp/r7/p7/8/4PN2/PPPP1PPP/RNBQKB1R w KQkq - 1 3");
+        assertTrue(wrapPos3.isLeft());
 
-        Maybe<Position> wrapPos4 = Position.fromFEN("rnbqkbn1/ppppppp1/7r/7p/8/2NP4/PPP1PPPP/R1BQKBNR w KQkq - 1 3");
-        assertTrue(wrapPos4.isNothing());
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("rnbqkbn1/ppppppp1/7r/7p/8/2NP4/PPP1PPPP/R1BQKBNR w KQkq - 1 3");
+        assertTrue(wrapPos4.isLeft());
     }
 }
