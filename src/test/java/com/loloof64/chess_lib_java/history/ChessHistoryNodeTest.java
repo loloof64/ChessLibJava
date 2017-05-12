@@ -84,18 +84,18 @@ public class ChessHistoryNodeTest {
         final Either<Exception, ChessHistoryNode> childNode1 = ChessHistoryNode.nonRootNode(rootNode1,
                 new Move(BoardCell.E2, BoardCell.E4));
         assertEquals("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
-                childNode1.right()._relatedPosition.toFEN());
+                childNode1.right().relatedPosition.toFEN());
 
         final Either<Exception, ChessHistoryNode> childNode2 = ChessHistoryNode.nonRootNode(rootNode1,
                 new Move(BoardCell.G1, BoardCell.F3));
         assertEquals("rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1",
-                childNode2.right()._relatedPosition.toFEN());
+                childNode2.right().relatedPosition.toFEN());
 
 
         final Either<Exception, ChessHistoryNode> childNode11 = ChessHistoryNode.nonRootNode(childNode2.right(),
                 new Move(BoardCell.E7, BoardCell.E5));
         assertEquals("rnbqkbnr/pppp1ppp/8/4p3/8/5N2/PPPPPPPP/RNBQKB1R w KQkq e6 0 2",
-                childNode11.right()._relatedPosition.toFEN());
+                childNode11.right().relatedPosition.toFEN());
     }
 
 }

@@ -24,12 +24,12 @@ public class ChessHistoryNode {
             throw new IllegalArgumentException(String.format("The related move (%s) is already " +
                     "present in the parent children !", relatedMove));
 
-        this._parent = parent;
-        this._relatedPosition = relatedPosition;
-        this._relatedMove = relatedMove;
+        this.parent = parent;
+        this.relatedPosition = relatedPosition;
+        this.relatedMove = relatedMove;
         this._childrenNodes = new ArrayList<>(Arrays.asList(childrenNodes));
 
-        if (this._parent != null) this._parent._childrenNodes.add(this);
+        if (this.parent != null) this.parent._childrenNodes.add(this);
     }
 
     /**
@@ -113,18 +113,18 @@ public class ChessHistoryNode {
 
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
         for (ChessHistoryNode currentChild : _childrenNodes){
-            if (currentChild._relatedMove.equals(move)) return true;
+            if (currentChild.relatedMove.equals(move)) return true;
         }
         return false;
     }
 
     private static Either<Exception, Position> computePosition(ChessHistoryNode parent,
                                                                Move relatedMove) {
-        return parent._relatedPosition.move(relatedMove);
+        return parent.relatedPosition.move(relatedMove);
     }
 
-    public final ChessHistoryNode _parent;
-    public final Move _relatedMove;
-    public final Position _relatedPosition;
+    public final ChessHistoryNode parent;
+    public final Move relatedMove;
+    public final Position relatedPosition;
     private final ArrayList<ChessHistoryNode> _childrenNodes;
 }
