@@ -125,12 +125,18 @@ public class ChessHistoryNode {
     }
 
     /**
-     *
      * Sets the associated comment : will be empty if null is passed.
      * @param comment - String - the comment, can be null.
      */
     public void setComment(String comment){
         this._relatedComment = comment != null ? comment : "";
+    }
+
+    /**
+     * Simply clears the associated comment.
+     */
+    public void removeComment(){
+        this._relatedComment = "";
     }
 
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
