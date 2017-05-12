@@ -27,7 +27,7 @@ public class ChessHistoryNode {
         this.parent = parent;
         this.relatedPosition = relatedPosition;
         this.relatedMove = relatedMove;
-        this.relatedComment = relatedComment != null ? relatedComment : "";
+        this._relatedComment = relatedComment != null ? relatedComment : "";
         this._childrenNodes = new ArrayList<>(Arrays.asList(childrenNodes));
 
         if (this.parent != null) this.parent._childrenNodes.add(this);
@@ -116,6 +116,23 @@ public class ChessHistoryNode {
         return _childrenNodes.remove(childToRemove);
     }
 
+    /**
+     * Get related comment : won't be null.
+     * @return String - the associated comment.
+     */
+    public String comment(){
+        return _relatedComment;
+    }
+
+    /**
+     *
+     * Sets the associated comment : will be empty if null is passed.
+     * @param comment - String - the comment, can be null.
+     */
+    public void setComment(String comment){
+        this._relatedComment = comment != null ? comment : "";
+    }
+
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
         for (ChessHistoryNode currentChild : _childrenNodes){
             if (currentChild.relatedMove.equals(move)) return true;
@@ -131,6 +148,6 @@ public class ChessHistoryNode {
     public final ChessHistoryNode parent;
     public final Move relatedMove;
     public final Position relatedPosition;
-    public final String relatedComment;
+    private String _relatedComment;
     private final ArrayList<ChessHistoryNode> _childrenNodes;
 }
