@@ -1,6 +1,8 @@
 package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
+import com.loloof64.chess_lib_java.rules.coords.BoardFile;
+import com.loloof64.chess_lib_java.rules.coords.BoardRank;
 import com.loloof64.chess_lib_java.rules.pieces.Piece;
 
 /**
@@ -53,6 +55,15 @@ public class Board {
      */
     Piece[][] values(){
         return this._values;
+    }
+
+    /**
+     * Gets the piece at the given cell
+     * @param cell - BoardCell - the cell where we want to get the piece.
+     * @return Piece - the piece at the given cell.
+     */
+    public Piece getPieceAt(BoardCell cell){
+        return _values[cell.rank][cell.file];
     }
 
     /**
