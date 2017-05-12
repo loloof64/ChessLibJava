@@ -30,7 +30,7 @@ public class GameInfo {
 
     /**
      * Generates a game info from a Forsyth-Edwards Notation string.
-     * @param fenStr - String - FEN to convert
+     * @param fenStr - String - FEN to convert: gives the full FEN str, not just the game info part !!!
      * @return GameInfo - generated GameInfo from the FEN parameter.
      */
     public static GameInfo fromFEN(String fenStr){

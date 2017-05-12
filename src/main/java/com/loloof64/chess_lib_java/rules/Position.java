@@ -388,6 +388,6 @@ public class Position {
                 '}';
     }
 
-    private final Board _board;
+    public final Board _board;
     public final GameInfo _info;
 }
