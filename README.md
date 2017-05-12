@@ -7,5 +7,5 @@ TODO
 ----
 
 - [X] Move validation
-- [ ] Game history
+- [X] Game history
 - [ ] Pgn parsing

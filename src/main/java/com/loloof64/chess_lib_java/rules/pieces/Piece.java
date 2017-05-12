@@ -1,5 +1,6 @@
 package com.loloof64.chess_lib_java.rules.pieces;
 
+import com.loloof64.chess_lib_java.rules.Move;
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Either;
@@ -49,23 +50,21 @@ public abstract class Piece {
 
     /**
      * Says if this piece can do the given move in the given position.
-     * @param from - BoardCell - start cell
-     * @param to - BoardCell - target cell
-     * @param position - Position - the position which this piece belongs to.
+     * @param moveToDo - {@link Move} - the move to do
+     * @param position - {@link Position} - the position which this piece belongs to.
      * @return is this move correct ?
      */
-    abstract public boolean canMove(BoardCell from, BoardCell to, Position position);
+    abstract public boolean canMove(Move moveToDo, Position position);
 
     /**
      * Executes the given move in the given position.
-     * @param from - BoardCell - start cell
-     * @param to - BoardCell - target cell
+     * @param moveToDo - {@link Move} - the move to do
      * @param position - Position - the position which this piece belongs to.
      * @param promotionPiece - class of PromotablePiece - promotion piece if the move leads to pawn promotion.
      * @return Either of Exception and Position - Left of Exception if the move cannot be done, otherwise Right of
      * Position, wrapping the resulting position.
      */
-    abstract public Either<Exception, Position> move(BoardCell from, BoardCell to,
+    abstract public Either<Exception, Position> move(Move moveToDo,
                                                      Position position, Class<? extends PromotablePiece> promotionPiece);
 
     /**

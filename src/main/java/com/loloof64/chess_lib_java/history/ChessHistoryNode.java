@@ -1,8 +1,7 @@
 package com.loloof64.chess_lib_java.history;
 
+import com.loloof64.chess_lib_java.rules.Move;
 import com.loloof64.chess_lib_java.rules.Position;
-import com.loloof64.chess_lib_java.rules.coords.BoardCell;
-import com.loloof64.functional.Pair;
 import com.loloof64.functional.monad.Either;
 
 import java.util.ArrayList;
@@ -14,18 +13,13 @@ import java.util.Arrays;
 public class ChessHistoryNode {
 
     private ChessHistoryNode(ChessHistoryNode parent, Position relatedPosition,
-                             Pair<BoardCell, BoardCell> relatedMove,
+                             Move relatedMove,
                              ChessHistoryNode... childrenNodes){
 
         boolean isRootNode = parent == null;
 
         if (!isRootNode && relatedMove == null) throw new IllegalArgumentException("Non root node (parent == null)" +
                 " must provide a related move !");
-        if (!isRootNode && (relatedMove.first == null || relatedMove.second == null))
-            throw new IllegalArgumentException(String.format("Non root node (parent == null)" +
-                    " must provide a related move ! Also none of the pair values can be null : got %s",
-                    relatedMove
-                    ));
         if (parent != null && parent.hasAlreadyThisRelatedMoveInDirectChildren(relatedMove))
             throw new IllegalArgumentException(String.format("The related move (%s) is already " +
                     "present in the parent children !", relatedMove));
@@ -58,13 +52,13 @@ public class ChessHistoryNode {
     /**
      * Builds a non root {@link ChessHistoryNode}
      * @param parent - {@link ChessHistoryNode} - null for a root node.
-     * @param relatedMove - {@link Pair} of {@link BoardCell} and {@link BoardCell} - the related move (the move which lead to this position, null for root node).
+     * @param relatedMove - {@link Move} - the related move (the move which lead to this position, null for root node).
      * First value is the start cell, and the second value is the target cell.
      * @param childrenNodes - Ellipsis/Array of {@link ChessHistoryNode}- children nodes.
      * @return Either of Exception and ChessHistoryNode - Left of Exception if failure otherwise Right of {@link ChessHistoryNode}.
      */
     public static Either<Exception, ChessHistoryNode> nonRootNode(ChessHistoryNode parent,
-                                                                  Pair<BoardCell, BoardCell> relatedMove,
+                                                                  Move relatedMove,
                                                                   ChessHistoryNode... childrenNodes){
         try {
             if (parent == null) throw new IllegalArgumentException("You must provide a parent node in order to build " +
@@ -117,7 +111,7 @@ public class ChessHistoryNode {
         return _childrenNodes.remove(childToRemove);
     }
 
-    private boolean hasAlreadyThisRelatedMoveInDirectChildren(Pair<BoardCell, BoardCell> move){
+    private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
         for (ChessHistoryNode currentChild : _childrenNodes){
             if (currentChild._relatedMove.equals(move)) return true;
         }
@@ -125,12 +119,12 @@ public class ChessHistoryNode {
     }
 
     private static Either<Exception, Position> computePosition(ChessHistoryNode parent,
-                                                               Pair<BoardCell, BoardCell> relatedMove) {
-        return parent._relatedPosition.move(relatedMove.first, relatedMove.second);
+                                                               Move relatedMove) {
+        return parent._relatedPosition.move(relatedMove);
     }
 
     public final ChessHistoryNode _parent;
-    public final Pair<BoardCell, BoardCell> _relatedMove;
+    public final Move _relatedMove;
     public final Position _relatedPosition;
     private final ArrayList<ChessHistoryNode> _childrenNodes;
 }

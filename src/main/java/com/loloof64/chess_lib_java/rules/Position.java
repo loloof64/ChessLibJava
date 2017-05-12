@@ -19,8 +19,8 @@ public class Position {
 
     /**
      * Constructor with a board and a game info.
-     * @param board - Board - board part.
-     * @param gameInfo - GameInfo - game info part.
+     * @param board - {@link Board} - board part.
+     * @param gameInfo - {@link GameInfo} - game info part.
      */
     public Position(Board board, GameInfo gameInfo){
         if (board == null) throw new IllegalArgumentException("Board can't be null !");
@@ -33,7 +33,7 @@ public class Position {
     /**
      * Generates a position from a Forsyth-Edwards Notation.
      * @param fenStr - String - the FEN to convert.
-     * @return Either of Exception and Position - the converted position wrapped in Right if success,
+     * @return Either of Exception and {@link Position} - the converted position wrapped in Right if success,
      * the exception wrapped in Left otherwise.
      */
     public static Either<Exception, Position> fromFEN(String fenStr){
@@ -49,7 +49,7 @@ public class Position {
 
     /**
      * Checks that the position has the right remaining castles availabilities.
-     * @param position - Position - the position to test.
+     * @param position - {@link Position} - the position to test.
      * @return Either of Exception and Void - exception wrapped in Left if checks is a failure, Right of Void otherwise.
      */
     private static Either<Exception, Void> rightCastleRightsRemainsInPosition(final Position position){
@@ -116,7 +116,7 @@ public class Position {
 
     /**
      * Checks that the count of all pieces are right for the given position.
-     * @param position - Position - the position to check.
+     * @param position - {@link Position} - the position to check.
      * @return Either of Exception and Void - wraps the error in Left if failure, Void in Right otherwise.
      */
     private static Either<Exception, Void> rightPiecesCountForPosition(final Position position){
@@ -174,8 +174,8 @@ public class Position {
 
     /**
      * Simply count the given piece in the given position.
-     * @param position - Position - position where we want to count.
-     * @param pieceToCount - Piece - the piece we want to count.
+     * @param position - {@link Position} - position where we want to count.
+     * @param pieceToCount - {@link Piece} - the piece we want to count.
      * @return int - the count.
      */
     private static int countPiece(Position position, Piece pieceToCount) {
@@ -201,23 +201,25 @@ public class Position {
 
     /**
      * Says if a move can be done on this position.
-     * @param from - BoardCell - the start cell
-     * @param to - BoardCell - the end cell
+     * @param moveToDo - {@link Move} - the move to do
      * @return boolean - can we move as described ?
      */
-    public boolean canMove(BoardCell from, BoardCell to){
+    public boolean canMove(Move moveToDo){
+        final BoardCell from = moveToDo.from();
+        final BoardCell to = moveToDo.to();
+
         final Piece movingPiece = _board.values()[from.rank][from.file];
         final boolean noPieceAtStartCell = movingPiece == null;
         final boolean pieceIsNotOurs = movingPiece != null && movingPiece.isWhitePiece() != _info.whiteTurn;
         final boolean originSquareEqualsToTarget = from == to;
 
         if (noPieceAtStartCell || pieceIsNotOurs || originSquareEqualsToTarget) return false;
-        return movingPiece.canMove(from, to,this);
+        return movingPiece.canMove(moveToDo, this);
     }
 
     /**
      * Gets the piece (can be null) at the given cell.
-     * @param cell - BoardCell - the cell where we want to get the piece.
+     * @param cell - {@link BoardCell} - the cell where we want to get the piece.
      * @return Piece - the piece in the given cell.
      */
     public Piece getPieceAt(BoardCell cell){
@@ -227,8 +229,8 @@ public class Position {
     /**
      * Says if there is any piece between those two cells. Notice that if the two cells does not define
      * a straight line, the result will be false (no obstacle).
-     * @param cell1 - BoardCell
-     * @param cell2 - BoardCell
+     * @param cell1 - {@link BoardCell} - first bound (not included)
+     * @param cell2 - {@link BoardCell} - second bound (not included)
      * @return true if and only if there is an obstacle between the two cells (both not included, of course).
      */
     public boolean obstacleBetween(BoardCell cell1, BoardCell cell2){
@@ -260,30 +262,30 @@ public class Position {
 
     /**
      * Executes the given move on the position (without modifying it) and returns the resulting position.
-     * @param from - BoardCell - the start cell
-     * @param to - BoardCell - the target cell
-     * @return Either of Exception and Position - Left of Exception on failure, otherwise Right of Position : wrapping the result.
+     * If this move leads to promotion, the queen will be chose.
+     * @param moveToDo - {@link Move} - the move to execute
+     * @return Either of Exception and {@link Position} - Left of Exception on failure, otherwise Right of Position : wrapping the result.
      */
-    public Either<Exception, Position> move(BoardCell from, BoardCell to){
-        return move(from, to, Queen.class);
+    public Either<Exception, Position> move(Move moveToDo){
+        return move(moveToDo, Queen.class);
     }
 
     /**
      * Executes the given move on the position (without modifying it) and returns the resulting position.
-     * @param from - BoardCell - the start cell
-     * @param to - BoardCell - the target cell
-     * @param promotionPiece - Class of PromotablePiece - promotion piece if the move leads to pawn promotion.
-     * @return Either of Exception and Position - Left of Exception on failure, otherwise Right of Position : wrapping the result.
+     * @param moveToDo - {@link Move} - the move to execute
+     * @param promotionPiece - Class of {@link PromotablePiece} - promotion piece if the move leads to pawn promotion.
+     * @return Either of Exception and {@link Position} - Left of Exception on failure, otherwise Right of Position : wrapping the result.
      */
-    public Either<Exception, Position> move(BoardCell from, BoardCell to, Class<? extends PromotablePiece> promotionPiece){
+    public Either<Exception, Position> move(Move moveToDo, Class<? extends PromotablePiece> promotionPiece){
+        final BoardCell from = moveToDo.from();
         final Piece movingPiece = _board.values()[from.rank][from.file];
         boolean noPieceAtStartCell = movingPiece == null;
 
         if (noPieceAtStartCell) return Either.left(new RuntimeException(String.format(
                 "No piece at move start cell (%s) ! Faulty position : %s", from, this.toFEN())));
-        if (!canMove(from, to)) return Either.left(new IllegalArgumentException(String.format(
-                "Illegal move (%s => %s) ! Faulty position : %s", from, to, this.toFEN())));
-        Either<Exception, Position> positionAfterMove = movingPiece.move(from, to, this, promotionPiece);
+        if (!canMove(moveToDo)) return Either.left(new IllegalArgumentException(String.format(
+                "Illegal move %s ! Faulty position : %s", moveToDo, this.toFEN())));
+        Either<Exception, Position> positionAfterMove = movingPiece.move(moveToDo, this, promotionPiece);
         if (positionAfterMove.isLeft()) return Either.left(positionAfterMove.left());
 
         Either<Exception, Boolean> theMovingSideHasLeftHisKingInChess = positionAfterMove.right().kingIsInChess(_info.whiteTurn);
@@ -329,7 +331,7 @@ public class Position {
     /**
      * Says if the given cell is under attack (by an enemy piece of the testedCell).
      * Caution ! Does not take into account the fact that the attacker may be pinned.
-     * @param testedCell - BoardCell - cell to test.
+     * @param testedCell - {@link BoardCell} - cell to test.
      * @return Either of Exception and Boolean - Left of Exception if failure, Right of
      * Boolean if success (true if cell is under attack, false otherwise).
      */
@@ -352,8 +354,8 @@ public class Position {
 
     /**
      * Says if the piece at the first cell is attacking piece at the second cell.
-     * @param attackerCell - BoardCell - cell where we suppose there is an attacking piece.
-     * @param testedCell - BoardCell - cell where we suppose to be attacked.
+     * @param attackerCell - {@link BoardCell} - cell where we suppose there is an attacking piece.
+     * @param testedCell - {@link BoardCell} - cell where we suppose to be attacked.
      * @return true if testedCell is attacked, false otherwise.
      */
     private boolean pieceAtTheFirstCellIsAttackingTheSecondCell(BoardCell attackerCell, BoardCell testedCell) {

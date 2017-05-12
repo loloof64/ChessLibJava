@@ -2,6 +2,7 @@ package com.loloof64.chess_lib_java.rules.pieces;
 
 import com.loloof64.chess_lib_java.rules.Board;
 import com.loloof64.chess_lib_java.rules.GameInfo;
+import com.loloof64.chess_lib_java.rules.Move;
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Either;
@@ -15,7 +16,10 @@ public class Knight extends PromotablePiece {
     }
 
     @Override
-    public boolean canMove(BoardCell from, BoardCell to, Position position) {
+    public boolean canMove(Move moveToDo, Position position) {
+        final BoardCell from = moveToDo.from();
+        final BoardCell to = moveToDo.to();
+
         final int deltaX = to.file - from.file;
         final int deltaY = to.rank - from.rank;
         final int absDeltaX = Math.abs(deltaX);
@@ -29,7 +33,10 @@ public class Knight extends PromotablePiece {
     }
 
     @Override
-    public Either<Exception, Position> move(BoardCell from, BoardCell to, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, Position> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
+        final BoardCell from = moveToDo.from();
+        final BoardCell to = moveToDo.to();
+
         final boolean isCaptureMove = position.getPieceAt(to) != null;
 
         Board newPositionBoard = Board.fromFEN(position.toFEN()); // A simple way to get a copy.
