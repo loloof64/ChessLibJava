@@ -26,8 +26,8 @@ public class Position {
         if (board == null) throw new IllegalArgumentException("Board can't be null !");
         if (gameInfo == null) throw new IllegalArgumentException("Game info can't be null !");
 
-        this._board = board;
-        this._info = gameInfo;
+        this.board = board;
+        this.info = gameInfo;
     }
 
     /**
@@ -53,7 +53,7 @@ public class Position {
      * @return Either of Exception and Void - exception wrapped in Left if checks is a failure, Right of Void otherwise.
      */
     private static Either<Exception, Void> rightCastleRightsRemainsInPosition(final Position position){
-        Either<Exception, Boolean> thePlayerWhoHasNotTheTurnHasKingInChess = position.kingIsInChess(!position._info.whiteTurn);
+        Either<Exception, Boolean> thePlayerWhoHasNotTheTurnHasKingInChess = position.kingIsInChess(!position.info.whiteTurn);
         if (thePlayerWhoHasNotTheTurnHasKingInChess.isLeft()) return Either.left(thePlayerWhoHasNotTheTurnHasKingInChess.left());
         if (thePlayerWhoHasNotTheTurnHasKingInChess.right()) return Either.left(new RuntimeException("The player who has not the " +
                 "turn has its king in chess ! Faulty position : "+position.toFEN()));
@@ -63,50 +63,50 @@ public class Position {
         final boolean blackHasLostRightToCastleBecauseOfKingPosition =
                 !position.findKingCell(false).right().equals(BoardCell.E8);
         if (whiteHasLostRightToCastleBecauseOfKingPosition &&
-                (position._info.castlesRights.whiteKingSide ||
-                        position._info.castlesRights.whiteQueenSide)) return Either.left(new RuntimeException(
+                (position.info.castlesRights.whiteKingSide ||
+                        position.info.castlesRights.whiteQueenSide)) return Either.left(new RuntimeException(
                                 "White has lost right to castle because its king has moved but its castle(s) flag " +
                                 "is/are still active. Faulty position : "+position.toFEN()
         ));
         if (blackHasLostRightToCastleBecauseOfKingPosition &&
-                (position._info.castlesRights.blackKingSide ||
-                        position._info.castlesRights.blackQueenSide)) return Either.left(new RuntimeException(
+                (position.info.castlesRights.blackKingSide ||
+                        position.info.castlesRights.blackQueenSide)) return Either.left(new RuntimeException(
                 "Black has lost right to castle because its king has moved but its castle(s) flag " +
                         "is/are still active. Faulty position : "+position.toFEN()
         ));
 
-        final Piece pieceOnH1 = position._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_H.ordinal()];
+        final Piece pieceOnH1 = position.board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_H.ordinal()];
         final boolean whiteKingSideCastleLostBecauseOfMissingRook =
                 pieceOnH1 == null || !pieceOnH1.equals(new Rook(true));
         if (whiteKingSideCastleLostBecauseOfMissingRook &&
-                position._info.castlesRights.whiteKingSide) return Either.left(new RuntimeException(
+                position.info.castlesRights.whiteKingSide) return Either.left(new RuntimeException(
                 "White has lost right to castle because its king has moved but its kingSide castle flag " +
                         "is still active. Faulty position : "+position.toFEN()
         ));
 
-        final Piece pieceOnA1 = position._board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_A.ordinal()];
+        final Piece pieceOnA1 = position.board.values()[BoardRank.RANK_1.ordinal()][BoardFile.FILE_A.ordinal()];
         final boolean whiteQueenSideCastleLostBecauseOfMissingRook =
                 pieceOnA1 == null || !pieceOnA1.equals(new Rook(true));
         if (whiteQueenSideCastleLostBecauseOfMissingRook &&
-                position._info.castlesRights.whiteQueenSide) return Either.left(new RuntimeException(
+                position.info.castlesRights.whiteQueenSide) return Either.left(new RuntimeException(
                 "White has lost right to castle because its king has moved but its queenSide castle flag " +
                         "is still active. Faulty position : "+position.toFEN()
         ));
 
-        final Piece pieceOnH8 = position._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_H.ordinal()];
+        final Piece pieceOnH8 = position.board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_H.ordinal()];
         final boolean blackKingSideCastleLostBecauseOfMissingRook =
                 pieceOnH8 == null || !pieceOnH8.equals(new Rook(false));
         if (blackKingSideCastleLostBecauseOfMissingRook &&
-                position._info.castlesRights.blackKingSide) return Either.left(new RuntimeException(
+                position.info.castlesRights.blackKingSide) return Either.left(new RuntimeException(
                 "Black has lost right to castle because its king has moved but its kingSide castle flag " +
                         "is still active. Faulty position : "+position.toFEN()
         ));
 
-        final Piece pieceOnA8 = position._board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_A.ordinal()];
+        final Piece pieceOnA8 = position.board.values()[BoardRank.RANK_8.ordinal()][BoardFile.FILE_A.ordinal()];
         final boolean blackQueenSideCastleLostBecauseOfMissingRook =
                 pieceOnA8 == null || !pieceOnA8.equals(new Rook(false));
         if (blackQueenSideCastleLostBecauseOfMissingRook &&
-                position._info.castlesRights.blackQueenSide) return Either.left(new RuntimeException(
+                position.info.castlesRights.blackQueenSide) return Either.left(new RuntimeException(
                 "Black has lost right to castle because its king has moved but its queenSide castle flag " +
                         "is still active. Faulty position : "+position.toFEN()
         ));
@@ -164,7 +164,7 @@ public class Position {
         final int ranks[] = {BoardRank.RANK_1.ordinal(), BoardRank.RANK_8.ordinal()};
         for (int rankIndex : ranks){
             for (int fileIndex = 0; fileIndex < 8; fileIndex++){
-                final Piece currentPiece = resultingPosition._board.values()[rankIndex][fileIndex];
+                final Piece currentPiece = resultingPosition.board.values()[rankIndex][fileIndex];
                 if (currentPiece instanceof Pawn) count++;
             }
         }
@@ -183,7 +183,7 @@ public class Position {
 
         for (int rankIndex = 0; rankIndex < 8; rankIndex++){
             for (int fileIndex = 0; fileIndex < 8; fileIndex++){
-                final Piece currentPiece = position._board.values()[rankIndex][fileIndex];
+                final Piece currentPiece = position.board.values()[rankIndex][fileIndex];
                 if (currentPiece != null && currentPiece.equals(pieceToCount)) count++;
             }
         }
@@ -196,7 +196,7 @@ public class Position {
      * @return String - the converted FEN.
      */
     public String toFEN(){
-        return _board.toFEN() + " " + _info.toFEN();
+        return board.toFEN() + " " + info.toFEN();
     }
 
     /**
@@ -208,9 +208,9 @@ public class Position {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
-        final Piece movingPiece = _board.values()[from.rank][from.file];
+        final Piece movingPiece = board.values()[from.rank][from.file];
         final boolean noPieceAtStartCell = movingPiece == null;
-        final boolean pieceIsNotOurs = movingPiece != null && movingPiece.isWhitePiece() != _info.whiteTurn;
+        final boolean pieceIsNotOurs = movingPiece != null && movingPiece.isWhitePiece() != info.whiteTurn;
         final boolean originSquareEqualsToTarget = from == to;
 
         if (noPieceAtStartCell || pieceIsNotOurs || originSquareEqualsToTarget) return false;
@@ -223,7 +223,7 @@ public class Position {
      * @return Piece - the piece in the given cell.
      */
     public Piece getPieceAt(BoardCell cell){
-        return _board.values()[cell.rank][cell.file];
+        return board.values()[cell.rank][cell.file];
     }
 
     /**
@@ -254,7 +254,7 @@ public class Position {
             final int dyi = i * ySide;
             final BoardCell computedCell = new BoardCell(cell1.rank + dyi, cell1.file + dxi);
 
-            if (_board.values()[computedCell.rank][computedCell.file] != null) return true;
+            if (board.values()[computedCell.rank][computedCell.file] != null) return true;
         }
 
         return false;
@@ -278,7 +278,7 @@ public class Position {
      */
     public Either<Exception, Position> move(Move moveToDo, Class<? extends PromotablePiece> promotionPiece){
         final BoardCell from = moveToDo.from();
-        final Piece movingPiece = _board.values()[from.rank][from.file];
+        final Piece movingPiece = board.values()[from.rank][from.file];
         boolean noPieceAtStartCell = movingPiece == null;
 
         if (noPieceAtStartCell) return Either.left(new RuntimeException(String.format(
@@ -288,10 +288,10 @@ public class Position {
         Either<Exception, Position> positionAfterMove = movingPiece.move(moveToDo, this, promotionPiece);
         if (positionAfterMove.isLeft()) return Either.left(positionAfterMove.left());
 
-        Either<Exception, Boolean> theMovingSideHasLeftHisKingInChess = positionAfterMove.right().kingIsInChess(_info.whiteTurn);
+        Either<Exception, Boolean> theMovingSideHasLeftHisKingInChess = positionAfterMove.right().kingIsInChess(info.whiteTurn);
         if (theMovingSideHasLeftHisKingInChess.isLeft()) return Either.left(theMovingSideHasLeftHisKingInChess.left());
         if (theMovingSideHasLeftHisKingInChess.right()) return Either.left(new RuntimeException(String.format(
-                "The moving side has left its king in chess (%s player) ! Faulty position : %s", _info.whiteTurn ? "white" : "black", this.toFEN())));
+                "The moving side has left its king in chess (%s player) ! Faulty position : %s", info.whiteTurn ? "white" : "black", this.toFEN())));
         else return positionAfterMove;
     }
 
@@ -318,7 +318,7 @@ public class Position {
     private Either<Exception, BoardCell> findKingCell(boolean whiteKing) {
         for (int rankIndex = 0; rankIndex < 8; rankIndex++){
             for (int fileIndex = 0; fileIndex < 8; fileIndex++){
-                final Piece currentPiece = _board.values()[rankIndex][fileIndex];
+                final Piece currentPiece = board.values()[rankIndex][fileIndex];
                 final boolean isSideKing = currentPiece != null && (currentPiece instanceof King) &&
                         currentPiece.isWhitePiece() == whiteKing;
                 if (isSideKing) return Either.right(new BoardCell(rankIndex, fileIndex));
@@ -336,14 +336,14 @@ public class Position {
      * Boolean if success (true if cell is under attack, false otherwise).
      */
     private Either<Exception, Boolean> checkIfThisSquareUnderAttackByAnEnemyPiece(BoardCell testedCell) {
-        final Piece pieceAtTestedCell = _board.values()[testedCell.rank][testedCell.file];
+        final Piece pieceAtTestedCell = board.values()[testedCell.rank][testedCell.file];
         if (pieceAtTestedCell == null) return Either.left(new IllegalArgumentException(String.format(
                 "No piece at tested cell (%s) ! Faulty position : %s", testedCell, this.toFEN())));
 
         for (int rankIndex = 0; rankIndex < 8; rankIndex++) {
             for (int fileIndex = 0; fileIndex < 8; fileIndex++) {
                 final BoardCell currentCell = new BoardCell(rankIndex, fileIndex);
-                final Piece currentPiece = _board.values()[rankIndex][fileIndex];
+                final Piece currentPiece = board.values()[rankIndex][fileIndex];
                 boolean pieceAtCurrentCellIsEnemyPiece =
                         currentPiece != null && currentPiece.isWhitePiece() != pieceAtTestedCell.isWhitePiece();
                 if (pieceAtTheFirstCellIsAttackingTheSecondCell(currentCell, testedCell) && pieceAtCurrentCellIsEnemyPiece) return Either.right(true);
@@ -359,7 +359,7 @@ public class Position {
      * @return true if testedCell is attacked, false otherwise.
      */
     private boolean pieceAtTheFirstCellIsAttackingTheSecondCell(BoardCell attackerCell, BoardCell testedCell) {
-        final Piece pieceAtAttackerCell = _board.values()[attackerCell.rank][attackerCell.file];
+        final Piece pieceAtAttackerCell = board.values()[attackerCell.rank][attackerCell.file];
         return pieceAtAttackerCell != null && pieceAtAttackerCell.isAttackingCell(attackerCell, testedCell, this);
     }
 
@@ -370,24 +370,24 @@ public class Position {
 
         Position position = (Position) o;
 
-        return _info.equals(position._info) && _board.equals(position._board);
+        return info.equals(position.info) && board.equals(position.board);
     }
 
     @Override
     public int hashCode() {
-        int result = _board.hashCode();
-        result = 31 * result + _info.hashCode();
+        int result = board.hashCode();
+        result = 31 * result + info.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "Position{" +
-                "_board=" + _board +
-                ", _info=" + _info +
+                "board=" + board +
+                ", info=" + info +
                 '}';
     }
 
-    public final Board _board;
-    public final GameInfo _info;
+    public final Board board;
+    public final GameInfo info;
 }

@@ -41,8 +41,8 @@ public class Pawn extends Piece {
         else if (tryingToCapture){
             final boolean tryingToCaptureEnPassant = pieceAtEndCell == null;
             if (tryingToCaptureEnPassant){
-                final boolean enPassantFileSameAsDestinationFile = position._info.enPassantFile != null &&
-                        position._info.enPassantFile.ordinal() == to.file;
+                final boolean enPassantFileSameAsDestinationFile = position.info.enPassantFile != null &&
+                        position.info.enPassantFile.ordinal() == to.file;
                 final boolean endRankIsAStandardEnPassantEndRank = to.rank == (whitePlayer ? BoardRank.RANK_6.ordinal() :
                         BoardRank.RANK_3.ordinal());
                 return enPassantFileSameAsDestinationFile && endRankIsAStandardEnPassantEndRank;
@@ -76,7 +76,7 @@ public class Pawn extends Piece {
             replacingPieceForEndSquare = isPromotion ? promotionPiece.getDeclaredConstructor(boolean.class).
                     newInstance(whitePlayer): position.getPieceAt(from);
 
-            final BoardFile enPassantFile = position._info.enPassantFile;
+            final BoardFile enPassantFile = position.info.enPassantFile;
 
             final boolean isEnPassantMove =
                     ((whitePlayer && deltaY == 1) || (!whitePlayer && deltaY == -1)) && Math.abs(deltaX) == 1 &&
@@ -86,7 +86,7 @@ public class Pawn extends Piece {
             newPositionBoard = newPositionBoard.copy(to, replacingPieceForEndSquare);
             if (isEnPassantMove) {
                 int capturedPieceRank = whitePlayer ? BoardRank.RANK_5.ordinal() : BoardRank.RANK_4.ordinal();
-                BoardCell capturedPieceCell = new BoardCell(capturedPieceRank, position._info.enPassantFile.ordinal());
+                BoardCell capturedPieceCell = new BoardCell(capturedPieceRank, position.info.enPassantFile.ordinal());
                 newPositionBoard = newPositionBoard.copy(capturedPieceCell, null);
             }
 

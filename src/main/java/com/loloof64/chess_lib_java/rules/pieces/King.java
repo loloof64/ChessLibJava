@@ -20,7 +20,7 @@ public class King extends Piece {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
-        Either<Exception, Boolean> kingIsInChess = position.kingIsInChess(position._info.whiteTurn);
+        Either<Exception, Boolean> kingIsInChess = position.kingIsInChess(position.info.whiteTurn);
 
         final int deltaX = to.file - from.file;
         final int deltaY = to.rank - from.rank;
@@ -30,12 +30,12 @@ public class King extends Piece {
         final int playerBackRank = whitePlayer ? BoardRank.RANK_1.ordinal() : BoardRank.RANK_8.ordinal();
 
         final boolean noPieceInKingSidePath = position.getPieceAt(new BoardCell(playerBackRank, BoardFile.FILE_F.ordinal())) == null;
-        final boolean hasRightForKingSideCastle = whitePlayer ? position._info.castlesRights.whiteKingSide :
-                position._info.castlesRights.blackKingSide;
+        final boolean hasRightForKingSideCastle = whitePlayer ? position.info.castlesRights.whiteKingSide :
+                position.info.castlesRights.blackKingSide;
         final boolean kingSideCastleMove = hasRightForKingSideCastle && deltaX == 2 && deltaY == 0 && noPieceInKingSidePath;
 
-        final boolean hasRightForQueenSideCastle = whitePlayer ? position._info.castlesRights.whiteQueenSide :
-                position._info.castlesRights.blackQueenSide;
+        final boolean hasRightForQueenSideCastle = whitePlayer ? position.info.castlesRights.whiteQueenSide :
+                position.info.castlesRights.blackQueenSide;
         final boolean noPieceInQueenSidePath = position.getPieceAt(new BoardCell(playerBackRank, BoardFile.FILE_D.ordinal())) == null
                 && position.getPieceAt(new BoardCell(playerBackRank, BoardFile.FILE_B.ordinal())) == null;
         final boolean queenSideCastleMove = hasRightForQueenSideCastle && deltaX == -2 && deltaY == 0 && noPieceInQueenSidePath;
@@ -46,31 +46,31 @@ public class King extends Piece {
         GameInfo positionIfKingCrossF1OrF8_GameInfo = GameInfo.fromFEN(position.toFEN()); // Simple copy
         Board positionIfKingCrossF1OrF8_Board = Board.fromFEN(position.toFEN()); // Simple copy
         positionIfKingCrossF1OrF8_Board = positionIfKingCrossF1OrF8_Board.copy(from, null);
-        positionIfKingCrossF1OrF8_Board = positionIfKingCrossF1OrF8_Board.copy(position._info.whiteTurn ? BoardCell.F1 : BoardCell.F8,
-                new King(position._info.whiteTurn));
+        positionIfKingCrossF1OrF8_Board = positionIfKingCrossF1OrF8_Board.copy(position.info.whiteTurn ? BoardCell.F1 : BoardCell.F8,
+                new King(position.info.whiteTurn));
         Position positionIfKingCrossF1OrF8 = new Position(positionIfKingCrossF1OrF8_Board,
                 positionIfKingCrossF1OrF8_GameInfo);
         Either<Exception, Boolean> positionIfKingCrossF1OrF8HasCurrentPlayerTurnKingInChess =
-                positionIfKingCrossF1OrF8.kingIsInChess(position._info.whiteTurn);
+                positionIfKingCrossF1OrF8.kingIsInChess(position.info.whiteTurn);
 
         GameInfo positionIfKingCrossD1OrD8_GameInfo = GameInfo.fromFEN(position.toFEN()); // Simple copy
         Board positionIfKingCrossD1OrD8_Board = Board.fromFEN(position.toFEN()); // Simple copy
         positionIfKingCrossD1OrD8_Board = positionIfKingCrossD1OrD8_Board.copy(from, null);
-        positionIfKingCrossD1OrD8_Board = positionIfKingCrossD1OrD8_Board.copy(position._info.whiteTurn ? BoardCell.D1 : BoardCell.D8,
-                new King(position._info.whiteTurn));
+        positionIfKingCrossD1OrD8_Board = positionIfKingCrossD1OrD8_Board.copy(position.info.whiteTurn ? BoardCell.D1 : BoardCell.D8,
+                new King(position.info.whiteTurn));
         Position positionIfKingCrossD1OrD8 = new Position(positionIfKingCrossD1OrD8_Board,
                 positionIfKingCrossD1OrD8_GameInfo);
         Either<Exception, Boolean> positionIfKingCrossD1OrD8HasCurrentPlayerTurnKingInChess =
-                positionIfKingCrossD1OrD8.kingIsInChess(position._info.whiteTurn);
+                positionIfKingCrossD1OrD8.kingIsInChess(position.info.whiteTurn);
 
         GameInfo positionIfKingReachEndCell_GameInfo = GameInfo.fromFEN(position.toFEN()); // Simple copy
         Board positionIfKingReachEndCell_Board = Board.fromFEN(position.toFEN()); // Simple copy
         positionIfKingReachEndCell_Board = positionIfKingReachEndCell_Board.copy(from, null);
-        positionIfKingReachEndCell_Board = positionIfKingReachEndCell_Board.copy(to,  new King(position._info.whiteTurn));
+        positionIfKingReachEndCell_Board = positionIfKingReachEndCell_Board.copy(to,  new King(position.info.whiteTurn));
         Position positionIfKingReachEndCell = new Position(positionIfKingReachEndCell_Board,
                 positionIfKingReachEndCell_GameInfo);
         Either<Exception, Boolean> positionIfKingReachEndCellHasCurrentPlayerTurnKingInChess =
-                positionIfKingReachEndCell.kingIsInChess(position._info.whiteTurn);
+                positionIfKingReachEndCell.kingIsInChess(position.info.whiteTurn);
 
         final boolean canDoKingSideCastleMove = kingSideCastleMove &&
                 kingIsInChess.isRight() && !kingIsInChess.right() &&
