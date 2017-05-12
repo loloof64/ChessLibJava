@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class ChessHistoryNode {
 
     private ChessHistoryNode(ChessHistoryNode parent, Position relatedPosition,
-                             Move relatedMove,
+                             Move relatedMove, String relatedComment,
                              ChessHistoryNode... childrenNodes){
 
         boolean isRootNode = parent == null;
@@ -27,6 +27,7 @@ public class ChessHistoryNode {
         this.parent = parent;
         this.relatedPosition = relatedPosition;
         this.relatedMove = relatedMove;
+        this.relatedComment = relatedComment != null ? relatedComment : "";
         this._childrenNodes = new ArrayList<>(Arrays.asList(childrenNodes));
 
         if (this.parent != null) this.parent._childrenNodes.add(this);
@@ -35,14 +36,16 @@ public class ChessHistoryNode {
     /**
      * Builds a root {@link ChessHistoryNode}
      * @param relatedPosition - {@link Position} - related position.
+     * @param relatedComment - String - related comment : will be empty if null is passed.
      * @param childrenNodes - Ellipsis/Array of {@link ChessHistoryNode}- children nodes.
      * @return Either of Exception and {@link ChessHistoryNode} - Left of Exception if failure otherwise Right of {@link ChessHistoryNode}.
      */
     public static Either<Exception, ChessHistoryNode> rootNode(Position relatedPosition,
+                                                           String relatedComment,
                                                            ChessHistoryNode... childrenNodes){
         try {
             return Either.right(new ChessHistoryNode(null, relatedPosition,
-                    null, childrenNodes));
+                    null, relatedComment, childrenNodes));
         }
         catch (Exception e){
             return Either.left(e);
@@ -54,11 +57,13 @@ public class ChessHistoryNode {
      * @param parent - {@link ChessHistoryNode} - null for a root node.
      * @param relatedMove - {@link Move} - the related move (the move which lead to this position, null for root node).
      * First value is the start cell, and the second value is the target cell.
+     * @param relatedComment - String - related comment : will be empty if null is passed.
      * @param childrenNodes - Ellipsis/Array of {@link ChessHistoryNode}- children nodes.
      * @return Either of Exception and ChessHistoryNode - Left of Exception if failure otherwise Right of {@link ChessHistoryNode}.
      */
     public static Either<Exception, ChessHistoryNode> nonRootNode(ChessHistoryNode parent,
                                                                   Move relatedMove,
+                                                                  String relatedComment,
                                                                   ChessHistoryNode... childrenNodes){
         try {
             if (parent == null) throw new IllegalArgumentException("You must provide a parent node in order to build " +
@@ -66,7 +71,7 @@ public class ChessHistoryNode {
             final Either<Exception, Position> relatedPosition = computePosition(parent, relatedMove);
             if (relatedPosition.isLeft()) throw relatedPosition.left();
             return Either.right(new ChessHistoryNode(parent, relatedPosition.right(),
-                    relatedMove, childrenNodes));
+                    relatedMove, relatedComment, childrenNodes));
         }
         catch (Exception e){
             return Either.left(e);
@@ -126,5 +131,6 @@ public class ChessHistoryNode {
     public final ChessHistoryNode parent;
     public final Move relatedMove;
     public final Position relatedPosition;
+    public final String relatedComment;
     private final ArrayList<ChessHistoryNode> _childrenNodes;
 }
