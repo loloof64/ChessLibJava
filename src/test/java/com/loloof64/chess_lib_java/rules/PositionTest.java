@@ -414,4 +414,14 @@ public class PositionTest {
         Either<Exception, Position> wrapPos4 = Position.fromFEN("rnbqkbn1/ppppppp1/7r/7p/8/2NP4/PPP1PPPP/R1BQKBNR b k - 1 3");
         assertTrue(wrapPos4.isLeft());
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void cannotGeneratePositionWithNegativeNullityHalfMoves_1() {
+        Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 -1 2");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void cannotGeneratePositionWithNegativeNullityHalfMoves_2() {
+        Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 -9 2");
+    }
 }
