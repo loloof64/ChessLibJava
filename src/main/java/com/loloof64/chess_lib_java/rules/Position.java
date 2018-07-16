@@ -37,7 +37,12 @@ public class Position {
      * the exception wrapped in Left otherwise.
      */
     public static Either<Exception, Position> fromFEN(String fenStr){
-        final Position resultingPosition = new Position(Board.fromFEN(fenStr), GameInfo.fromFEN(fenStr));
+        Position resultingPosition;
+        try {
+            resultingPosition = new Position(Board.fromFEN(fenStr), GameInfo.fromFEN(fenStr));
+        } catch(Exception ex) {
+            return Either.left(ex);
+        }
         final Either<Exception, Void> piecesCountCheckReport = rightPiecesCountForPosition(resultingPosition);
         final Either<Exception, Void> rightRemainingCastlesCheckReport = rightCastleRightsRemainsInPosition(resultingPosition);
 

@@ -415,23 +415,21 @@ public class PositionTest {
         assertTrue(wrapPos4.isLeft());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void cannotGeneratePositionWithNegativeNullityHalfMoves_1() {
-        Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 -1 2");
+    @Test
+    public void cannotGeneratePositionWithNegativeNullityHalfMoves() {
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 -1 2");
+        assertTrue(wrapPos1.isLeft());
+
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 -9 2");
+        assertTrue(wrapPos2.isLeft());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void cannotGeneratePositionWithNegativeNullityHalfMoves_2() {
-        Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 -9 2");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void cannotGeneratePositionWithZeroOrLessMoveNumber_1() {
-        Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 1 0");
-    }
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 1 0");
+        assertTrue(wrapPos1.isLeft());
 
-    @Test(expected = IllegalArgumentException.class)
-    public void cannotGeneratePositionWithZeroOrLessMoveNumber_2() {
-        Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 1 -7");
+        Either<Exception, Position> wrapPos2= Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 1 -7");
+        assertTrue(wrapPos2.isLeft());
     }
 }
