@@ -13,7 +13,8 @@ import java.util.Arrays;
 public class ChessHistoryNode {
 
     private ChessHistoryNode(ChessHistoryNode parent, Position relatedPosition,
-                             Move relatedMove, String relatedComment,
+                             Move relatedMove, String commentBefore,
+                             String commentAfter,
                              ChessHistoryNode... childrenNodes){
 
         boolean isRootNode = parent == null;
@@ -27,7 +28,8 @@ public class ChessHistoryNode {
         this.parent = parent;
         this.relatedPosition = relatedPosition;
         this.relatedMove = relatedMove;
-        this._relatedComment = relatedComment != null ? relatedComment : "";
+        this._commentBefore = commentBefore != null ? commentBefore : "";
+        this._commentAfter = commentAfter != null ? commentAfter : "";
         this._childrenNodes = new ArrayList<>(Arrays.asList(childrenNodes));
 
         if (this.parent != null) this.parent._childrenNodes.add(this);
@@ -36,16 +38,18 @@ public class ChessHistoryNode {
     /**
      * Builds a root {@link ChessHistoryNode}
      * @param relatedPosition - {@link Position} - related position.
-     * @param relatedComment - String - related comment : will be empty if null is passed.
+     * @param commentBefore - String - comment before the move : will be empty if null is passed.
+     * @param commentAfter - String - comment after the move : will be empty if null is passed.
      * @param childrenNodes - Ellipsis/Array of {@link ChessHistoryNode}- children nodes.
      * @return Either of Exception and {@link ChessHistoryNode} - Left of Exception if failure otherwise Right of {@link ChessHistoryNode}.
      */
     public static Either<Exception, ChessHistoryNode> rootNode(Position relatedPosition,
-                                                           String relatedComment,
+                                                           String commentBefore,
+                                                           String commentAfter,
                                                            ChessHistoryNode... childrenNodes){
         try {
             return Either.right(new ChessHistoryNode(null, relatedPosition,
-                    null, relatedComment, childrenNodes));
+                    null, commentBefore, commentAfter, childrenNodes));
         }
         catch (Exception e){
             return Either.left(e);
@@ -57,13 +61,15 @@ public class ChessHistoryNode {
      * @param parent - {@link ChessHistoryNode} - null for a root node.
      * @param relatedMove - {@link Move} - the related move (the move which lead to this position, null for root node).
      * First value is the start cell, and the second value is the target cell.
-     * @param relatedComment - String - related comment : will be empty if null is passed.
+     * @param commentBefore - String - comment before the move : will be empty if null is passed.
+     * @param commentAfter - String - comment before the move : will be empty if null is passed.
      * @param childrenNodes - Ellipsis/Array of {@link ChessHistoryNode}- children nodes.
      * @return Either of Exception and ChessHistoryNode - Left of Exception if failure otherwise Right of {@link ChessHistoryNode}.
      */
     public static Either<Exception, ChessHistoryNode> nonRootNode(ChessHistoryNode parent,
                                                                   Move relatedMove,
-                                                                  String relatedComment,
+                                                                  String commentBefore,
+                                                                  String commentAfter,
                                                                   ChessHistoryNode... childrenNodes){
         try {
             if (parent == null) throw new IllegalArgumentException("You must provide a parent node in order to build " +
@@ -71,7 +77,7 @@ public class ChessHistoryNode {
             final Either<Exception, Position> relatedPosition = computePosition(parent, relatedMove);
             if (relatedPosition.isLeft()) throw relatedPosition.left();
             return Either.right(new ChessHistoryNode(parent, relatedPosition.right(),
-                    relatedMove, relatedComment, childrenNodes));
+                    relatedMove, commentBefore, commentAfter, childrenNodes));
         }
         catch (Exception e){
             return Either.left(e);
@@ -117,26 +123,42 @@ public class ChessHistoryNode {
     }
 
     /**
-     * Get related comment : won't be null.
+     * Get related comment after move : won't be null.
      * @return String - the associated comment.
      */
-    public String comment(){
-        return _relatedComment;
+    public String commentAfter(){
+        return _commentAfter;
     }
 
     /**
-     * Sets the associated comment : will be empty if null is passed.
+     * Get related comment before move : won't be null.
+     * @return String - the associated comment.
+     */
+    public String commentBefore(){
+        return _commentBefore;
+    }
+
+    /**
+     * Sets associated comment before the move : will be empty if null is passed.
      * @param comment - String - the comment, can be null.
      */
-    public void setComment(String comment){
-        this._relatedComment = comment != null ? comment : "";
+    public void setCommentBefore(String comment){
+        this._commentBefore = comment != null ? comment : "";
+    }
+
+    /**
+     * Sets associated comment after the move : will be empty if null is passed.
+     * @param comment - String - the comment, can be null.
+     */
+    public void setCommentAfter(String comment){
+        this._commentAfter = comment != null ? comment : "";
     }
 
     /**
      * Simply clears the associated comment.
      */
     public void removeComment(){
-        this._relatedComment = "";
+        this._commentBefore = "";
     }
 
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
@@ -154,6 +176,6 @@ public class ChessHistoryNode {
     public final ChessHistoryNode parent;
     public final Move relatedMove;
     public final Position relatedPosition;
-    private String _relatedComment;
+    private String _commentBefore, _commentAfter;
     private final ArrayList<ChessHistoryNode> _childrenNodes;
 }
