@@ -155,10 +155,18 @@ public class ChessHistoryNode {
     }
 
     /**
-     * Simply clears the associated comment.
+     * Simply clears the associated comment before the move.
      */
-    public void removeComment(){
+    public void removeCommentBefore(){
         this._commentBefore = "";
+    }
+
+
+    /**
+     * Simply clears the associated comment after the move.
+     */
+    public void removeCommentAfter(){
+        this._commentAfter = "";
     }
 
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
