@@ -402,16 +402,16 @@ public class PositionTest {
 
     @Test
     public void cannotGenerateAPositionWhereARookIsMissingInCornerAndTheMatchingCastleRightStillActive(){
-        Either<Exception, Position> wrapPos1 = Position.fromFEN("r1bqkbnr/pppppppp/2n5/8/7P/8/PPPPPPPR/RNBQKBN1 b KQkq - 2 2");
+        Either<Exception, Position> wrapPos1 = Position.fromFEN("r1bqkbnr/pppppppp/2n5/8/7P/8/PPPPPPPR/RNBQKBN1 w K - 2 2");
         assertTrue(wrapPos1.isLeft());
 
-        Either<Exception, Position> wrapPos2 = Position.fromFEN("rnbqkb1r/pppppppp/5n2/8/P7/R7/1PPPPPPP/1NBQKBNR b KQkq - 2 2");
+        Either<Exception, Position> wrapPos2 = Position.fromFEN("rnbqkb1r/pppppppp/5n2/8/P7/R7/1PPPPPPP/1NBQKBNR w Q - 2 2");
         assertTrue(wrapPos2.isLeft());
 
-        Either<Exception, Position> wrapPos3 = Position.fromFEN("1nbqkbnr/1ppppppp/r7/p7/8/4PN2/PPPP1PPP/RNBQKB1R w KQkq - 1 3");
+        Either<Exception, Position> wrapPos3 = Position.fromFEN("1nbqkbnr/1ppppppp/r7/p7/8/4PN2/PPPP1PPP/RNBQKB1R b q - 1 3");
         assertTrue(wrapPos3.isLeft());
 
-        Either<Exception, Position> wrapPos4 = Position.fromFEN("rnbqkbn1/ppppppp1/7r/7p/8/2NP4/PPP1PPPP/R1BQKBNR w KQkq - 1 3");
+        Either<Exception, Position> wrapPos4 = Position.fromFEN("rnbqkbn1/ppppppp1/7r/7p/8/2NP4/PPP1PPPP/R1BQKBNR b k - 1 3");
         assertTrue(wrapPos4.isLeft());
     }
 }
