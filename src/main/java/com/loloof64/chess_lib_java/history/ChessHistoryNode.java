@@ -194,6 +194,10 @@ public class ChessHistoryNode {
         return this._childrenNodes.get(index+1);
     }
 
+    public Position getRelatedPosition() {
+        return relatedPosition;
+    }
+
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
         for (ChessHistoryNode currentChild : _childrenNodes){
             if (currentChild.relatedMove.equals(move)) return true;
