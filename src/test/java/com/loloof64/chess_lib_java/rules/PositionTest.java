@@ -424,4 +424,14 @@ public class PositionTest {
     public void cannotGeneratePositionWithNegativeNullityHalfMoves_2() {
         Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 -9 2");
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void cannotGeneratePositionWithZeroOrLessMoveNumber_1() {
+        Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 1 0");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void cannotGeneratePositionWithZeroOrLessMoveNumber_2() {
+        Position.fromFEN("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 1 -7");
+    }
 }
