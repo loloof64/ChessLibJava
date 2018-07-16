@@ -169,6 +169,31 @@ public class ChessHistoryNode {
         this._commentAfter = "";
     }
 
+    /**
+     *
+     * @return ChessHistoryNode or null
+     */
+    public ChessHistoryNode getMainLineChildIfAny(){
+        if (this._childrenNodes.size() < 1) return null;
+        return this._childrenNodes.get(0);
+    }
+
+    public int getVariationsChildrenCount() {
+        return this._childrenNodes.size() - 1;
+    }
+
+    /**
+     * Gets the variation whose index is given, if it exists.
+     * E.g if given index is 2, will try to get the child of index 3, because
+     * of the existence of the main line.
+     * @param index - int
+     * @return ChessHistoryNode or null
+     */
+    public ChessHistoryNode getVariationChildIfExists(int index) {
+        if (this._childrenNodes.size() < index+1) return null;
+        return this._childrenNodes.get(index+1);
+    }
+
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
         for (ChessHistoryNode currentChild : _childrenNodes){
             if (currentChild.relatedMove.equals(move)) return true;
