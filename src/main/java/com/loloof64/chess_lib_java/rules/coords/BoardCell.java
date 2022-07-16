@@ -101,6 +101,10 @@ public class BoardCell {
 
     @Override
     public String toString() {
+        return "" + (char) ('a' + file) + (char) ('1' + rank);
+    }
+
+    public String debugString() {
         return "BoardCell{" +
                 "file=" + (char) ('A' + file) +
                 ", rank=" + (char) ('1' + rank) +

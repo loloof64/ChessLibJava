@@ -1,8 +1,6 @@
 package com.loloof64.chess_lib_java.rules;
 
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
-import com.loloof64.chess_lib_java.rules.coords.BoardFile;
-import com.loloof64.chess_lib_java.rules.coords.BoardRank;
 import com.loloof64.chess_lib_java.rules.pieces.Piece;
 
 /**
@@ -27,11 +25,11 @@ public class Board {
         Piece[][] boardToBuild = new Piece[8][8];
 
         final String boardFEN = fenStr.split("\\s+")[0];
-        final String lines [] = boardFEN.split("/");
+        final String[] lines = boardFEN.split("/");
 
         int rankIndex = 7;
         for (String currentLine : lines){
-            char cellValues [] = currentLine.toCharArray();
+            char[] cellValues = currentLine.toCharArray();
             int fileIndex = 0;
             for (char cell : cellValues){
                 if (Character.isDigit(cell)){

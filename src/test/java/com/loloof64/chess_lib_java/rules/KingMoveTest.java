@@ -63,6 +63,46 @@ public class KingMoveTest {
         assertTrue(pos4.canMove(new Move(BoardCell.D4, BoardCell.C3)));
         assertTrue(pos4.canMove(new Move(BoardCell.D4, BoardCell.D3)));
         assertTrue(pos4.canMove(new Move(BoardCell.D4, BoardCell.E3)));
+
+        // ---
+
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.C6)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.F3)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.D6)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.D1)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.B4)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.H4)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.H8)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.B2)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.B6)).isRight());
+        assertFalse(pos3.move(new Move(BoardCell.D4, BoardCell.G1)).isRight());
+        assertTrue(pos3.move(new Move(BoardCell.D4, BoardCell.C5)).isRight());
+        assertTrue(pos3.move(new Move(BoardCell.D4, BoardCell.D5)).isRight());
+        assertTrue(pos3.move(new Move(BoardCell.D4, BoardCell.E5)).isRight());
+        assertTrue(pos3.move(new Move(BoardCell.D4, BoardCell.C4)).isRight());
+        assertTrue(pos3.move(new Move(BoardCell.D4, BoardCell.E4)).isRight());
+        assertTrue(pos3.move(new Move(BoardCell.D4, BoardCell.C3)).isRight());
+        assertTrue(pos3.move(new Move(BoardCell.D4, BoardCell.D3)).isRight());
+        assertTrue(pos3.move(new Move(BoardCell.D4, BoardCell.E3)).isRight());
+
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.C6)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.F3)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.D6)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.D1)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.B4)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.H4)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.H8)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.B2)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.B6)).isRight());
+        assertFalse(pos4.move(new Move(BoardCell.D4, BoardCell.G1)).isRight());
+        assertTrue(pos4.move(new Move(BoardCell.D4, BoardCell.C5)).isRight());
+        assertTrue(pos4.move(new Move(BoardCell.D4, BoardCell.D5)).isRight());
+        assertTrue(pos4.move(new Move(BoardCell.D4, BoardCell.E5)).isRight());
+        assertTrue(pos4.move(new Move(BoardCell.D4, BoardCell.C4)).isRight());
+        assertTrue(pos4.move(new Move(BoardCell.D4, BoardCell.E4)).isRight());
+        assertTrue(pos4.move(new Move(BoardCell.D4, BoardCell.C3)).isRight());
+        assertTrue(pos4.move(new Move(BoardCell.D4, BoardCell.D3)).isRight());
+        assertTrue(pos4.move(new Move(BoardCell.D4, BoardCell.E3)).isRight());
     }
 
     @Test
@@ -102,6 +142,44 @@ public class KingMoveTest {
         assertFalse(pos6.canMove(new Move(BoardCell.D4, BoardCell.E5)));
         assertFalse(pos6.canMove(new Move(BoardCell.D4, BoardCell.C3)));
         assertFalse(pos6.canMove(new Move(BoardCell.D4, BoardCell.E3)));
+
+        // ---
+
+        assertTrue(pos1.move(new Move(BoardCell.D4, BoardCell.C5)).isRight());
+        assertTrue(pos1.move(new Move(BoardCell.D4, BoardCell.E5)).isRight());
+        assertTrue(pos1.move(new Move(BoardCell.D4, BoardCell.C3)).isRight());
+        assertTrue(pos1.move(new Move(BoardCell.D4, BoardCell.E3)).isRight());
+        assertFalse(pos1.move(new Move(BoardCell.D4, BoardCell.D5)).isRight());
+        assertFalse(pos1.move(new Move(BoardCell.D4, BoardCell.D3)).isRight());
+        assertFalse(pos1.move(new Move(BoardCell.D4, BoardCell.C4)).isRight());
+        assertFalse(pos1.move(new Move(BoardCell.D4, BoardCell.E4)).isRight());
+
+        assertTrue(pos2.move(new Move(BoardCell.D4, BoardCell.C5)).isRight());
+        assertTrue(pos2.move(new Move(BoardCell.D4, BoardCell.E5)).isRight());
+        assertTrue(pos2.move(new Move(BoardCell.D4, BoardCell.C3)).isRight());
+        assertTrue(pos2.move(new Move(BoardCell.D4, BoardCell.E3)).isRight());
+        assertFalse(pos2.move(new Move(BoardCell.D4, BoardCell.D5)).isRight());
+        assertFalse(pos2.move(new Move(BoardCell.D4, BoardCell.D3)).isRight());
+        assertFalse(pos2.move(new Move(BoardCell.D4, BoardCell.C4)).isRight());
+        assertFalse(pos2.move(new Move(BoardCell.D4, BoardCell.E4)).isRight());
+
+        assertTrue(pos5.move(new Move(BoardCell.D4, BoardCell.D5)).isRight());
+        assertTrue(pos5.move(new Move(BoardCell.D4, BoardCell.D3)).isRight());
+        assertTrue(pos5.move(new Move(BoardCell.D4, BoardCell.C4)).isRight());
+        assertTrue(pos5.move(new Move(BoardCell.D4, BoardCell.E4)).isRight());
+        assertFalse(pos5.move(new Move(BoardCell.D4, BoardCell.C5)).isRight());
+        assertFalse(pos5.move(new Move(BoardCell.D4, BoardCell.E5)).isRight());
+        assertFalse(pos5.move(new Move(BoardCell.D4, BoardCell.C3)).isRight());
+        assertFalse(pos5.move(new Move(BoardCell.D4, BoardCell.E3)).isRight());
+
+        assertTrue(pos6.move(new Move(BoardCell.D4, BoardCell.D5)).isRight());
+        assertTrue(pos6.move(new Move(BoardCell.D4, BoardCell.D3)).isRight());
+        assertTrue(pos6.move(new Move(BoardCell.D4, BoardCell.C4)).isRight());
+        assertTrue(pos6.move(new Move(BoardCell.D4, BoardCell.E4)).isRight());
+        assertFalse(pos6.move(new Move(BoardCell.D4, BoardCell.C5)).isRight());
+        assertFalse(pos6.move(new Move(BoardCell.D4, BoardCell.E5)).isRight());
+        assertFalse(pos6.move(new Move(BoardCell.D4, BoardCell.C3)).isRight());
+        assertFalse(pos6.move(new Move(BoardCell.D4, BoardCell.E3)).isRight());
     }
 
     @Test
@@ -129,6 +207,24 @@ public class KingMoveTest {
 
         Position pos8 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/3P1N2/PPPN1PPP/R1BQKB1R b KQq - 2 4").right();
         assertFalse(pos8.canMove(new Move(BoardCell.E8, BoardCell.G8)));
+
+        /// ---
+
+        assertTrue(pos1.move(new Move(BoardCell.E1, BoardCell.G1)).isRight());
+
+        assertFalse(pos2.move(new Move(BoardCell.E1, BoardCell.G1)).isRight());
+
+        assertFalse(pos3.move(new Move(BoardCell.E1, BoardCell.G1)).isRight());
+
+        assertTrue(pos4.move(new Move(BoardCell.E8, BoardCell.G8)).isRight());
+
+        assertFalse(pos5.move(new Move(BoardCell.E8, BoardCell.G8)).isRight());
+
+        assertFalse(pos6.move(new Move(BoardCell.E8, BoardCell.G8)).isRight());
+
+        assertFalse(pos7.move(new Move(BoardCell.E1, BoardCell.G1)).isRight());
+
+        assertFalse(pos8.move(new Move(BoardCell.E8, BoardCell.G8)).isRight());
     }
 
     @Test
@@ -162,6 +258,29 @@ public class KingMoveTest {
 
         Position pos10 = Position.fromFEN("r3kbnr/pppq1ppp/2np4/4p3/2B1P1b1/P1N2N2/1PPP1PPP/R1BQ1RK1 b k - 2 6").right();
         assertFalse(pos10.canMove(new Move(BoardCell.E8, BoardCell.C8)));
+
+        // ---
+
+        assertTrue(pos1.move(new Move(BoardCell.E1, BoardCell.C1)).isRight());
+
+        assertFalse(pos2.move(new Move(BoardCell.E1, BoardCell.C1)).isRight());
+
+        assertFalse(pos3.move(new Move(BoardCell.E1, BoardCell.C1)).isRight());
+
+        assertFalse(pos4.move(new Move(BoardCell.E1, BoardCell.C1)).isRight());
+
+        assertTrue(pos5.move(new Move(BoardCell.E8, BoardCell.C8)).isRight());
+
+        assertFalse(pos6.move(new Move(BoardCell.E8, BoardCell.C8)).isRight());
+
+        assertFalse(pos7.move(new Move(BoardCell.E8, BoardCell.C8)).isRight());
+
+        assertFalse(pos8.move(new Move(BoardCell.E8, BoardCell.C8)).isRight());
+
+        assertFalse(pos9.move(new Move(BoardCell.E1, BoardCell.C1)).isRight());
+
+        assertFalse(pos10.move(new Move(BoardCell.E8, BoardCell.C8)).isRight());
+
     }
 
     @Test
@@ -170,11 +289,13 @@ public class KingMoveTest {
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.E1, BoardCell.F2));
         assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/5P2/8/PPPPPKPP/RNBQ1BNR b kq - 1 2").right(),
                 wrapPos2.right().position);
+        assertEquals("Kf2", wrapPos2.right().moveSan);
 
         Position pos3 = Position.fromFEN("rnbqkbnr/ppppp1pp/8/5p2/8/2N4P/PPPPPPP1/R1BQKBNR b KQkq - 0 2").right();
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.E8, BoardCell.F7));
         assertEquals(Position.fromFEN("rnbq1bnr/pppppkpp/8/5p2/8/2N4P/PPPPPPP1/R1BQKBNR w KQ - 1 3").right(),
                 wrapPos4.right().position);
+        assertEquals("Kf7", wrapPos4.right().moveSan);
     }
 
     @Test
@@ -183,11 +304,13 @@ public class KingMoveTest {
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.E1, BoardCell.E2));
         assertEquals(Position.fromFEN("rnbqkbnr/pp1ppppp/8/2p5/8/4P3/PPPPKPPP/RNBQ1BNR b kq - 1 2").right(),
                 wrapPos2.right().position);
+        assertEquals("Ke2", wrapPos2.right().moveSan);
 
         Position pos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/4p3/8/3P4/P7/1PP1PPPP/RNBQKBNR b KQkq d3 0 2").right();
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.E8, BoardCell.E7));
         assertEquals(Position.fromFEN("rnbq1bnr/ppppkppp/4p3/8/3P4/P7/1PP1PPPP/RNBQKBNR w KQ - 1 3").right(),
                 wrapPos4.right().position);
+        assertEquals("Ke7", wrapPos4.right().moveSan);
     }
 
     @Test
@@ -196,21 +319,25 @@ public class KingMoveTest {
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.E1, BoardCell.G1));
         assertEquals(Position.fromFEN("r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4").right(),
                 wrapPos2.right().position);
+        assertEquals("O-O", wrapPos2.right().moveSan);
 
         Position pos3 = Position.fromFEN("rnbq1rk1/ppp2ppp/3p1n2/2b1p3/4P3/2NPB3/PPPQ1PPP/R3KBNR w KQ - 0 6").right();
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.E1, BoardCell.C1));
         assertEquals(Position.fromFEN("rnbq1rk1/ppp2ppp/3p1n2/2b1p3/4P3/2NPB3/PPPQ1PPP/2KR1BNR b - - 1 6").right(),
                 wrapPos4.right().position);
+        assertEquals(wrapPos4.right().moveSan, "O-O-O");
 
         Position pos5 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4").right();
         Either<Exception, MoveResult> wrapPos6 = pos5.move(new Move(BoardCell.E8, BoardCell.G8));
         assertEquals(Position.fromFEN("rnbq1rk1/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 6 5").right(),
                 wrapPos6.right().position);
+        assertEquals(wrapPos6.right().moveSan, "O-O");
 
         Position pos7 = Position.fromFEN("r3kbnr/pppqpppp/2n5/1B1pP3/6b1/5N2/PPPP1PPP/RNBQ1RK1 b kq - 6 5").right();
         Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.E8, BoardCell.C8));
         assertEquals(Position.fromFEN("2kr1bnr/pppqpppp/2n5/1B1pP3/6b1/5N2/PPPP1PPP/RNBQ1RK1 w - - 7 6").right(),
                 wrapPos8.right().position);
+        assertEquals(wrapPos8.right().moveSan, "O-O-O");
     }
 
     @Test
@@ -219,21 +346,25 @@ public class KingMoveTest {
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.E1, BoardCell.G1));
         assertEquals(Position.fromFEN("r1bqkbnr/p1pp1ppp/1pn5/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4").right(),
                 wrapPos2.right().position);
+        assertEquals(wrapPos2.right().moveSan, "O-O");
 
         Position pos3 = Position.fromFEN("r2qkb1r/pppb1ppp/2np1n2/4p3/4P3/2NPB3/PPPQ1PPP/R3KBNR w KQkq e6 0 6").right();
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.E1, BoardCell.C1));
         assertEquals(Position.fromFEN("r2qkb1r/pppb1ppp/2np1n2/4p3/4P3/2NPB3/PPPQ1PPP/2KR1BNR b kq - 1 6").right(),
                 wrapPos4.right().position);
+        assertEquals(wrapPos4.right().moveSan, "O-O-O");
 
         Position pos5 = Position.fromFEN("rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R b KQkq e3 0 4").right();
         Either<Exception, MoveResult> wrapPos6 = pos5.move(new Move(BoardCell.E8, BoardCell.G8));
         assertEquals(Position.fromFEN("rnbq1rk1/pppp1ppp/5n2/2b1p3/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQ - 1 5").right(),
                 wrapPos6.right().position);
+        assertEquals(wrapPos6.right().moveSan, "O-O");
 
         Position pos7 = Position.fromFEN("r3kbnr/pppqpppp/2n5/3p4/3PP1b1/5N2/PPP1BPPP/RNBQ1RK1 b kq d3 0 5").right();
         Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.E8, BoardCell.C8));
         assertEquals(Position.fromFEN("2kr1bnr/pppqpppp/2n5/3p4/3PP1b1/5N2/PPP1BPPP/RNBQ1RK1 w - - 1 6").right(),
                 wrapPos8.right().position);
+        assertEquals(wrapPos8.right().moveSan, "O-O-O");
     }
 
     @Test

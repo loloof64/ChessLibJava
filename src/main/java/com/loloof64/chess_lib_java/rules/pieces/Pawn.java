@@ -93,7 +93,9 @@ public class Pawn extends Piece {
             newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(0);
 
             Position resultPosition = new Position(newPositionBoard, newPositionInfo);
-            String moveSan = "";
+            String moveSan = to.toString();
+            boolean targetCellWasOccupied = position.board.getPieceAt(to) != null;
+            if (targetCellWasOccupied) moveSan = String.format("%sx%s", (char) ('a' + from.file), to);
             return Either.right(new MoveResult(resultPosition, moveSan));
         } catch (Exception e) {
             e.printStackTrace();
