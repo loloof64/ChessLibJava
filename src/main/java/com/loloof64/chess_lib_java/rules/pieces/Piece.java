@@ -1,6 +1,7 @@
 package com.loloof64.chess_lib_java.rules.pieces;
 
 import com.loloof64.chess_lib_java.rules.Move;
+import com.loloof64.chess_lib_java.rules.MoveResult;
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Either;
@@ -61,11 +62,11 @@ public abstract class Piece {
      * @param moveToDo - {@link Move} - the move to do
      * @param position - Position - the position which this piece belongs to.
      * @param promotionPiece - class of PromotablePiece - promotion piece if the move leads to pawn promotion.
-     * @return Either of Exception and Position - Left of Exception if the move cannot be done, otherwise Right of
-     * Position, wrapping the resulting position.
+     * @return Either of Exception and MoveResult - Left of Exception if the move cannot be done, otherwise Right of
+     * MoveResult, wrapping the result.
      */
-    abstract public Either<Exception, Position> move(Move moveToDo,
-                                                     Position position, Class<? extends PromotablePiece> promotionPiece);
+    abstract public Either<Exception, MoveResult> move(Move moveToDo,
+                                                       Position position, Class<? extends PromotablePiece> promotionPiece);
 
     /**
      * Says if the piece is attacking the given cell, with no consideration about the current player turn

@@ -166,7 +166,7 @@ public class Position {
     private static int countPawnsOnRank1Or8(Position resultingPosition) {
         int count = 0;
 
-        final int ranks[] = {BoardRank.RANK_1.ordinal(), BoardRank.RANK_8.ordinal()};
+        final int[] ranks = {BoardRank.RANK_1.ordinal(), BoardRank.RANK_8.ordinal()};
         for (int rankIndex : ranks){
             for (int fileIndex = 0; fileIndex < 8; fileIndex++){
                 final Piece currentPiece = resultingPosition.board.values()[rankIndex][fileIndex];
@@ -247,10 +247,10 @@ public class Position {
         final boolean notAStraightLine = (absDeltaX > 0 && absDeltaY > 0) && (absDeltaX != absDeltaY);
         final boolean sameCell = absDeltaX == 0 && absDeltaY == 0;
 
-        if (notAStraightLine || sameCell) return false;
+        if (notAStraightLine || sameCell) return true;
 
-        final int xSide = deltaX == 0 ? 0 : deltaX > 0 ? 1 : -1;
-        final int ySide = deltaY == 0 ? 0 : deltaY > 0 ? 1 : -1;
+        final int xSide = Integer.compare(deltaX, 0);
+        final int ySide = Integer.compare(deltaY, 0);
 
         final int loopLimit = absDeltaX > 0 ? absDeltaX : absDeltaY;
 
@@ -259,19 +259,19 @@ public class Position {
             final int dyi = i * ySide;
             final BoardCell computedCell = new BoardCell(cell1.rank + dyi, cell1.file + dxi);
 
-            if (board.values()[computedCell.rank][computedCell.file] != null) return true;
+            if (board.values()[computedCell.rank][computedCell.file] != null) return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
      * Executes the given move on the position (without modifying it) and returns the resulting position.
      * If this move leads to promotion, the queen will be chose.
      * @param moveToDo - {@link Move} - the move to execute
-     * @return Either of Exception and {@link Position} - Left of Exception on failure, otherwise Right of Position : wrapping the result.
+     * @return Either of Exception and {@link MoveResult} - Left of Exception on failure, otherwise Right of MoveResult : wrapping the result.
      */
-    public Either<Exception, Position> move(Move moveToDo){
+    public Either<Exception, MoveResult> move(Move moveToDo){
         return move(moveToDo, Queen.class);
     }
 
@@ -279,9 +279,9 @@ public class Position {
      * Executes the given move on the position (without modifying it) and returns the resulting position.
      * @param moveToDo - {@link Move} - the move to execute
      * @param promotionPiece - Class of {@link PromotablePiece} - promotion piece if the move leads to pawn promotion.
-     * @return Either of Exception and {@link Position} - Left of Exception on failure, otherwise Right of Position : wrapping the result.
+     * @return Either of Exception and {@link MoveResult} - Left of Exception on failure, otherwise Right of MoveResult : wrapping the result.
      */
-    public Either<Exception, Position> move(Move moveToDo, Class<? extends PromotablePiece> promotionPiece){
+    public Either<Exception, MoveResult> move(Move moveToDo, Class<? extends PromotablePiece> promotionPiece){
         final BoardCell from = moveToDo.from();
         final Piece movingPiece = board.values()[from.rank][from.file];
         boolean noPieceAtStartCell = movingPiece == null;
@@ -290,14 +290,14 @@ public class Position {
                 "No piece at move start cell (%s) ! Faulty position : %s", from, this.toFEN())));
         if (!canMove(moveToDo)) return Either.left(new IllegalArgumentException(String.format(
                 "Illegal move %s ! Faulty position : %s", moveToDo, this.toFEN())));
-        Either<Exception, Position> positionAfterMove = movingPiece.move(moveToDo, this, promotionPiece);
-        if (positionAfterMove.isLeft()) return Either.left(positionAfterMove.left());
+        Either<Exception, MoveResult> moveResult = movingPiece.move(moveToDo, this, promotionPiece);
+        if (moveResult.isLeft()) return Either.left(moveResult.left());
 
-        Either<Exception, Boolean> theMovingSideHasLeftHisKingInChess = positionAfterMove.right().kingIsInChess(info.whiteTurn);
+        Either<Exception, Boolean> theMovingSideHasLeftHisKingInChess = moveResult.right().position.kingIsInChess(info.whiteTurn);
         if (theMovingSideHasLeftHisKingInChess.isLeft()) return Either.left(theMovingSideHasLeftHisKingInChess.left());
         if (theMovingSideHasLeftHisKingInChess.right()) return Either.left(new RuntimeException(String.format(
                 "The moving side has left its king in chess (%s player) ! Faulty position : %s", info.whiteTurn ? "white" : "black", this.toFEN())));
-        else return positionAfterMove;
+        else return moveResult;
     }
 
     /**
@@ -324,7 +324,7 @@ public class Position {
         for (int rankIndex = 0; rankIndex < 8; rankIndex++){
             for (int fileIndex = 0; fileIndex < 8; fileIndex++){
                 final Piece currentPiece = board.values()[rankIndex][fileIndex];
-                final boolean isSideKing = currentPiece != null && (currentPiece instanceof King) &&
+                final boolean isSideKing = (currentPiece instanceof King) &&
                         currentPiece.isWhitePiece() == whiteKing;
                 if (isSideKing) return Either.right(new BoardCell(rankIndex, fileIndex));
             }

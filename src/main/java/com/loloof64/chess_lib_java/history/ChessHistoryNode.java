@@ -1,18 +1,18 @@
 package com.loloof64.chess_lib_java.history;
 
 import com.loloof64.chess_lib_java.rules.Move;
+import com.loloof64.chess_lib_java.rules.MoveResult;
 import com.loloof64.chess_lib_java.rules.Position;
 import com.loloof64.functional.monad.Either;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Chess history node.
  */
 public class ChessHistoryNode {
 
-    private ChessHistoryNode(ChessHistoryNode parent, Position relatedPosition,
+    private ChessHistoryNode(ChessHistoryNode parent, MoveResult moveResult,
                              Move relatedMove, String commentBefore,
                              String commentAfter){
 
@@ -25,7 +25,7 @@ public class ChessHistoryNode {
                     "present in the parent children !", relatedMove));
 
         this.parent = parent;
-        this.relatedPosition = relatedPosition;
+        this.moveResult = moveResult;
         this.relatedMove = relatedMove;
         this._commentBefore = commentBefore != null ? commentBefore : "";
         this._commentAfter = commentAfter != null ? commentAfter : "";
@@ -45,7 +45,7 @@ public class ChessHistoryNode {
                                                            String commentBefore,
                                                            String commentAfter){
         try {
-            return Either.right(new ChessHistoryNode(null, relatedPosition,
+            return Either.right(new ChessHistoryNode(null, new MoveResult(relatedPosition, ""),
                     null, commentBefore, commentAfter));
         }
         catch (Exception e){
@@ -69,9 +69,9 @@ public class ChessHistoryNode {
         try {
             if (parent == null) throw new IllegalArgumentException("You must provide a parent node in order to build " +
                     "a non root node !");
-            final Either<Exception, Position> relatedPosition = computePosition(parent, relatedMove);
-            if (relatedPosition.isLeft()) throw relatedPosition.left();
-            return Either.right(new ChessHistoryNode(parent, relatedPosition.right(),
+            final Either<Exception, MoveResult> moveResult = computePosition(parent, relatedMove);
+            if (moveResult.isLeft()) throw moveResult.left();
+            return Either.right(new ChessHistoryNode(parent, moveResult.right(),
                     relatedMove, commentBefore, commentAfter));
         }
         catch (Exception e){
@@ -189,8 +189,8 @@ public class ChessHistoryNode {
         return this._childrenNodes.get(index+1);
     }
 
-    public Position getRelatedPosition() {
-        return relatedPosition;
+    public MoveResult getRelatedMoveResult() {
+        return moveResult;
     }
 
     private boolean hasAlreadyThisRelatedMoveInDirectChildren(Move move){
@@ -200,14 +200,14 @@ public class ChessHistoryNode {
         return false;
     }
 
-    private static Either<Exception, Position> computePosition(ChessHistoryNode parent,
-                                                               Move relatedMove) {
-        return parent.relatedPosition.move(relatedMove);
+    private static Either<Exception, MoveResult> computePosition(ChessHistoryNode parent,
+                                                                 Move relatedMove) {
+        return parent.moveResult.position.move(relatedMove);
     }
 
     public final ChessHistoryNode parent;
     public final Move relatedMove;
-    public final Position relatedPosition;
+    public final MoveResult moveResult;
     private String _commentBefore, _commentAfter;
-    private ArrayList<ChessHistoryNode> _childrenNodes;
+    private final ArrayList<ChessHistoryNode> _childrenNodes;
 }

@@ -1,5 +1,6 @@
 package com.loloof64.chess_lib_java.pgn;
 
+import com.loloof64.chess_lib_java.history.ChessHistoryNode;
 import org.junit.Test;
 
 import java.io.*;
@@ -10,9 +11,8 @@ import static junit.framework.TestCase.fail;
 public class PgnParsingTest {
 
 
-
     @Test
-    public void headersParsingTest_1(){
+    public void headersParsingTest_1() {
         ChessGame game = null;
         try {
             game = PgnParser.parsePgnFromFileName("/ParsingPgn_1.pgn");
@@ -31,7 +31,7 @@ public class PgnParsingTest {
     }
 
     @Test
-    public  void headersParsingTest_2(){
+    public void headersParsingTest_2() {
         ChessGame game = null;
         try {
             game = PgnParser.parsePgnFromFileName("/ParsingPgn_2.pgn");
@@ -48,5 +48,4 @@ public class PgnParsingTest {
         assertEquals("Bauduin, Etienne", game.getHeader().get("Black"));
         assertEquals("1-0", game.getHeader().get("Result"));
     }
-
 }

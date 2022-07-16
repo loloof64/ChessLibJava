@@ -1,9 +1,6 @@
 package com.loloof64.chess_lib_java.rules.pieces;
 
-import com.loloof64.chess_lib_java.rules.Board;
-import com.loloof64.chess_lib_java.rules.GameInfo;
-import com.loloof64.chess_lib_java.rules.Move;
-import com.loloof64.chess_lib_java.rules.Position;
+import com.loloof64.chess_lib_java.rules.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.chess_lib_java.rules.coords.BoardFile;
 import com.loloof64.chess_lib_java.rules.coords.BoardRank;
@@ -90,7 +87,7 @@ public class King extends Piece {
     }
 
     @Override
-    public Either<Exception, Position> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
@@ -134,7 +131,9 @@ public class King extends Piece {
         }
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
-        return Either.right(new Position(newPositionBoard, newPositionInfo));
+        Position resultPosition = new Position(newPositionBoard, newPositionInfo);
+        String moveSan = "";
+        return Either.right(new MoveResult(resultPosition, moveSan));
     }
 
     @Override

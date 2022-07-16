@@ -119,63 +119,63 @@ public class PawnMoveTest {
     @Test
     public void legalStandardPawnMoveGeneratesCorrectPosition(){
         Position pos1 = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").right();
-        Either<Exception, Position> wrapPos2 = pos1.move(new Move(BoardCell.E2, BoardCell.E4));
-        Position pos2 = wrapPos2.right();
+        Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.E2, BoardCell.E4));
+        Position pos2 = wrapPos2.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1").right(), pos2);
 
-        Either<Exception, Position> wrapPos3 = pos2.move(new Move(BoardCell.D7, BoardCell.D6));
-        Position pos3 = wrapPos3.right();
+        Either<Exception, MoveResult> wrapPos3 = pos2.move(new Move(BoardCell.D7, BoardCell.D6));
+        Position pos3 = wrapPos3.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2").right(), pos3);
 
-        Either<Exception, Position> wrapPos4 = pos3.move(new Move(BoardCell.D2, BoardCell.D4));
-        Position pos4 = wrapPos4.right();
+        Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.D2, BoardCell.D4));
+        Position pos4 = wrapPos4.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2").right(), pos4);
 
-        Either<Exception, Position> wrapPos5 = pos4.move(new Move(BoardCell.E7, BoardCell.E5));
-        Position pos5 = wrapPos5.right();
+        Either<Exception, MoveResult> wrapPos5 = pos4.move(new Move(BoardCell.E7, BoardCell.E5));
+        Position pos5 = wrapPos5.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq e6 0 3").right(), pos5);
 
-        Either<Exception, Position> wrapPos6 = pos5.move(new Move(BoardCell.D4, BoardCell.E5));
-        Position pos6 = wrapPos6.right();
+        Either<Exception, MoveResult> wrapPos6 = pos5.move(new Move(BoardCell.D4, BoardCell.E5));
+        Position pos6 = wrapPos6.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3").right(), pos6);
 
         Position pos7 = Position.fromFEN("8/2P4k/8/8/8/8/8/4K3 w - - 0 1").right();
-        Either<Exception, Position> wrapPos8 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), Queen.class);
-        Position pos8 = wrapPos8.right();
+        Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), Queen.class);
+        Position pos8 = wrapPos8.right().position;
         assertEquals(Position.fromFEN("2Q5/7k/8/8/8/8/8/4K3 b - - 0 1").right(), pos8);
-        Either<Exception, Position> wrapPos9 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), Bishop.class);
-        Position pos9 = wrapPos9.right();
+        Either<Exception, MoveResult> wrapPos9 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), Bishop.class);
+        Position pos9 = wrapPos9.right().position;
         assertEquals(Position.fromFEN("2B5/7k/8/8/8/8/8/4K3 b - - 0 1").right(), pos9);
 
         Position pos10 = Position.fromFEN("4k3/8/8/8/8/8/3p3K/2N5 b - - 0 1").right();
-        Either<Exception, Position> wrapPos11 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), Rook.class);
-        Position pos11 = wrapPos11.right();
+        Either<Exception, MoveResult> wrapPos11 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), Rook.class);
+        Position pos11 = wrapPos11.right().position;
         assertEquals(Position.fromFEN("4k3/8/8/8/8/8/7K/2r5 w - - 0 2").right(), pos11);
-        Either<Exception, Position> wrapPos12 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), Knight.class);
-        Position pos12 = wrapPos12.right();
+        Either<Exception, MoveResult> wrapPos12 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), Knight.class);
+        Position pos12 = wrapPos12.right().position;
         assertEquals(Position.fromFEN("4k3/8/8/8/8/8/7K/2n5 w - - 0 2").right(), pos12);
     }
 
     @Test
     public void enPassantPawnMoveGeneratesCorrectPosition(){
         Position pos1 = Position.fromFEN("rnbqkb1r/ppp1pppp/7n/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3").right();
-        Either<Exception, Position> wrapPos2 = pos1.move(new Move(BoardCell.E5, BoardCell.D6));
-        Position pos2 = wrapPos2.right();
+        Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.E5, BoardCell.D6));
+        Position pos2 = wrapPos2.right().position;
         assertEquals(Position.fromFEN("rnbqkb1r/ppp1pppp/3P3n/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3").right(), pos2);
 
         Position pos3 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/6N1/3pP3/8/PPPP1PPP/RNBQKB1R b KQkq e3 0 3").right();
-        Either<Exception, Position> wrapPos4 = pos3.move(new Move(BoardCell.D4, BoardCell.E3));
-        Position pos4 = wrapPos4.right();
+        Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.D4, BoardCell.E3));
+        Position pos4 = wrapPos4.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/8/6N1/8/4p3/PPPP1PPP/RNBQKB1R w KQkq - 0 4").right(), pos4);
 
         Position pos5 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/3Pp3/8/3P4/PPP2PPP/RNBQKBNR w KQkq e6 0 1").right();
-        Either<Exception, Position> wrapPos6 = pos5.move(new Move(BoardCell.D5, BoardCell.E6));
-        Position pos6 = wrapPos6.right();
+        Either<Exception, MoveResult> wrapPos6 = pos5.move(new Move(BoardCell.D5, BoardCell.E6));
+        Position pos6 = wrapPos6.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/4P3/8/8/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 1").right(), pos6);
 
         Position pos7 = Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1").right();
-        Either<Exception, Position> wrapPos8 = pos7.move(new Move(BoardCell.D4, BoardCell.E3));
-        Position pos8 = wrapPos8.right();
+        Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.D4, BoardCell.E3));
+        Position pos8 = wrapPos8.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2").right(), pos8);
     }
 

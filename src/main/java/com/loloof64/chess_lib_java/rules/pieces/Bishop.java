@@ -1,9 +1,6 @@
 package com.loloof64.chess_lib_java.rules.pieces;
 
-import com.loloof64.chess_lib_java.rules.Board;
-import com.loloof64.chess_lib_java.rules.GameInfo;
-import com.loloof64.chess_lib_java.rules.Move;
-import com.loloof64.chess_lib_java.rules.Position;
+import com.loloof64.chess_lib_java.rules.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Either;
 
@@ -24,14 +21,14 @@ public class Bishop extends PromotablePiece {
         final int absDeltaY = Math.abs(deltaY);
         final Piece pieceAtEndCell = position.getPieceAt(to);
         final boolean targetCellHasNoFriendPiece = pieceAtEndCell == null || pieceAtEndCell.isWhitePiece() != whitePlayer;
-        final boolean noObstacleBefore = !position.obstacleBetween(to, from);
+        final boolean noObstacleBefore = position.obstacleBetween(to, from);
         final boolean isAGoodPath = absDeltaX == absDeltaY;
 
         return isAGoodPath && targetCellHasNoFriendPiece && noObstacleBefore;
     }
 
     @Override
-    public Either<Exception, Position> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
@@ -48,7 +45,9 @@ public class Bishop extends PromotablePiece {
         int  newNullityHalfMovesCount = isCaptureMove ? 0 : newPositionInfo.nullityHalfMovesCount + 1;
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
-        return Either.right(new Position(newPositionBoard, newPositionInfo));
+        Position resultPosition = new Position(newPositionBoard, newPositionInfo);
+        String moveSan = "";
+        return Either.right(new MoveResult(resultPosition, moveSan));
     }
 
     @Override
@@ -57,7 +56,7 @@ public class Bishop extends PromotablePiece {
         final int deltaY = testedCell.rank - pieceCell.rank;
         final int absDeltaX = Math.abs(deltaX);
         final int absDeltaY = Math.abs(deltaY);
-        final boolean noObstacleBefore = !position.obstacleBetween(pieceCell, testedCell);
+        final boolean noObstacleBefore = position.obstacleBetween(pieceCell, testedCell);
         final boolean isAGoodPath = absDeltaX == absDeltaY;
 
         return isAGoodPath && noObstacleBefore;

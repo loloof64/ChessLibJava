@@ -9,3 +9,4 @@ TODO
 - [X] Move validation
 - [X] Game history
 - [ ] Pgn parsing
+- [ ] Pgn exportation
