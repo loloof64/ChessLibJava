@@ -4,7 +4,7 @@ import com.loloof64.chess_lib_java.rules.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Either;
 
-public class Queen extends PromotablePiece {
+public class Queen extends Piece implements Promotable {
 
     public Queen(boolean whitePlayer){
         this.whitePlayer = whitePlayer;
@@ -28,7 +28,7 @@ public class Queen extends PromotablePiece {
     }
 
     @Override
-    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Promotable promotionPiece) {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
@@ -46,7 +46,8 @@ public class Queen extends PromotablePiece {
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
-        String moveSan = "";
+        String moveSan = String.format("Q%s", to);
+        if (isCaptureMove) moveSan = String.format("Qx%s", to);
         return Either.right(new MoveResult(resultPosition, moveSan));
     }
 
@@ -73,5 +74,10 @@ public class Queen extends PromotablePiece {
     @Override
     public char toFEN() {
         return whitePlayer? 'Q' : 'q';
+    }
+
+    @Override
+    public char pieceLetter() {
+        return 'Q';
     }
 }

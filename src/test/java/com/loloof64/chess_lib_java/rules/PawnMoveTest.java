@@ -229,24 +229,24 @@ public class PawnMoveTest {
         assertEquals(pos6San, "dxe5");
 
         Position pos7 = Position.fromFEN("8/2P4k/8/8/8/8/8/4K3 w - - 0 1").right();
-        Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), Queen.class);
+        Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), new Queen(true));
         Position pos8 = wrapPos8.right().position;
         String pos8San = wrapPos8.right().moveSan;
         assertEquals(Position.fromFEN("2Q5/7k/8/8/8/8/8/4K3 b - - 0 1").right(), pos8);
         assertEquals(pos8San, "c8=Q");
-        Either<Exception, MoveResult> wrapPos9 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), Bishop.class);
+        Either<Exception, MoveResult> wrapPos9 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), new Bishop(true));
         Position pos9 = wrapPos9.right().position;
         String pos9San = wrapPos9.right().moveSan;
         assertEquals(Position.fromFEN("2B5/7k/8/8/8/8/8/4K3 b - - 0 1").right(), pos9);
         assertEquals(pos9San, "c8=B");
 
         Position pos10 = Position.fromFEN("4k3/8/8/8/8/8/3p3K/2N5 b - - 0 1").right();
-        Either<Exception, MoveResult> wrapPos11 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), Rook.class);
+        Either<Exception, MoveResult> wrapPos11 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), new Rook(false));
         Position pos11 = wrapPos11.right().position;
         String pos11San = wrapPos11.right().moveSan;
         assertEquals(Position.fromFEN("4k3/8/8/8/8/8/7K/2r5 w - - 0 2").right(), pos11);
         assertEquals(pos11San, "dxc1=R");
-        Either<Exception, MoveResult> wrapPos12 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), Knight.class);
+        Either<Exception, MoveResult> wrapPos12 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), new Knight(false));
         Position pos12 = wrapPos12.right().position;
         String pos12San = wrapPos12.right().moveSan;
         assertEquals(Position.fromFEN("4k3/8/8/8/8/8/7K/2n5 w - - 0 2").right(), pos12);

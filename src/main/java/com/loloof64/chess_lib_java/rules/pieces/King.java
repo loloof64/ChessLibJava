@@ -87,7 +87,7 @@ public class King extends Piece {
     }
 
     @Override
-    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Promotable promotionPiece) {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
@@ -132,7 +132,10 @@ public class King extends Piece {
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
-        String moveSan = "";
+        String moveSan = String.format("K%s", to);
+        if (isCaptureMove) moveSan = String.format("Kx%s", to);
+        if (isKingSideCastleMove) moveSan = "O-O";
+        if (isQueenSideCastleMove) moveSan = "O-O-O";
         return Either.right(new MoveResult(resultPosition, moveSan));
     }
 

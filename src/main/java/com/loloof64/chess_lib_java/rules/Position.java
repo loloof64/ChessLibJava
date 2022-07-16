@@ -272,16 +272,16 @@ public class Position {
      * @return Either of Exception and {@link MoveResult} - Left of Exception on failure, otherwise Right of MoveResult : wrapping the result.
      */
     public Either<Exception, MoveResult> move(Move moveToDo){
-        return move(moveToDo, Queen.class);
+        return move(moveToDo, new Queen(false));
     }
 
     /**
      * Executes the given move on the position (without modifying it) and returns the resulting position.
      * @param moveToDo - {@link Move} - the move to execute
-     * @param promotionPiece - Class of {@link PromotablePiece} - promotion piece if the move leads to pawn promotion.
+     * @param promotionPiece - {@link Promotable} - promotion piece if the move leads to pawn promotion.
      * @return Either of Exception and {@link MoveResult} - Left of Exception on failure, otherwise Right of MoveResult : wrapping the result.
      */
-    public Either<Exception, MoveResult> move(Move moveToDo, Class<? extends PromotablePiece> promotionPiece){
+    public Either<Exception, MoveResult> move(Move moveToDo, Promotable promotionPiece){
         final BoardCell from = moveToDo.from();
         final Piece movingPiece = board.values()[from.rank][from.file];
         boolean noPieceAtStartCell = movingPiece == null;

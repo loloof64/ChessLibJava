@@ -53,7 +53,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Promotable promotionPiece) {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
@@ -70,8 +70,7 @@ public class Pawn extends Piece {
         final Piece pieceAtEndSquare = position.getPieceAt(to);
         Piece replacingPieceForEndSquare;
         try {
-            replacingPieceForEndSquare = isPromotion ? promotionPiece.getDeclaredConstructor(boolean.class).
-                    newInstance(whitePlayer): position.getPieceAt(from);
+            replacingPieceForEndSquare = isPromotion ? (Piece) promotionPiece : position.getPieceAt(from);
 
             final BoardFile enPassantFile = position.info.enPassantFile;
 
@@ -94,8 +93,10 @@ public class Pawn extends Piece {
 
             Position resultPosition = new Position(newPositionBoard, newPositionInfo);
             String moveSan = to.toString();
-            boolean targetCellWasOccupied = position.board.getPieceAt(to) != null;
-            if (targetCellWasOccupied) moveSan = String.format("%sx%s", (char) ('a' + from.file), to);
+            boolean isCaptureMove = position.board.getPieceAt(to) != null;
+
+            if (isCaptureMove || isEnPassantMove) moveSan = String.format("%sx%s", (char) ('a' + from.file), to);
+            if (isPromotion) moveSan = String.format("%s=%c",moveSan, promotionPiece.pieceLetter());
             return Either.right(new MoveResult(resultPosition, moveSan));
         } catch (Exception e) {
             e.printStackTrace();

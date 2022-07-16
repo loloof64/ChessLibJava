@@ -61,12 +61,12 @@ public abstract class Piece {
      * Executes the given move in the given position.
      * @param moveToDo - {@link Move} - the move to do
      * @param position - Position - the position which this piece belongs to.
-     * @param promotionPiece - class of PromotablePiece - promotion piece if the move leads to pawn promotion.
+     * @param promotionPiece - PromotablePiece - promotion piece if the move leads to pawn promotion.
      * @return Either of Exception and MoveResult - Left of Exception if the move cannot be done, otherwise Right of
      * MoveResult, wrapping the result.
      */
     abstract public Either<Exception, MoveResult> move(Move moveToDo,
-                                                       Position position, Class<? extends PromotablePiece> promotionPiece);
+                                                       Position position, Promotable promotionPiece);
 
     /**
      * Says if the piece is attacking the given cell, with no consideration about the current player turn

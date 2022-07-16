@@ -3,10 +3,8 @@ package com.loloof64.chess_lib_java.rules.pieces;
 import com.loloof64.chess_lib_java.rules.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Either;
-import com.loloof64.functional.monad.Just;
-import com.loloof64.functional.monad.Maybe;
 
-public class Knight extends PromotablePiece {
+public class Knight extends Piece implements Promotable {
 
     public Knight(boolean whitePlayer){
         this.whitePlayer = whitePlayer;
@@ -30,7 +28,7 @@ public class Knight extends PromotablePiece {
     }
 
     @Override
-    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Promotable promotionPiece) {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
@@ -48,7 +46,8 @@ public class Knight extends PromotablePiece {
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
-        String moveSan = "";
+        String moveSan = String.format("N%s", to);
+        if (isCaptureMove) moveSan = String.format("Nx%s", to);
         return Either.right(new MoveResult(resultPosition, moveSan));
     }
 
@@ -71,5 +70,10 @@ public class Knight extends PromotablePiece {
     @Override
     public char toFEN() {
         return whitePlayer ? 'N' : 'n';
+    }
+
+    @Override
+    public char pieceLetter() {
+        return 'N';
     }
 }

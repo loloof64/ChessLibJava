@@ -4,7 +4,7 @@ import com.loloof64.chess_lib_java.rules.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Either;
 
-public class Rook extends PromotablePiece {
+public class Rook extends Piece implements Promotable {
 
     public Rook(boolean whitePlayer){
         this.whitePlayer = whitePlayer;
@@ -28,7 +28,7 @@ public class Rook extends PromotablePiece {
     }
 
     @Override
-    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Class<? extends PromotablePiece> promotionPiece) {
+    public Either<Exception, MoveResult> move(Move moveToDo, Position position, Promotable promotionPiece) {
         final BoardCell from = moveToDo.from();
         final BoardCell to = moveToDo.to();
 
@@ -50,7 +50,8 @@ public class Rook extends PromotablePiece {
         else if (from == BoardCell.H8) newPositionInfo = newPositionInfo.copyWithThisBlackKingSideCastleState(false);
 
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
-        String moveSan = "";
+        String moveSan = String.format("R%s", to);
+        if (isCaptureMove) moveSan = String.format("Rx%s", to);
         return Either.right(new MoveResult(resultPosition, moveSan));
     }
 
@@ -76,5 +77,10 @@ public class Rook extends PromotablePiece {
     @Override
     public char toFEN() {
         return whitePlayer? 'R' : 'r';
+    }
+
+    @Override
+    public char pieceLetter() {
+        return 'R';
     }
 }
