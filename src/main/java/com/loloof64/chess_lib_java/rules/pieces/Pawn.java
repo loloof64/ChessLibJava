@@ -94,9 +94,11 @@ public class Pawn extends Piece {
             Position resultPosition = new Position(newPositionBoard, newPositionInfo);
             String moveSan = to.toString();
             boolean isCaptureMove = position.board.getPieceAt(to) != null;
+            boolean opponentKingInCheck = resultPosition.kingIsInChess(resultPosition.info.whiteTurn).right();
 
             if (isCaptureMove || isEnPassantMove) moveSan = String.format("%sx%s", (char) ('a' + from.file), to);
             if (isPromotion) moveSan = String.format("%s=%c",moveSan, promotionPiece.pieceLetter());
+            if (opponentKingInCheck) moveSan = String.format("%s+", moveSan);
             return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
         } catch (Exception e) {
             e.printStackTrace();

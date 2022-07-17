@@ -50,8 +50,11 @@ public class Rook extends Piece implements Promotable {
         else if (from == BoardCell.H8) newPositionInfo = newPositionInfo.copyWithThisBlackKingSideCastleState(false);
 
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
+        boolean opponentKingInCheck = resultPosition.kingIsInChess(resultPosition.info.whiteTurn).right();
+
         String moveSan = String.format("R%s", to);
         if (isCaptureMove) moveSan = String.format("Rx%s", to);
+        if (opponentKingInCheck) moveSan = String.format("%s+", moveSan);
         return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 

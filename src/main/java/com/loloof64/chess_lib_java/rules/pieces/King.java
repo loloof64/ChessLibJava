@@ -132,10 +132,13 @@ public class King extends Piece {
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
+        boolean opponentKingInCheck = resultPosition.kingIsInChess(resultPosition.info.whiteTurn).right();
+
         String moveSan = String.format("K%s", to);
         if (isCaptureMove) moveSan = String.format("Kx%s", to);
         if (isKingSideCastleMove) moveSan = "O-O";
         if (isQueenSideCastleMove) moveSan = "O-O-O";
+        if (opponentKingInCheck) moveSan = String.format("%s+", moveSan);
         return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 

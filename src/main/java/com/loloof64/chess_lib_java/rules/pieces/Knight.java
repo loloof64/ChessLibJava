@@ -46,8 +46,11 @@ public class Knight extends Piece implements Promotable {
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
+        boolean opponentKingInCheck = resultPosition.kingIsInChess(resultPosition.info.whiteTurn).right();
+
         String moveSan = String.format("N%s", to);
         if (isCaptureMove) moveSan = String.format("Nx%s", to);
+        if (opponentKingInCheck) moveSan = String.format("%s+", moveSan);
         return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 

@@ -19,7 +19,7 @@ public class SpecialSanGenerationTest {
         MoveResult moveResult2 = pos2.move(new Move(BoardCell.F6, BoardCell.F5)).right();
         assertEquals("f5+", moveResult2.moveSan);
 
-        Position pos3 = Position.fromFEN("8/8/4kp2/8/4K3/8/8/8 b - - 0 1").right();
+        Position pos3 = Position.fromFEN("8/5p2/4k3/8/4K3/8/8/8 b - - 0 1").right();
         MoveResult moveResult3 = pos3.move(new Move(BoardCell.F7, BoardCell.F5)).right();
         assertEquals("f5+", moveResult3.moveSan);
 
@@ -40,7 +40,7 @@ public class SpecialSanGenerationTest {
     public void pawnGivingCheckComplexCases() {
         Position pos1 = Position.fromFEN("8/5k2/8/3Pp3/8/8/8/4K3 w - e6 0 1").right();
         MoveResult moveResult1 = pos1.move(new Move(BoardCell.D5, BoardCell.E6)).right();
-        assertEquals("dxe5+", moveResult1.moveSan);
+        assertEquals("dxe6+", moveResult1.moveSan);
 
         Position pos2 = Position.fromFEN("8/6k1/8/8/2Pp4/8/1K6/8 b - c3 0 1").right();
         MoveResult moveResult2 = pos2.move(new Move(BoardCell.D4, BoardCell.C3)).right();

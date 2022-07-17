@@ -311,7 +311,7 @@ public class BishopRookQueenTest {
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.F8, BoardCell.B4));
         assertEquals(Position.fromFEN("rnbqk1nr/pppp1ppp/8/4p3/1b1PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3").right(),
                 wrapPos4.right().position);
-        assertEquals(wrapPos4.right().moveSan, "Bb4");
+        assertEquals(wrapPos4.right().moveSan, "Bb4+");
     }
 
     @Test

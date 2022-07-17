@@ -46,8 +46,11 @@ public class Queen extends Piece implements Promotable {
         newPositionInfo = newPositionInfo.copyWithThisNullityHalfMovesCount(newNullityHalfMovesCount);
 
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
+        boolean opponentKingInCheck = resultPosition.kingIsInChess(resultPosition.info.whiteTurn).right();
+
         String moveSan = String.format("Q%s", to);
         if (isCaptureMove) moveSan = String.format("Qx%s", to);
+        if (opponentKingInCheck) moveSan = String.format("%s+", moveSan);
         return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 
