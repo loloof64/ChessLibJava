@@ -97,7 +97,7 @@ public class Pawn extends Piece {
 
             if (isCaptureMove || isEnPassantMove) moveSan = String.format("%sx%s", (char) ('a' + from.file), to);
             if (isPromotion) moveSan = String.format("%s=%c",moveSan, promotionPiece.pieceLetter());
-            return Either.right(new MoveResult(resultPosition, moveSan));
+            return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
         } catch (Exception e) {
             e.printStackTrace();
             return Either.left(e);

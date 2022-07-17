@@ -55,5 +55,5 @@ public class Move {
         return String.format("(%s => %s)", _coordinates.first, _coordinates.second);
     }
 
-    private Pair<BoardCell, BoardCell> _coordinates;
+    private final Pair<BoardCell, BoardCell> _coordinates;
 }

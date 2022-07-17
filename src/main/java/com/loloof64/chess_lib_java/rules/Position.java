@@ -6,6 +6,8 @@ import com.loloof64.chess_lib_java.rules.pieces.*;
 import com.loloof64.chess_lib_java.rules.coords.BoardCell;
 import com.loloof64.functional.monad.Either;
 
+import java.util.ArrayList;
+
 /**
  * Immutable chess position.
  */
@@ -368,6 +370,20 @@ public class Position {
         return pieceAtAttackerCell != null && pieceAtAttackerCell.isAttackingCell(attackerCell, testedCell, this);
     }
 
+    /**
+     * Returns the list of legal moves from this position.
+     * @return {@link MoveResult}[]
+     */
+    public MoveResult[] legalMoves() {
+        ArrayList<MoveResult> resultList = new ArrayList<>();
+        MoveResult[] result = new MoveResult[resultList.size()];
+
+
+
+        resultList.toArray(result);
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -395,4 +411,6 @@ public class Position {
 
     public final Board board;
     public final GameInfo info;
+
+
 }

@@ -202,55 +202,55 @@ public class PawnMoveTest {
         Position pos2 = wrapPos2.right().position;
         String pos2San = wrapPos2.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1").right(), pos2);
-        assertEquals(pos2San, "e4");
+        assertEquals("e4", pos2San);
 
         Either<Exception, MoveResult> wrapPos3 = pos2.move(new Move(BoardCell.D7, BoardCell.D6));
         Position pos3 = wrapPos3.right().position;
         String pos3San = wrapPos3.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2").right(), pos3);
-        assertEquals(pos3San, "d6");
+        assertEquals("d6", pos3San);
 
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.D2, BoardCell.D4));
         Position pos4 = wrapPos4.right().position;
         String pos4San = wrapPos4.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2").right(), pos4);
-        assertEquals(pos4San, "d4");
+        assertEquals("d4", pos4San);
 
         Either<Exception, MoveResult> wrapPos5 = pos4.move(new Move(BoardCell.E7, BoardCell.E5));
         Position pos5 = wrapPos5.right().position;
         String pos5San = wrapPos5.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq e6 0 3").right(), pos5);
-        assertEquals(pos5San, "e5");
+        assertEquals("e5", pos5San);
 
         Either<Exception, MoveResult> wrapPos6 = pos5.move(new Move(BoardCell.D4, BoardCell.E5));
         Position pos6 = wrapPos6.right().position;
         String pos6San = wrapPos6.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3").right(), pos6);
-        assertEquals(pos6San, "dxe5");
+        assertEquals( "dxe5", pos6San);
 
         Position pos7 = Position.fromFEN("8/2P4k/8/8/8/8/8/4K3 w - - 0 1").right();
         Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), new Queen(true));
         Position pos8 = wrapPos8.right().position;
         String pos8San = wrapPos8.right().moveSan;
         assertEquals(Position.fromFEN("2Q5/7k/8/8/8/8/8/4K3 b - - 0 1").right(), pos8);
-        assertEquals(pos8San, "c8=Q");
+        assertEquals( "c8=Q", pos8San);
         Either<Exception, MoveResult> wrapPos9 = pos7.move(new Move(BoardCell.C7, BoardCell.C8), new Bishop(true));
         Position pos9 = wrapPos9.right().position;
         String pos9San = wrapPos9.right().moveSan;
         assertEquals(Position.fromFEN("2B5/7k/8/8/8/8/8/4K3 b - - 0 1").right(), pos9);
-        assertEquals(pos9San, "c8=B");
+        assertEquals("c8=B", pos9San);
 
         Position pos10 = Position.fromFEN("4k3/8/8/8/8/8/3p3K/2N5 b - - 0 1").right();
         Either<Exception, MoveResult> wrapPos11 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), new Rook(false));
         Position pos11 = wrapPos11.right().position;
         String pos11San = wrapPos11.right().moveSan;
         assertEquals(Position.fromFEN("4k3/8/8/8/8/8/7K/2r5 w - - 0 2").right(), pos11);
-        assertEquals(pos11San, "dxc1=R");
+        assertEquals( "dxc1=R", pos11San);
         Either<Exception, MoveResult> wrapPos12 = pos10.move(new Move(BoardCell.D2, BoardCell.C1), new Knight(false));
         Position pos12 = wrapPos12.right().position;
         String pos12San = wrapPos12.right().moveSan;
         assertEquals(Position.fromFEN("4k3/8/8/8/8/8/7K/2n5 w - - 0 2").right(), pos12);
-        assertEquals(pos12San, "dxc1=N");
+        assertEquals( "dxc1=N", pos12San);
     }
 
     @Test
@@ -260,28 +260,28 @@ public class PawnMoveTest {
         Position pos2 = wrapPos2.right().position;
         String pos2San = wrapPos2.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkb1r/ppp1pppp/3P3n/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3").right(), pos2);
-        assertEquals(pos2San, "exd6");
+        assertEquals("exd6", pos2San);
 
         Position pos3 = Position.fromFEN("rnbqkbnr/ppp1pppp/8/6N1/3pP3/8/PPPP1PPP/RNBQKB1R b KQkq e3 0 3").right();
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.D4, BoardCell.E3));
         Position pos4 = wrapPos4.right().position;
         String pos4San = wrapPos4.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp1pppp/8/6N1/8/4p3/PPPP1PPP/RNBQKB1R w KQkq - 0 4").right(), pos4);
-        assertEquals(pos4San, "dxe3");
+        assertEquals("dxe3", pos4San);
 
         Position pos5 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/3Pp3/8/3P4/PPP2PPP/RNBQKBNR w KQkq e6 0 1").right();
         Either<Exception, MoveResult> wrapPos6 = pos5.move(new Move(BoardCell.D5, BoardCell.E6));
         Position pos6 = wrapPos6.right().position;
         String pos6San = wrapPos6.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/4P3/8/8/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 1").right(), pos6);
-        assertEquals(pos6San, "dxe6");
+        assertEquals("dxe6", pos6San);
 
         Position pos7 = Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1").right();
         Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.D4, BoardCell.E3));
         Position pos8 = wrapPos8.right().position;
         String pos8San = wrapPos8.right().moveSan;
         assertEquals(Position.fromFEN("rnbqkbnr/ppp2ppp/3p4/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2").right(), pos8);
-        assertEquals(pos8San, "dxe3");
+        assertEquals("dxe3", pos8San);
     }
 
     @Test

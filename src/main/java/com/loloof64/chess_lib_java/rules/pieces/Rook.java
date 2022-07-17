@@ -52,7 +52,7 @@ public class Rook extends Piece implements Promotable {
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
         String moveSan = String.format("R%s", to);
         if (isCaptureMove) moveSan = String.format("Rx%s", to);
-        return Either.right(new MoveResult(resultPosition, moveSan));
+        return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 
     @Override

@@ -48,7 +48,7 @@ public class Knight extends Piece implements Promotable {
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
         String moveSan = String.format("N%s", to);
         if (isCaptureMove) moveSan = String.format("Nx%s", to);
-        return Either.right(new MoveResult(resultPosition, moveSan));
+        return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.loloof64.chess_lib_java.rules.coords;
 
+import java.util.Objects;
+
 /**
  * Board cell coordinate
  */
@@ -85,18 +87,13 @@ public class BoardCell {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         BoardCell boardCell = (BoardCell) o;
-
-        if (rank != boardCell.rank) return false;
-        return file == boardCell.file;
+        return rank == boardCell.rank && file == boardCell.file;
     }
 
     @Override
     public int hashCode() {
-        int result = rank;
-        result = 31 * result + file;
-        return result;
+        return Objects.hash(rank, file);
     }
 
     @Override

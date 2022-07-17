@@ -45,7 +45,7 @@ public class ChessHistoryNode {
                                                            String commentBefore,
                                                            String commentAfter){
         try {
-            return Either.right(new ChessHistoryNode(null, new MoveResult(relatedPosition, ""),
+            return Either.right(new ChessHistoryNode(null, new MoveResult(relatedPosition, "", null),
                     null, commentBefore, commentAfter));
         }
         catch (Exception e){

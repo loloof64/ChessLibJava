@@ -320,21 +320,21 @@ public class BishopRookQueenTest {
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.C4, BoardCell.C7));
         Position pos2 = wrapPos2.right().position;
         assertEquals(Position.fromFEN("4k3/2R5/8/8/6n1/8/8/4K3 b - - 1 1").right(), pos2);
-        assertEquals(wrapPos2.right().moveSan, "Rc7");
+        assertEquals("Rc7", wrapPos2.right().moveSan);
         Either<Exception, MoveResult> wrapPos3 = pos1.move(new Move(BoardCell.C4, BoardCell.G4));
         Position pos3 = wrapPos3.right().position;
         assertEquals(Position.fromFEN("4k3/8/8/8/6R1/8/8/4K3 b - - 0 1").right(), pos3);
-        assertEquals(wrapPos3.right().moveSan, "Rxg4");
+        assertEquals("Rxg4", wrapPos3.right().moveSan);
 
         Position pos4 = Position.fromFEN("4k3/8/8/8/2r3N1/8/8/4K3 b - - 0 1").right();
         Either<Exception, MoveResult> wrapPos5 = pos4.move(new Move(BoardCell.C4, BoardCell.G4));
         Position pos5 = wrapPos5.right().position;
         assertEquals(Position.fromFEN("4k3/8/8/8/6r1/8/8/4K3 w - - 0 2").right(), pos5);
-        assertEquals(wrapPos5.right().moveSan, "Rxg4");
+        assertEquals("Rxg4", wrapPos5.right().moveSan);
         Either<Exception, MoveResult> wrapPos6 = pos4.move(new Move(BoardCell.C4, BoardCell.C7));
         Position pos6 = wrapPos6.right().position;
         assertEquals(Position.fromFEN("4k3/2r5/8/8/6N1/8/8/4K3 w - - 1 2").right(), pos6);
-        assertEquals(wrapPos6.right().moveSan, "Rc7");
+        assertEquals( "Rc7", wrapPos6.right().moveSan);
     }
 
     @Test
@@ -343,13 +343,13 @@ public class BishopRookQueenTest {
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.H1, BoardCell.H3));
         assertEquals(Position.fromFEN("rnbqkbnr/ppppppp1/8/7p/7P/7R/PPPPPPP1/RNBQKBN1 b Qkq - 1 2").right(),
                 wrapPos2.right().position);
-        assertEquals(wrapPos2.right().moveSan, "Rh3");
+        assertEquals("Rh3", wrapPos2.right().moveSan);
 
         Position pos3 = Position.fromFEN("rnbqkbnr/ppppppp1/8/7p/7P/5N2/PPPPPPP1/RNBQKB1R b KQkq h3 0 2").right();
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.H8, BoardCell.H6));
         assertEquals(Position.fromFEN("rnbqkbn1/ppppppp1/7r/7p/7P/5N2/PPPPPPP1/RNBQKB1R w KQq - 1 3").right(),
                 wrapPos4.right().position);
-        assertEquals(wrapPos4.right().moveSan, "Rh6");
+        assertEquals("Rh6", wrapPos4.right().moveSan);
     }
 
     @Test
@@ -358,25 +358,25 @@ public class BishopRookQueenTest {
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.H1, BoardCell.H3));
         Position pos2 = wrapPos2.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/7P/7R/PPPPPPP1/RNBQKBN1 b Qkq - 1 2").right(), pos2);
-        assertEquals(wrapPos2.right().moveSan, "Rh3");
+        assertEquals("Rh3", wrapPos2.right().moveSan);
 
         Position pos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/P7/8/1PPPPPPP/RNBQKBNR w KQkq e6 0 2").right();
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.A1, BoardCell.A3));
         Position pos4 = wrapPos4.right().position;
         assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/P7/R7/1PPPPPPP/1NBQKBNR b Kkq - 1 2").right(), pos4);
-        assertEquals(wrapPos4.right().moveSan, "Ra3");
+        assertEquals("Ra3", wrapPos4.right().moveSan);
 
         Position pos5 = Position.fromFEN("rnbqk1nr/ppppppb1/6p1/7p/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 4").right();
         Either<Exception, MoveResult> wrapPos6 = pos5.move(new Move(BoardCell.H8, BoardCell.H6));
         Position pos6 = wrapPos6.right().position;
         assertEquals(Position.fromFEN("rnbqk1n1/ppppppb1/6pr/7p/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w q - 4 5").right(), pos6);
-        assertEquals(wrapPos6.right().moveSan, "Rh6");
+        assertEquals( "Rh6", wrapPos6.right().moveSan);
 
         Position pos7 = Position.fromFEN("rnbqkbnr/1ppppppp/8/p7/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2").right();
         Either<Exception, MoveResult> wrapPos8 = pos7.move(new Move(BoardCell.A8, BoardCell.A6));
         Position pos8 = wrapPos8.right().position;
         assertEquals(Position.fromFEN("1nbqkbnr/1ppppppp/r7/p7/4P3/5N2/PPPP1PPP/RNBQKB1R w KQk - 2 3").right(), pos8);
-        assertEquals(wrapPos8.right().moveSan, "Ra6");
+        assertEquals( "Ra6", wrapPos8.right().moveSan);
     }
 
     @Test
@@ -384,18 +384,18 @@ public class BishopRookQueenTest {
         Position pos1 = Position.fromFEN("4k3/1b6/8/8/1Q6/8/8/4K3 w - - 0 1").right();
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.B4, BoardCell.B7));
         assertEquals(Position.fromFEN("4k3/1Q6/8/8/8/8/8/4K3 b - - 0 1").right(), wrapPos2.right().position);
-        assertEquals(wrapPos2.right().moveSan, "Qxb7");
+        assertEquals("Qxb7", wrapPos2.right().moveSan);
         Either<Exception, MoveResult> wrapPos3 = pos1.move(new Move(BoardCell.B4, BoardCell.D2));
         assertEquals(Position.fromFEN("4k3/1b6/8/8/8/8/3Q4/4K3 b - - 1 1").right(), wrapPos3.right().position);
-        assertEquals(wrapPos3.right().moveSan, "Qd2");
+        assertEquals("Qd2", wrapPos3.right().moveSan);
 
         Position pos4 = Position.fromFEN("4k3/8/1B5q/8/8/8/8/4K3 b - - 1 1").right();
         Either<Exception, MoveResult> wrapPos5 = pos4.move(new Move(BoardCell.H6, BoardCell.B6));
         assertEquals(Position.fromFEN("4k3/8/1q6/8/8/8/8/4K3 w - - 0 2").right(), wrapPos5.right().position);
-        assertEquals(wrapPos5.right().moveSan, "Qxb6");
+        assertEquals("Qxb6", wrapPos5.right().moveSan);
         Either<Exception, MoveResult> wrapPos6 = pos4.move(new Move(BoardCell.H6, BoardCell.H8));
         assertEquals(Position.fromFEN("4k2q/8/1B6/8/8/8/8/4K3 w - - 2 2").right(), wrapPos6.right().position);
-        assertEquals(wrapPos6.right().moveSan, "Qh8");
+        assertEquals("Qh8", wrapPos6.right().moveSan);
     }
 
     @Test
@@ -404,13 +404,13 @@ public class BishopRookQueenTest {
         Either<Exception, MoveResult> wrapPos2 = pos1.move(new Move(BoardCell.D1, BoardCell.H5));
         assertEquals(Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 2").right(),
                 wrapPos2.right().position);
-        assertEquals(wrapPos2.right().moveSan, "Qh5");
+        assertEquals("Qh5", wrapPos2.right().moveSan);
 
         Position pos3 = Position.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq d3 0 2").right();
         Either<Exception, MoveResult> wrapPos4 = pos3.move(new Move(BoardCell.D8, BoardCell.H4));
         assertEquals(Position.fromFEN("rnb1kbnr/pppp1ppp/8/4p3/3PP2q/8/PPP2PPP/RNBQKBNR w KQkq - 1 3").right(),
                 wrapPos4.right().position);
-        assertEquals(wrapPos4.right().moveSan, "Qh4");
+        assertEquals("Qh4", wrapPos4.right().moveSan);
     }
 
     @Test

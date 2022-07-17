@@ -136,7 +136,7 @@ public class King extends Piece {
         if (isCaptureMove) moveSan = String.format("Kx%s", to);
         if (isKingSideCastleMove) moveSan = "O-O";
         if (isQueenSideCastleMove) moveSan = "O-O-O";
-        return Either.right(new MoveResult(resultPosition, moveSan));
+        return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 
     @Override

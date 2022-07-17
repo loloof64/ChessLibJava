@@ -48,7 +48,7 @@ public class Bishop extends Piece implements Promotable {
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
         String moveSan = String.format("B%s", to);
         if (isCaptureMove) moveSan = String.format("Bx%s", to);
-        return Either.right(new MoveResult(resultPosition, moveSan));
+        return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 
     @Override

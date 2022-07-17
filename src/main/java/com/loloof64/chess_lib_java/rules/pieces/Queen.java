@@ -48,7 +48,7 @@ public class Queen extends Piece implements Promotable {
         Position resultPosition = new Position(newPositionBoard, newPositionInfo);
         String moveSan = String.format("Q%s", to);
         if (isCaptureMove) moveSan = String.format("Qx%s", to);
-        return Either.right(new MoveResult(resultPosition, moveSan));
+        return Either.right(new MoveResult(resultPosition, moveSan, moveToDo));
     }
 
     @Override
